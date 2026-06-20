@@ -77,9 +77,18 @@ export async function POST(
       max_tokens: 8192,
     })
 
-    const raw = completion.choices[0]?.message?.content
+    const choice = completion.choices[0]
+    const raw = choice?.message?.content
+    const finishReason = choice?.finish_reason
+
+    console.log('[plan/route] finish_reason:', finishReason, 'raw length:', raw?.length)
+
     if (!raw) {
       return NextResponse.json({ error: 'Resposta vazia da IA.' }, { status: 500 })
+    }
+
+    if (finishReason === 'length') {
+      return NextResponse.json({ error: 'Resposta da IA truncada. Tente com menos páginas ou capítulos.' }, { status: 500 })
     }
 
     // Extrai JSON mesmo que venha envolto em markdown/texto
@@ -89,23 +98,35 @@ export async function POST(
       return NextResponse.json({ error: 'Resposta da IA sem JSON válido.' }, { status: 500 })
     }
 
-    // Valida com Zod (coerce para arredondar floats em inteiros)
+    // Normaliza e valida o JSON retornado
     let parsed: ReturnType<typeof WritingPlanOutputSchema.parse>
     try {
       const rawJson = JSON.parse(jsonMatch[0])
-      // Normaliza targetPages e targetWords para inteiros caso venham como float
-      if (Array.isArray(rawJson?.chapters)) {
-        rawJson.chapters = rawJson.chapters.map((ch: Record<string, unknown>) => ({
-          ...ch,
-          order: Math.round(Number(ch.order)),
-          targetPages: Math.max(1, Math.round(Number(ch.targetPages))),
-          targetWords: Math.max(1, Math.round(Number(ch.targetWords))),
-        }))
-      }
-      parsed = WritingPlanOutputSchema.parse(rawJson)
+
+      // Normaliza array de capítulos — modelo pode usar nomes em português
+      // e pode aninhar dentro de um objeto wrapper (ex: { plano: { capitulos: [...] } })
+      const anyObj = rawJson.plano ?? rawJson.plan ?? rawJson
+      const chaptersRaw: Record<string, unknown>[] =
+        anyObj.chapters      ??  // inglês direto
+        anyObj.capitulos     ??  // português direto
+        anyObj.chapters_list ??  // variante inglês
+        []
+
+      const chapters = chaptersRaw.map((ch: Record<string, unknown>, idx: number) => ({
+        order:       Math.round(Number(ch.order ?? ch.numero ?? ch.ordem ?? (idx + 1))),
+        title:       String(ch.title ?? ch.titulo ?? `Capítulo ${idx + 1}`),
+        description: String(ch.description ?? ch.descricao ?? ch.descricão ?? ch.summary ?? ''),
+        targetPages: Math.max(1, Math.round(Number(ch.targetPages ?? ch.paginas ?? ch.target_pages ?? ch.pages ?? 1))),
+        targetWords: Math.max(1, Math.round(Number(ch.targetWords ?? ch.palavras ?? ch.target_words ?? ch.words ?? 100))),
+      }))
+
+      parsed = WritingPlanOutputSchema.parse({ chapters })
     } catch (parseErr) {
-      console.error('[plan/route] parse error:', parseErr, 'raw:', raw)
-      return NextResponse.json({ error: 'Resposta da IA fora do formato esperado.' }, { status: 500 })
+      const zodMsg = parseErr instanceof Error ? parseErr.message : String(parseErr)
+      console.error('[plan/route] parse error:', zodMsg, '\nraw:', raw?.slice(0, 800))
+      return NextResponse.json({
+        error: `Erro ao processar plano da IA: ${zodMsg.slice(0, 200)}`,
+      }, { status: 500 })
     }
 
     // Remove plano anterior se existir

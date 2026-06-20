@@ -3,11 +3,11 @@ import { z } from 'zod'
 // ── Plano de escrita ─────────────────────────────────────────────────────────
 
 export const ChapterPlanSchema = z.object({
-  order: z.number().int().min(1),
+  order: z.coerce.number().int().min(1),
   title: z.string().min(1),
   description: z.string().min(1),
-  targetPages: z.number().int().min(1),
-  targetWords: z.number().int().min(1),
+  targetPages: z.coerce.number().int().min(1),
+  targetWords: z.coerce.number().int().min(1),
 })
 
 export const WritingPlanOutputSchema = z.object({

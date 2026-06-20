@@ -15,20 +15,18 @@ function wordsPerPage(type: BookProject['type']): number {
 export function buildPlanSystemPrompt(book: BookProject): string {
   const isAcademic = book.type === 'academic'
 
+  const jsonFormat = `Responda APENAS com JSON válido neste formato exato (sem markdown, sem texto extra):
+{"chapters":[{"order":1,"title":"Título do capítulo","description":"Descrição do capítulo.","targetPages":N,"targetWords":N}]}`
+
   return isAcademic
     ? `Você é um especialista em metodologia científica e redação acadêmica.
-Sua tarefa é criar um plano de escrita detalhado para uma obra acadêmica em português brasileiro.
-Siga rigorosamente as normas ABNT.
-O plano deve ter estrutura acadêmica clássica adaptada ao tipo da obra.
-Cada capítulo deve ter objetivo claro, coerência com o tema geral e progressão lógica.
-Distribua as páginas de forma proporcional à complexidade de cada seção.
-Responda APENAS com o JSON do plano, sem texto adicional.`
+Sua tarefa é criar um plano de escrita para uma obra acadêmica em português brasileiro.
+Siga as normas ABNT. Cada capítulo deve ter objetivo claro e progressão lógica.
+${jsonFormat}`
     : `Você é um escritor profissional especialista em obras literárias.
-Sua tarefa é criar um plano de escrita detalhado para uma obra literária em português brasileiro.
-O plano deve ter arco narrativo coerente, capítulos com progressão dramática e ritmo adequado ao gênero.
-Cada capítulo deve ter título criativo e descrição que guie a escrita do conteúdo.
-Distribua as páginas de forma equilibrada.
-Responda APENAS com o JSON do plano, sem texto adicional.`
+Sua tarefa é criar um plano de escrita para uma obra literária em português brasileiro.
+O plano deve ter arco narrativo coerente e ritmo adequado ao gênero.
+${jsonFormat}`
 }
 
 /**
@@ -61,13 +59,15 @@ TOTAL DE PALAVRAS ESTIMADO: ${totalWords} (a ${wpg} palavras/página)
 
 ${structureHint}
 
-INSTRUÇÕES:
-- Gere exatamente os capítulos necessários para cobrir ${book.targetPages} páginas no total.
+INSTRUÇÕES (obrigatório):
+- Use EXATAMENTE os campos: order, title, description, targetPages, targetWords (em inglês).
+- Gere os capítulos necessários para cobrir ${book.targetPages} páginas no total.
 - A soma de targetPages de todos os capítulos deve ser igual a ${book.targetPages}.
-- targetWords de cada capítulo = targetPages × ${wpg}.
-- Títulos em português, claros e descritivos.
-- Descrições de 2 a 4 frases explicando o conteúdo de cada capítulo.
-- A ordem começa em 1.`
+- targetWords de cada capítulo = targetPages × ${wpg} (número inteiro).
+- Títulos e descrições em português, claros e descritivos.
+- Descrições de 2 a 4 frases por capítulo.
+- A ordem (order) começa em 1.
+- Retorne SOMENTE o JSON, sem qualquer texto antes ou depois.`
 }
 
 function buildAcademicStructureHint(book: BookProject): string {
