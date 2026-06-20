@@ -1,22 +1,23 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/appwrite/server'
-import { DATABASE_ID, COLLECTIONS, APPWRITE_ENDPOINT, APPWRITE_PROJECT_ID } from '@/lib/appwrite/config'
-import { Query } from 'node-appwrite'
+import { DATABASE_ID, COLLECTIONS } from '@/lib/appwrite/config'
 import { Download, BookOpen, ArrowLeft, Calendar, User } from 'lucide-react'
+
+// URLs de arquivo passam pelo proxy Next.js para evitar CORS/auth cross-origin
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+function proxyUrl(bucket: string, fileId: string, download = false) {
+  return `${APP_URL}/api/files/${bucket}/${fileId}${download ? '?dl=1' : ''}`
+}
 
 interface Props { params: Promise<{ bookId: string }> }
 
 async function getItem(bookId: string) {
   try {
     const { databases } = createAdminClient()
-    // bookId aqui é o $id do library_item
-    const res = await databases.listDocuments(DATABASE_ID, COLLECTIONS.LIBRARY_ITEMS, [
-      Query.equal('$id', bookId),
-      Query.limit(1),
-    ])
-    if (res.total === 0) return null
-    return res.documents[0] as Record<string, unknown>
+    // bookId é o $id do library_item — usa getDocument diretamente
+    const doc = await databases.getDocument(DATABASE_ID, COLLECTIONS.LIBRARY_ITEMS, bookId)
+    return doc as Record<string, unknown>
   } catch {
     return null
   }
@@ -27,13 +28,8 @@ export default async function LibraryBookPage({ params }: Props) {
   const item = await getItem(bookId)
   if (!item) notFound()
 
-  const coverUrl = item.coverFileId
-    ? `${APPWRITE_ENDPOINT}/storage/buckets/covers/files/${item.coverFileId}/view?project=${APPWRITE_PROJECT_ID}`
-    : null
-
-  const pdfDownloadUrl = item.pdfFileId
-    ? `${APPWRITE_ENDPOINT}/storage/buckets/exports/files/${item.pdfFileId}/download?project=${APPWRITE_PROJECT_ID}`
-    : null
+  const coverUrl       = item.coverFileId ? proxyUrl('covers',  item.coverFileId as string) : null
+  const pdfDownloadUrl = item.pdfFileId   ? proxyUrl('exports', item.pdfFileId   as string, true) : null
 
   const publishedDate = item.publishedAt
     ? new Date(item.publishedAt as string).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })

@@ -84,7 +84,7 @@ export default async function LibraryPage() {
                   {item.coverFileId ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={`${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/covers/files/${item.coverFileId}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`}
+                      src={`/api/files/covers/${item.coverFileId}`}
                       alt={item.title}
                       className="w-full h-full object-cover"
                     />

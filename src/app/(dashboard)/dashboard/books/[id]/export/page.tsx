@@ -5,13 +5,12 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 import { getBookProject, updateBookProject } from '@/lib/appwrite/database'
-import { getFileDownloadUrl } from '@/lib/appwrite/client'
+import { getPdfDownloadUrl } from '@/lib/appwrite/fileUrls'
 import type { BookProject } from '@/types/book'
 import { CoverUploader } from '@/components/books/CoverUploader'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Spinner } from '@/components/ui/Spinner'
-import { BUCKETS } from '@/lib/appwrite/config'
 import {
   ChevronLeft, FileText, Download, BookOpen,
   Globe, CheckCircle2, AlertCircle,
@@ -102,7 +101,7 @@ export default function ExportPage() {
   if (!book)   return null
 
   const downloadUrl = book.finalPdfFileId
-    ? getFileDownloadUrl(BUCKETS.EXPORTS, book.finalPdfFileId)
+    ? getPdfDownloadUrl(book.finalPdfFileId)
     : null
 
   return (

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { storage, ID } from '@/lib/appwrite/client'
-import { getFileViewUrl } from '@/lib/appwrite/client'
+import { getCoverUrl } from '@/lib/appwrite/fileUrls'
 import { BUCKETS } from '@/lib/appwrite/config'
 import { Button } from '@/components/ui/Button'
 import { Spinner } from '@/components/ui/Spinner'
@@ -23,7 +23,7 @@ export function CoverUploader({ currentFileId, onUploaded, onRemoved }: CoverUpl
   const fileRef = useRef<HTMLInputElement>(null)
 
   const previewUrl = currentFileId
-    ? getFileViewUrl(BUCKETS.COVERS, currentFileId)
+    ? getCoverUrl(currentFileId)
     : null
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
