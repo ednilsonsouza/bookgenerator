@@ -49,6 +49,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     if (!isAppwriteConfigured()) throw new Error('Appwrite não configurado.')
+    // Appwrite proíbe criar sessão nova se já houver uma ativa.
+    await account.deleteSession('current').catch(() => {})
     await account.createEmailPasswordSession(email, password)
     setUser(await account.get())
   }, [])
@@ -57,6 +59,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (name: string, email: string, password: string) => {
       if (!isAppwriteConfigured()) throw new Error('Appwrite não configurado.')
       await account.create(ID.unique(), email, password, name)
+      // Limpa sessão anterior, se houver, antes de criar a nova.
+      await account.deleteSession('current').catch(() => {})
       await account.createEmailPasswordSession(email, password)
       setUser(await account.get())
     },

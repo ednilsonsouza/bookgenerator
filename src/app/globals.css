@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  /* Fundo laranja pastel */
-  --background: #fff3e6;
-  --background-muted: #ffe8cf;
-  --background-elevated: #fff8f0;
+  /* Fundo branco */
+  --background: #ffffff;
+  --background-muted: #f7f3ef;
+  --background-elevated: #fffdfa;
 
   /* Texto */
   --foreground: #162032;
@@ -12,8 +12,8 @@
 
   /* Superfícies (cards, inputs, etc) */
   --surface: #ffffff;
-  --surface-muted: #ffe8cf;
-  --surface-elevated: #fff8f0;
+  --surface-muted: #f5f0eb;
+  --surface-elevated: #fffdfa;
 
   /* Bordas */
   --border: #e6cfba;
