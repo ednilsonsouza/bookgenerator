@@ -201,6 +201,19 @@ export async function POST(
       throw new Error('Conteúdo vazio retornado pela IA.')
     }
 
+    // Remove indicadores de página fictícios (p. X, p. XX, p. 000, etc.)
+    // gerados pela IA quando não tem a paginação real da fonte.
+    generatedContent = generatedContent
+      .replace(/,\s*p\.\s*X+\b/gi, '')           // ", p. X" ou ", p. XX"
+      .replace(/,\s*p\.\s*\d{1,4}\b/g, (m) => {
+        // Mantém apenas se o número parece real (não placeholder óbvio como 000)
+        const n = parseInt(m.replace(/\D/g, ''), 10)
+        return (n === 0 || n > 9999) ? '' : m
+      })
+      .replace(/\(\s*([A-ZÁÀÃÊÉÍÓÕÚÇ]+(?:\s+[A-ZÁÀÃÊÉÍÓÕÚÇ]+)*),\s*(\d{4}),\s*p\.\s*X+\s*\)/gi,
+        '($1, $2)')                               // "(SILVA, 2023, p. X)" → "(SILVA, 2023)"
+      .trim()
+
     // ── Salva seções ──────────────────────────────────────────────────────────
     const MAX_SECTION = 7400
     const parts: string[] = []

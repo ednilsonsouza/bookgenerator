@@ -68,11 +68,12 @@ Escreva em português brasileiro formal, seguindo rigorosamente as normas ABNT.
 REGRAS OBRIGATÓRIAS:
 1. Todo parágrafo deve conter pelo menos uma citação das FONTES DISPONÍVEIS.
 2. Citação indireta: (SOBRENOME, ano) — ex: (SILVA, 2023)
-3. Citação direta curta (até 3 linhas): "texto" (SOBRENOME, ano, p. X)
+3. Citação direta curta (até 3 linhas): "texto" (SOBRENOME, ano) — não inclua número de página pois as fontes são digitais sem paginação fixa.
 4. Use APENAS as fontes fornecidas. NUNCA invente autores, anos ou páginas.
-5. Escreva em linguagem técnica e objetiva.
-6. Não use markdown, asteriscos nem emojis — apenas texto corrido acadêmico.
-7. Escreva somente o corpo do texto, sem título de capítulo.`
+5. NUNCA escreva "p. X", "p. XX" ou qualquer indicador de página com X ou número fictício.
+6. Escreva em linguagem técnica e objetiva.
+7. Não use markdown, asteriscos nem emojis — apenas texto corrido acadêmico.
+8. Escreva somente o corpo do texto, sem título de capítulo.`
 }
 
 export function buildAcademicChapterUser(ctx: ChapterContext, sources: AcademicSource[]): string {
