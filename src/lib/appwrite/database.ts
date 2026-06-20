@@ -103,7 +103,10 @@ export async function getBookProject(id: string): Promise<BookProject | null> {
 
 export async function updateBookProject(
   id: string,
-  data: Partial<Omit<BookProject, 'id' | 'userId' | 'createdAt' | 'updatedAt'>>
+  data: Partial<Omit<BookProject, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'coverFileId' | 'finalPdfFileId'>> & {
+    coverFileId?: string | null
+    finalPdfFileId?: string | null
+  }
 ): Promise<BookProject> {
   try {
     const payload: Record<string, unknown> = {}
@@ -116,8 +119,8 @@ export async function updateBookProject(
     if (data.targetPages !== undefined) payload.targetPages = data.targetPages
     if (data.status !== undefined) payload.status = data.status
     if (data.visibility !== undefined) payload.visibility = data.visibility
-    if (data.coverFileId !== undefined) payload.coverFileId = data.coverFileId
-    if (data.finalPdfFileId !== undefined) payload.finalPdfFileId = data.finalPdfFileId
+    if (data.coverFileId !== undefined) payload.coverFileId = data.coverFileId ?? null
+    if (data.finalPdfFileId !== undefined) payload.finalPdfFileId = data.finalPdfFileId ?? null
 
     const doc = await databases.updateDocument(
       DATABASE_ID,

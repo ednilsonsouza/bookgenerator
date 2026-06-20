@@ -70,9 +70,13 @@ export default function ExportPage() {
   }
 
   async function handleCoverRemoved() {
-    if (!book) return
-    await updateBookProject(book.id, { coverFileId: undefined })
-    setBook((prev) => prev ? { ...prev, coverFileId: undefined } : prev)
+    if (!book || !book.coverFileId) return
+    try {
+      await updateBookProject(book.id, { coverFileId: null })
+      setBook((prev) => prev ? { ...prev, coverFileId: undefined } : prev)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao remover capa.')
+    }
   }
 
   async function handlePublish() {
