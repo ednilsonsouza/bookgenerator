@@ -15,7 +15,7 @@ interface CoverUploaderProps {
   onRemoved?: () => void
 }
 
-const MAX_SIZE = 5 * 1024 * 1024 // 5 MB
+const MAX_SIZE = 20 * 1024 * 1024 // 20 MB
 
 export function CoverUploader({ currentFileId, onUploaded, onRemoved }: CoverUploaderProps) {
   const [uploading, setUploading] = useState(false)
@@ -31,7 +31,7 @@ export function CoverUploader({ currentFileId, onUploaded, onRemoved }: CoverUpl
     if (!file) return
 
     if (file.size > MAX_SIZE) {
-      setError('Imagem muito grande. Máximo: 5 MB.')
+      setError('Imagem muito grande. Máximo: 20 MB.')
       return
     }
     const ext = file.name.split('.').pop()?.toLowerCase() ?? ''
@@ -57,7 +57,7 @@ export function CoverUploader({ currentFileId, onUploaded, onRemoved }: CoverUpl
     <div className="flex flex-col gap-2">
       <label className="text-sm font-medium text-foreground/80">
         Capa do livro
-        <span className="ml-1 text-muted-foreground/70 font-normal">— JPG, PNG ou WEBP, máx. 5 MB</span>
+        <span className="ml-1 text-muted-foreground/70 font-normal">— JPG, PNG ou WEBP, máx. 20 MB</span>
       </label>
 
       {previewUrl ? (
