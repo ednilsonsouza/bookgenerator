@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/appwrite/server'
 import { DATABASE_ID, COLLECTIONS, APPWRITE_ENDPOINT, APPWRITE_PROJECT_ID } from '@/lib/appwrite/config'
 import { Query, ID } from 'node-appwrite'
 import { generatePdf } from '@/lib/pdf/generatePdf'
+import { generateCoverImage } from '@/lib/pdf/coverGenerator'
 import type { BookProject, Chapter } from '@/types/book'
 import type { AcademicSubtype, LiteraryGenre } from '@/types/book'
 import type { GeneratedSection } from '@/lib/appwrite/generation'
@@ -94,7 +95,7 @@ export async function POST(
       abntFormattedReference: r.abntFormattedReference as string,
     }))
 
-    // Capa (se existir)
+    // Capa: usa upload do autor ou gera uma automaticamente
     let coverImageBase64: string | undefined
     if (book.coverFileId) {
       try {
@@ -109,6 +110,34 @@ export async function POST(
           coverImageBase64 = `data:${mime};base64,${Buffer.from(buf).toString('base64')}`
         }
       } catch { /* capa ignorada se falhar */ }
+    }
+
+    // Gera capa automaticamente quando o autor não anexou uma imagem
+    if (!coverImageBase64 && book.type === 'literary') {
+      try {
+        const genreLabel = book.literaryGenre
+          ? book.literaryGenre.replace(/_/g, ' ')
+          : undefined
+        const coverBuf = await generateCoverImage({
+          title: book.title,
+          authorName: authorName || 'Autor',
+          theme: book.theme,
+          genre: genreLabel,
+          type: book.type,
+        })
+        coverImageBase64 = `data:image/png;base64,${coverBuf.toString('base64')}`
+
+        // Salva a capa gerada no bucket para reutilização futura
+        const coverBlob = new Blob([new Uint8Array(coverBuf)], { type: 'image/png' })
+        const coverFile = new File([coverBlob], `cover_${bookId}.png`, { type: 'image/png' })
+        const savedCover = await storage.createFile('covers', ID.unique(), coverFile as unknown as File)
+        await databases.updateDocument(DATABASE_ID, COLLECTIONS.BOOK_PROJECTS, bookId, {
+          coverFileId: savedCover.$id,
+        })
+      } catch (coverErr) {
+        console.error('[export/route] cover generation failed:', coverErr)
+        // Continua sem capa se a geração falhar
+      }
     }
 
     // ── Gera o PDF ────────────────────────────────────────────────────────────
