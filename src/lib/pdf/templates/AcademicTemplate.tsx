@@ -2,6 +2,8 @@ import React from 'react'
 import { Document, Page, Text, View } from '@react-pdf/renderer'
 import { academicStyles as s } from '../styles'
 import { PageHeader, PageFooter } from '../components'
+import { parseContentBlocks } from '../tableParser'
+import { TableBlock } from '../TableBlock'
 import type { BookProject, Chapter } from '@/types/book'
 import { ACADEMIC_SUBTYPE_LABELS } from '@/types/book'
 import type { GeneratedSection } from '@/lib/appwrite/generation'
@@ -21,6 +23,22 @@ interface Props {
 
 function splitParagraphs(text: string): string[] {
   return text.split(/\n\n+/).map((p) => p.trim()).filter(Boolean)
+}
+
+/**
+ * Renderiza o conteúdo de uma seção, detectando quadros e texto corrido.
+ */
+function renderSection(content: string) {
+  const blocks = parseContentBlocks(content)
+  return blocks.map((block, bi) => {
+    if (block.type === 'table') {
+      return <TableBlock key={bi} data={block.data} fontFamily="Helvetica" />
+    }
+    // Texto: divide em parágrafos
+    return splitParagraphs(block.content).map((para, pi) => (
+      <Text key={`${bi}-${pi}`} style={s.body}>{para}</Text>
+    ))
+  })
 }
 
 export function AcademicPdf({ book, chapters, sectionsMap, references, authorName }: Props) {
@@ -93,9 +111,8 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
 
       {/* ── CAPÍTULOS ────────────────────────────── header + footer automático */}
       {generatedChapters.map((chapter) => {
-        const sections   = sectionsMap[chapter.id] ?? []
-        const fullText   = sections.map((sec) => sec.content).join('\n\n')
-        const paragraphs = splitParagraphs(fullText)
+        const sections = sectionsMap[chapter.id] ?? []
+        const fullText = sections.map((sec) => sec.content).join('\n\n')
 
         return (
           <Page key={chapter.id} size="A4" style={s.page}>
@@ -103,9 +120,7 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
             <Text style={[s.h2, { marginBottom: 16 }]}>
               {chapter.order}  {chapter.title.toUpperCase()}
             </Text>
-            {paragraphs.map((para, pi) => (
-              <Text key={pi} style={s.body}>{para}</Text>
-            ))}
+            {renderSection(fullText)}
             <PageFooter />
           </Page>
         )

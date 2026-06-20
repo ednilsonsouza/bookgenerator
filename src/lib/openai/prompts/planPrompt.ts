@@ -3,7 +3,6 @@ import { ACADEMIC_SUBTYPE_LABELS, LITERARY_GENRE_LABELS } from '@/types/book'
 
 /**
  * Estima o número de palavras por página para o tipo da obra.
- * Obras acadêmicas tendem a ter mais texto por página; literárias menos.
  */
 function wordsPerPage(type: BookProject['type']): number {
   return type === 'academic' ? 350 : 280
@@ -20,7 +19,9 @@ export function buildPlanSystemPrompt(book: BookProject): string {
 
   return isAcademic
     ? `Você é um especialista em metodologia científica e redação acadêmica.
-Sua tarefa é criar um plano de escrita para uma obra acadêmica em português brasileiro.
+Sua tarefa é criar um plano de escrita para uma obra acadêmica do tipo LEVANTAMENTO BIBLIOGRÁFICO em português brasileiro.
+A metodologia deve ser baseada na Análise de Conteúdo de Laurence Bardin.
+Os resultados devem ser analisados a partir das unidades de contexto e categorias criadas na Análise de Conteúdo.
 Siga as normas ABNT. Cada capítulo deve ter objetivo claro e progressão lógica.
 ${jsonFormat}`
     : `Você é um escritor profissional especialista em obras literárias.
@@ -52,7 +53,7 @@ export function buildPlanUserPrompt(book: BookProject): string {
 
 TÍTULO: ${book.title}
 TEMA: ${book.theme}
-TIPO: ${isAcademic ? 'Acadêmica' : 'Literária'} — ${subtypeLabel}
+TIPO: ${isAcademic ? 'Acadêmica — Levantamento Bibliográfico' : 'Literária'} — ${subtypeLabel}
 DESCRIÇÃO: ${book.description}
 TOTAL DE PÁGINAS: ${book.targetPages}
 TOTAL DE PALAVRAS ESTIMADO: ${totalWords} (a ${wpg} palavras/página)
@@ -73,34 +74,54 @@ INSTRUÇÕES (obrigatório):
 function buildAcademicStructureHint(book: BookProject): string {
   const subtype = book.academicSubtype
 
+  // Estrutura padrão de levantamento bibliográfico com Análise de Conteúdo de Bardin
+  const bardinStructure = `ESTRUTURA OBRIGATÓRIA — LEVANTAMENTO BIBLIOGRÁFICO COM ANÁLISE DE CONTEÚDO DE BARDIN:
+
+1. Introdução
+   - Contextualização do tema, problema de pesquisa, justificativa e objetivos (geral e específicos).
+   - Apresentação da abordagem metodológica adotada.
+
+2. Referencial Teórico
+   - Fundamentação teórica sobre o tema.
+   - Pode ser dividido em subcapítulos conforme a complexidade do tema.
+   - Discussão dos principais conceitos, teorias e estudos relacionados.
+
+3. Metodologia
+   - Caracterização da pesquisa como levantamento bibliográfico de abordagem qualitativa.
+   - Descrição dos critérios de seleção do corpus documental (bases de dados, descritores, período, critérios de inclusão/exclusão).
+   - Detalhamento das três fases da Análise de Conteúdo de Laurence Bardin:
+     a) Pré-análise: leitura flutuante, constituição do corpus e formulação de hipóteses.
+     b) Exploração do material: codificação, definição das unidades de registro e unidades de contexto.
+     c) Tratamento dos resultados: categorização temática e inferências.
+   - Apresentação das categorias de análise emergentes do corpus.
+
+4. Análise e Discussão dos Resultados
+   - Resultados analisados e discutidos a partir das categorias e unidades de contexto identificadas.
+   - Cada categoria deve ter uma seção própria com análise dos dados e discussão à luz do referencial teórico.
+   - Citações e evidências dos textos analisados para sustentar cada categoria.
+
+5. Considerações Finais
+   - Síntese dos principais resultados encontrados nas categorias.
+   - Resposta aos objetivos e problema de pesquisa.
+   - Limitações do estudo e sugestões para pesquisas futuras.`
+
   if (subtype === 'article') {
-    return `ESTRUTURA ESPERADA PARA ARTIGO CIENTÍFICO:
-1. Introdução (apresentação do problema, justificativa, objetivos)
-2. Referencial Teórico (revisão de literatura)
-3. Metodologia (delineamento da pesquisa)
-4. Resultados e Discussão
-5. Conclusão
-6. Referências (não conta como capítulo de texto — inclua apenas se necessário)`
+    return `ESTRUTURA PARA ARTIGO CIENTÍFICO — LEVANTAMENTO BIBLIOGRÁFICO COM ANÁLISE DE CONTEÚDO DE BARDIN:
+
+1. Introdução (problema, justificativa, objetivos)
+2. Referencial Teórico
+3. Metodologia (levantamento bibliográfico + Análise de Conteúdo de Bardin: pré-análise, exploração do material, categorização)
+4. Resultados e Discussão (por categorias da Análise de Conteúdo, com unidades de contexto)
+5. Considerações Finais`
   }
 
   if (subtype === 'thesis' || subtype === 'dissertation') {
-    return `ESTRUTURA ESPERADA PARA ${subtype === 'thesis' ? 'TESE' : 'DISSERTAÇÃO'}:
-1. Introdução
-2. Revisão de Literatura / Referencial Teórico
-3. Metodologia
-4. Capítulos de desenvolvimento (2 a 4 capítulos conforme o tema)
-5. Resultados e Discussão
-6. Considerações Finais
-Elementos pré-textuais (resumo, abstract) não são capítulos.`
+    return `${bardinStructure}
+
+NOTA: Para ${subtype === 'thesis' ? 'tese' : 'dissertação'}, o Referencial Teórico pode ser dividido em 2 ou 3 capítulos temáticos. A Análise e Discussão pode igualmente ser dividida em capítulos por categoria.`
   }
 
-  return `ESTRUTURA ESPERADA PARA OBRA ACADÊMICA:
-1. Introdução
-2. Referencial Teórico
-3. Metodologia
-4. Desenvolvimento (1 a 3 capítulos)
-5. Resultados / Análise
-6. Conclusão`
+  return bardinStructure
 }
 
 function buildLiteraryStructureHint(book: BookProject): string {
