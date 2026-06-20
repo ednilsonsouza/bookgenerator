@@ -102,3 +102,4 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
     </Document>
   )
 }
+

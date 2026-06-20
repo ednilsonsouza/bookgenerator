@@ -148,14 +148,14 @@ export default function ReferencesPage() {
       {/* Barra de progresso */}
       <Card className={cn(
         'border',
-        meetsMinimum ? 'border-emerald-800/50' : 'border-yellow-800/50'
+        meetsMinimum ? 'border-success/30' : 'border-warning/30'
       )}>
         <CardContent>
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-foreground/80">
               {refs.length} de {MIN_REFS} mínimas adicionadas
             </span>
-            <span className={cn('text-sm font-medium', meetsMinimum ? 'text-emerald-400' : 'text-yellow-400')}>
+            <span className={cn('text-sm font-medium', meetsMinimum ? 'text-success' : 'text-warning')}>
               {meetsMinimum
                 ? <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Mínimo atingido</span>
                 : `Faltam ${MIN_REFS - refs.length}`}
@@ -192,15 +192,15 @@ export default function ReferencesPage() {
       )}
 
       {error && (
-        <p className="text-sm text-red-400 bg-red-900/20 border border-red-800 rounded-md px-4 py-2">
+        <p className="text-sm text-danger bg-danger-muted border border-danger/30 rounded-md px-4 py-2">
           {error}
         </p>
       )}
 
       {/* Aviso mínimo */}
       {!meetsMinimum && refs.length > 0 && (
-        <div className="flex items-start gap-3 rounded-lg border border-yellow-800/50 bg-yellow-900/10 px-4 py-3">
-          <AlertTriangle className="h-4 w-4 text-yellow-400 shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 rounded-lg border border-warning/30 bg-warning-muted px-4 py-3">
+          <AlertTriangle className="h-4 w-4 text-warning shrink-0 mt-0.5" />
           <p className="text-sm text-yellow-300">
             Adicione pelo menos {MIN_REFS - refs.length} referência{MIN_REFS - refs.length > 1 ? 's' : ''} antes de gerar o plano de escrita.
           </p>
@@ -274,7 +274,7 @@ export default function ReferencesPage() {
                       title="Remover"
                       onClick={() => handleDelete(ref.id)}
                       disabled={deletingId === ref.id}
-                      className="p-1.5 rounded text-muted-foreground/60 hover:text-red-400 transition-colors disabled:opacity-40"
+                      className="p-1.5 rounded text-muted-foreground/60 hover:text-danger transition-colors disabled:opacity-40"
                     >
                       {deletingId === ref.id
                         ? <Spinner size="sm" className="h-3.5 w-3.5" />

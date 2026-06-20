@@ -8,11 +8,11 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  default: 'bg-surface-muted text-foreground/80',
-  success: 'bg-success-muted text-success border border-success/20',
-  warning: 'bg-warning-muted text-warning border border-warning/20',
-  danger: 'bg-danger-muted text-danger border border-danger/20',
-  info: 'bg-info-muted text-info border border-info/20',
+  default: 'bg-white/5 text-foreground/80 border border-white/10',
+  success: 'bg-success-muted text-success border border-success/30',
+  warning: 'bg-warning-muted text-warning border border-warning/30',
+  danger: 'bg-danger-muted text-danger border border-danger/30',
+  info: 'bg-info-muted text-info border border-info/30',
 }
 
 export function Badge({ variant = 'default', className, children, ...props }: BadgeProps) {
@@ -54,3 +54,4 @@ export function BookStatusBadge({ status }: { status: BookStatus }) {
   }
   return <Badge variant={statusVariants[status]}>{labels[status]}</Badge>
 }
+

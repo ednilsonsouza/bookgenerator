@@ -134,3 +134,4 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
     </Document>
   )
 }
+

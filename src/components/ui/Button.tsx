@@ -1,4 +1,4 @@
-﻿import { forwardRef } from 'react'
+import { forwardRef } from 'react'
 import { cn } from '@/lib/utils'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
@@ -12,13 +12,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    'bg-primary text-primary-foreground hover:bg-primary-hover active:bg-[#081b2f] disabled:bg-primary/50 disabled:text-primary-foreground/70',
+    'bg-primary text-primary-foreground hover:bg-primary-hover active:bg-[#0e7490] disabled:bg-primary/40 disabled:text-primary-foreground/60 shadow-[0_0_16px_rgba(6,182,212,0.35)] hover:shadow-[0_0_24px_rgba(6,182,212,0.5)]',
   secondary:
-    'bg-surface text-foreground border border-border hover:bg-background-muted active:bg-border disabled:opacity-50',
+    'bg-surface text-foreground border border-border hover:border-border-strong hover:bg-surface-muted active:bg-background-elevated disabled:opacity-50',
   ghost:
-    'bg-transparent text-foreground/80 hover:bg-surface-muted hover:text-foreground disabled:opacity-40',
+    'bg-transparent text-foreground/70 hover:bg-white/5 hover:text-foreground disabled:opacity-40',
   danger:
-    'bg-danger text-foreground hover:bg-[#a82b23] active:bg-[#8f241d] disabled:opacity-50',
+    'bg-danger/10 text-danger border border-danger/30 hover:bg-danger/20 active:bg-danger/30 disabled:opacity-50',
 }
 
 const sizeClasses: Record<Size, string> = {
@@ -37,7 +37,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 cursor-pointer',
+          'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 cursor-pointer',
           variantClasses[variant],
           sizeClasses[size],
           className
@@ -73,3 +73,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 )
 
 Button.displayName = 'Button'
+

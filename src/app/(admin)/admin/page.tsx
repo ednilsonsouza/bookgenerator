@@ -138,3 +138,4 @@ function StatBox({ icon: Icon, label, value }: { icon: React.ElementType; label:
     </div>
   )
 }
+

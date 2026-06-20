@@ -44,7 +44,7 @@ export default async function LibraryBookPage({ params }: Props) {
           <Link href="/library" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Biblioteca</Link>
           <div className="ml-auto flex items-center gap-3">
             <Link href="/login"    className="text-sm text-muted-foreground hover:text-foreground transition-colors">Entrar</Link>
-            <Link href="/register" className="rounded-md bg-white px-3 py-1.5 text-xs font-medium text-black hover:bg-surface transition-colors">Criar conta</Link>
+            <Link href="/register" className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary-hover transition-colors">Criar conta</Link>
           </div>
         </div>
       </header>
@@ -74,7 +74,7 @@ export default async function LibraryBookPage({ params }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
                 download
-                className="flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-medium text-black hover:bg-surface transition-colors"
+                className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary-hover transition-colors"
               >
                 <Download className="h-4 w-4" />
                 Baixar PDF
@@ -133,7 +133,7 @@ export default async function LibraryBookPage({ params }: Props) {
               )}
               <Link
                 href="/register"
-                className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-black hover:bg-surface transition-colors"
+                className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover transition-colors"
               >
                 Criar minha obra
               </Link>

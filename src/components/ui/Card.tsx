@@ -8,7 +8,7 @@ export function Card({ className, children, ...props }: CardProps) {
   return (
     <div
       className={cn(
-        'rounded-xl border border-border bg-surface p-6 shadow-sm',
+        'rounded-xl border border-border bg-surface p-6 backdrop-blur-md shadow-[0_0_30px_rgba(6,182,212,0.06)]',
         className
       )}
       {...props}
@@ -57,3 +57,4 @@ export function CardFooter({ className, children, ...props }: CardProps) {
     </div>
   )
 }
+

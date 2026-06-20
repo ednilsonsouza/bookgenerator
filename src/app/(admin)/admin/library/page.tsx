@@ -94,7 +94,7 @@ export default function AdminLibraryPage() {
                           <button
                             onClick={() => handleRemove(item)}
                             disabled={removingId === item.$id}
-                            className="text-muted-foreground/70 hover:text-red-400 transition-colors disabled:opacity-40"
+                            className="text-muted-foreground/70 hover:text-danger transition-colors disabled:opacity-40"
                             title="Despublicar"
                           >
                             {removingId === item.$id ? <Spinner size="sm" /> : <Trash2 className="h-4 w-4" />}
@@ -132,3 +132,4 @@ export default function AdminLibraryPage() {
     </div>
   )
 }
+

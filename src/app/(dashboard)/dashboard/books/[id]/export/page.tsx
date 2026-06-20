@@ -124,15 +124,15 @@ export default function ExportPage() {
       </div>
 
       {error && (
-        <div className="flex items-start gap-3 rounded-lg border border-red-800 bg-red-900/20 px-4 py-3">
-          <AlertCircle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
-          <p className="text-sm text-red-400">{error}</p>
+        <div className="flex items-start gap-3 rounded-lg border border-danger/30 bg-danger-muted px-4 py-3">
+          <AlertCircle className="h-4 w-4 text-danger mt-0.5 shrink-0" />
+          <p className="text-sm text-danger">{error}</p>
         </div>
       )}
       {success && (
-        <div className="flex items-start gap-3 rounded-lg border border-emerald-800 bg-emerald-900/20 px-4 py-3">
-          <CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5 shrink-0" />
-          <p className="text-sm text-emerald-400">{success}</p>
+        <div className="flex items-start gap-3 rounded-lg border border-success/30 bg-success-muted px-4 py-3">
+          <CheckCircle2 className="h-4 w-4 text-success mt-0.5 shrink-0" />
+          <p className="text-sm text-success">{success}</p>
         </div>
       )}
 
@@ -202,7 +202,7 @@ export default function ExportPage() {
             Um resumo será gerado automaticamente pela IA.
           </p>
           {book.visibility === 'public' ? (
-            <div className="flex items-center gap-2 text-emerald-400 text-sm">
+            <div className="flex items-center gap-2 text-success text-sm">
               <CheckCircle2 className="h-4 w-4" />
               Já publicada na biblioteca
               <Link href="/library" className="underline hover:text-emerald-300 transition-colors ml-1">

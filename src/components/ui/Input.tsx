@@ -21,10 +21,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            'h-10 w-full rounded-md border bg-surface px-3 text-sm text-foreground placeholder-muted-foreground/60 transition-colors',
-            'focus:outline-none focus:ring-2 focus:ring-primary/30',
+            'h-10 w-full rounded-md border bg-surface px-3 text-sm text-foreground placeholder-muted-foreground/50 transition-all',
+            'focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50',
             error
-              ? 'border-danger focus:ring-danger/20'
+              ? 'border-danger focus:ring-danger/30 focus:border-danger/50'
               : 'border-border hover:border-border-strong',
             props.disabled && 'cursor-not-allowed opacity-50',
             className
@@ -39,3 +39,4 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 )
 
 Input.displayName = 'Input'
+

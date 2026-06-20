@@ -28,10 +28,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            'h-10 w-full rounded-md border bg-surface px-3 text-sm text-foreground transition-colors appearance-none cursor-pointer',
-            'focus:outline-none focus:ring-2 focus:ring-primary/30',
+            'h-10 w-full rounded-md border bg-surface px-3 text-sm text-foreground transition-all appearance-none cursor-pointer',
+            'focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50',
             error
-              ? 'border-danger focus:ring-danger/20'
+              ? 'border-danger focus:ring-danger/30 focus:border-danger/50'
               : 'border-border hover:border-border-strong',
             props.disabled && 'cursor-not-allowed opacity-50',
             className
@@ -44,7 +44,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             </option>
           )}
           {options.map((opt) => (
-            <option key={opt.value} value={opt.value} className="bg-surface">
+            <option key={opt.value} value={opt.value} className="bg-background-elevated">
               {opt.label}
             </option>
           ))}
@@ -57,3 +57,4 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 )
 
 Select.displayName = 'Select'
+

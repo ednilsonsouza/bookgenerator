@@ -34,8 +34,8 @@ interface UsageData {
 
 const PAGE_SIZE = 30
 const STATUS_COLORS: Record<string, string> = {
-  completed: 'text-emerald-400', running: 'text-yellow-400',
-  failed: 'text-red-400',       pending: 'text-muted-foreground',
+  completed: 'text-success', running: 'text-warning',
+  failed: 'text-danger',       pending: 'text-muted-foreground',
 }
 
 export default function AdminUsagePage() {
@@ -178,3 +178,4 @@ export default function AdminUsagePage() {
     </div>
   )
 }
+

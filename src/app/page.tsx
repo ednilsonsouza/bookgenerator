@@ -26,15 +26,16 @@ export default function HomePage() {
       </header>
 
       {/* Hero */}
-      <section className="mx-auto max-w-5xl px-4 py-24 sm:px-6 text-center">
+      <section className="relative mx-auto max-w-5xl px-4 py-24 sm:px-6 text-center bg-grid">
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background pointer-events-none" />
         <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs text-muted-foreground mb-6">
           <Wand2 className="h-3 w-3" />
           GPT-4o mini • Geração por capítulos • ABNT
         </div>
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-5 leading-tight">
+        <h1 className="relative text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-5 leading-tight">
           Gere obras extensas
           <br />
-          <span className="text-muted-foreground">com inteligência artificial</span>
+          <span className="text-primary">com inteligência artificial</span>
         </h1>
         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
           Crie monografias, teses, romances e muito mais. A IA gera capítulo por capítulo, com
@@ -100,3 +101,4 @@ const features = [
     description: 'Publique sua obra e compartilhe com o mundo gratuitamente.',
   },
 ]
+

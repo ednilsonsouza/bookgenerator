@@ -88,8 +88,8 @@ export default function AdminUsersPage() {
                     <td className="px-4 py-3">
                       <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
                         u.status
-                          ? 'bg-emerald-900/40 text-emerald-400'
-                          : 'bg-red-900/40 text-red-400'
+                          ? 'bg-success-muted text-success'
+                          : 'bg-danger-muted text-danger'
                       }`}>
                         {u.status ? 'Ativo' : 'Bloqueado'}
                       </span>
@@ -147,3 +147,4 @@ export default function AdminUsersPage() {
     </div>
   )
 }
+

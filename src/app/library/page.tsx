@@ -40,7 +40,7 @@ export default async function LibraryPage() {
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login"    className="text-sm text-muted-foreground hover:text-foreground transition-colors">Entrar</Link>
-            <Link href="/register" className="rounded-md bg-white px-3 py-1.5 text-xs font-medium text-black hover:bg-surface transition-colors">Criar conta</Link>
+            <Link href="/register" className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary-hover transition-colors">Criar conta</Link>
           </div>
         </div>
       </header>
@@ -64,7 +64,7 @@ export default async function LibraryPage() {
             <p className="text-sm text-muted-foreground/70 max-w-sm mb-6">
               Crie uma obra, gere o conteúdo e publique aqui para que outros possam ler.
             </p>
-            <Link href="/register" className="rounded-md bg-white px-4 py-2 text-sm font-medium text-black hover:bg-surface transition-colors">
+            <Link href="/register" className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover transition-colors">
               Começar agora
             </Link>
           </div>
@@ -125,3 +125,4 @@ export default async function LibraryPage() {
     </div>
   )
 }
+

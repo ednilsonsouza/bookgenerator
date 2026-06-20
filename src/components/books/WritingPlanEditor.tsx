@@ -92,7 +92,7 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
         <div>
           <p className="text-sm text-muted-foreground">
             {chapters.length} capítulos •{' '}
-            <span className={cn(totalPages === plan.chapters.reduce((s,c)=>s+c.targetPages,0) ? 'text-muted-foreground' : 'text-yellow-400')}>
+            <span className={cn(totalPages === plan.chapters.reduce((s,c)=>s+c.targetPages,0) ? 'text-muted-foreground' : 'text-warning')}>
               {totalPages} págs. no total
             </span>
           </p>
@@ -121,7 +121,7 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
       </div>
 
       {error && (
-        <p className="rounded-md border border-red-800 bg-red-900/20 px-3 py-2 text-sm text-red-400">
+        <p className="rounded-md border border-danger/30 bg-danger-muted px-3 py-2 text-sm text-danger">
           {error}
         </p>
       )}
@@ -133,7 +133,7 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
             key={chapter.id}
             className={cn(
               'rounded-xl border bg-surface-muted/60 transition-colors',
-              chapter.dirty ? 'border-yellow-800/60' : 'border-border',
+              chapter.dirty ? 'border-warning/30/60' : 'border-border',
               expandedId === chapter.id && 'border-border'
             )}
           >
@@ -238,3 +238,4 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
     </div>
   )
 }
+

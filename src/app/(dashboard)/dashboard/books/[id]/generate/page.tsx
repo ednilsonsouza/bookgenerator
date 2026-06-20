@@ -214,9 +214,9 @@ export default function GeneratePage() {
 
       {/* Erro */}
       {error && (
-        <div className="flex items-start gap-3 rounded-lg border border-red-800 bg-red-900/20 px-4 py-3">
-          <AlertCircle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
-          <p className="text-sm text-red-400">{error}</p>
+        <div className="flex items-start gap-3 rounded-lg border border-danger/30 bg-danger-muted px-4 py-3">
+          <AlertCircle className="h-4 w-4 text-danger mt-0.5 shrink-0" />
+          <p className="text-sm text-danger">{error}</p>
         </div>
       )}
 
@@ -287,11 +287,11 @@ export default function GeneratePage() {
       {/* Estado: concluído */}
       {pageState === 'completed' && (
         <div className="space-y-4">
-          <div className="rounded-xl border border-emerald-800/50 bg-emerald-900/10 px-5 py-4 flex items-start gap-3">
-            <BookOpen className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="rounded-xl border border-success/30 bg-success-muted px-5 py-4 flex items-start gap-3">
+            <BookOpen className="h-5 w-5 text-success shrink-0 mt-0.5" />
             <div>
               <p className="font-medium text-emerald-300">Obra gerada com sucesso!</p>
-              <p className="text-sm text-emerald-500 mt-0.5">
+              <p className="text-sm text-success mt-0.5">
                 Revise o conteúdo, adicione capa e exporte em PDF.
               </p>
             </div>

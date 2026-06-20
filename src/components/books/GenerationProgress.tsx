@@ -23,9 +23,9 @@ interface GenerationProgressProps {
 
 const statusConfig: Record<ChapterGenStatus, { icon: React.ElementType; label: string; classes: string }> = {
   pending:    { icon: Clock,        label: 'Aguardando', classes: 'text-muted-foreground/70 bg-surface-muted/40 border-border' },
-  generating: { icon: Loader2,      label: 'Gerando…',  classes: 'text-yellow-400 bg-yellow-900/20 border-yellow-800 animate-pulse' },
-  completed:  { icon: CheckCircle2, label: 'Concluído', classes: 'text-emerald-400 bg-emerald-900/20 border-emerald-800' },
-  failed:     { icon: AlertCircle,  label: 'Falhou',    classes: 'text-red-400 bg-red-900/20 border-red-800' },
+  generating: { icon: Loader2,      label: 'Gerando…',  classes: 'text-warning bg-warning-muted border-warning/30 animate-pulse' },
+  completed:  { icon: CheckCircle2, label: 'Concluído', classes: 'text-success bg-success-muted border-success/30' },
+  failed:     { icon: AlertCircle,  label: 'Falhou',    classes: 'text-danger bg-danger-muted border-danger/30' },
 }
 
 export function GenerationProgress({ chapters, progress, currentStep, isRunning }: GenerationProgressProps) {
@@ -43,7 +43,7 @@ export function GenerationProgress({ chapters, progress, currentStep, isRunning 
           <div
             className={cn(
               'h-2 rounded-full transition-all duration-500',
-              progress === 100 ? 'bg-emerald-500' : isRunning ? 'bg-white' : 'bg-muted-foreground/30'
+              progress === 100 ? 'bg-success' : isRunning ? 'bg-primary' : 'bg-muted-foreground/30'
             )}
             style={{ width: `${progress}%` }}
           />
@@ -82,3 +82,4 @@ export function GenerationProgress({ chapters, progress, currentStep, isRunning 
     </div>
   )
 }
+

@@ -162,7 +162,7 @@ export function ReferenceUploadForm({ bookId, userId, onSuccess }: ReferenceUplo
       </div>
 
       {error && (
-        <p className="text-sm text-red-400 rounded-md border border-red-800 bg-red-900/20 px-3 py-2">
+        <p className="text-sm text-danger rounded-md border border-danger/30 bg-danger-muted px-3 py-2">
           {error}
         </p>
       )}
@@ -173,3 +173,4 @@ export function ReferenceUploadForm({ bookId, userId, onSuccess }: ReferenceUplo
     </form>
   )
 }
+

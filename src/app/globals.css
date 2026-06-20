@@ -1,43 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  /* Fundo branco */
-  --background: #ffffff;
-  --background-muted: #f7f3ef;
-  --background-elevated: #fffdfa;
+  /* Futuristic black background */
+  --background: #050505;
+  --background-muted: #0a0a0a;
+  --background-elevated: #111111;
 
-  /* Texto */
-  --foreground: #162032;
-  --foreground-muted: #5c6b82;
+  /* Text */
+  --foreground: #f0f0f0;
+  --foreground-muted: #9ca3af;
 
-  /* Superfícies (cards, inputs, etc) */
-  --surface: #ffffff;
-  --surface-muted: #f5f0eb;
-  --surface-elevated: #fffdfa;
+  /* Glassmorphism surfaces */
+  --surface: rgba(17, 17, 17, 0.75);
+  --surface-muted: #111111;
+  --surface-elevated: #141414;
 
-  /* Bordas */
-  --border: #e6cfba;
-  --border-strong: #d4b89e;
+  /* Borders - subtle white with cyan glow on strong */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(6, 182, 212, 0.35);
 
-  /* Primária — azul marinho */
-  --primary: #0f3a63;
-  --primary-hover: #0a2744;
-  --primary-foreground: #ffffff;
+  /* Primary - cyan neon */
+  --primary: #06b6d4;
+  --primary-hover: #0891b2;
+  --primary-foreground: #000000;
 
-  /* Acento — laranja/coral */
-  --accent: #e87b3a;
-  --accent-hover: #c9652b;
+  /* Accent - violet */
+  --accent: #8b5cf6;
+  --accent-hover: #7c3aed;
   --accent-foreground: #ffffff;
 
-  /* Estados */
-  --danger: #c9372d;
-  --danger-muted: #fde8e6;
-  --success: #1f7a50;
-  --success-muted: #e6f4ed;
-  --warning: #b36b00;
-  --warning-muted: #fff3d6;
-  --info: #1d5a8a;
-  --info-muted: #e6f1f8;
+  /* States */
+  --danger: #ef4444;
+  --danger-muted: rgba(239, 68, 68, 0.12);
+  --success: #10b981;
+  --success-muted: rgba(16, 185, 129, 0.12);
+  --warning: #f59e0b;
+  --warning-muted: rgba(245, 158, 11, 0.12);
+  --info: #3b82f6;
+  --info-muted: rgba(59, 130, 246, 0.12);
 }
 
 @theme inline {
@@ -81,7 +81,7 @@ body {
   color: var(--foreground);
 }
 
-/* Scrollbar em tons quentes */
+/* Futuristic scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -90,15 +90,34 @@ body {
   background: var(--background-muted);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
+  background: rgba(6, 182, 212, 0.35);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--foreground-muted);
+  background: rgba(6, 182, 212, 0.6);
 }
 
 /* Select options */
 select option {
-  background: var(--surface);
+  background: var(--background-elevated);
   color: var(--foreground);
+}
+
+/* Utility glow classes */
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+}
+.glow-cyan-sm {
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+}
+.glow-violet {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
+}
+
+/* Futuristic grid background pattern */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
 }

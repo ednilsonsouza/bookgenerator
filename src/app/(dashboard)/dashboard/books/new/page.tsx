@@ -61,7 +61,7 @@ export default function NewBookPage() {
       </div>
 
       {error && (
-        <p className="rounded-md border border-red-800 bg-red-900/20 px-4 py-3 text-sm text-red-400">
+        <p className="rounded-md border border-danger/30 bg-danger-muted px-4 py-3 text-sm text-danger">
           {error}
         </p>
       )}
@@ -72,3 +72,4 @@ export default function NewBookPage() {
     </div>
   )
 }
+

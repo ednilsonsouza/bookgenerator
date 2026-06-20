@@ -104,7 +104,8 @@ export function CoverUploader({ currentFileId, onUploaded, onRemoved }: CoverUpl
         </label>
       )}
 
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-xs text-danger">{error}</p>}
     </div>
   )
 }
+

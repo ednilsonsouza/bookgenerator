@@ -104,7 +104,7 @@ export default function BookDetailPage() {
             size="sm"
             onClick={handleDelete}
             loading={deleting}
-            className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+            className="text-danger hover:text-danger hover:bg-danger-muted"
           >
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -112,7 +112,7 @@ export default function BookDetailPage() {
       </div>
 
       {error && (
-        <p className="rounded-md border border-red-800 bg-red-900/20 px-4 py-3 text-sm text-red-400">
+        <p className="rounded-md border border-danger/30 bg-danger-muted px-4 py-3 text-sm text-danger">
           {error}
         </p>
       )}
@@ -224,7 +224,7 @@ function Step({
     >
       <div
         className={`mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${
-          done ? 'bg-emerald-900/40 text-emerald-400' : 'bg-surface-muted text-muted-foreground'
+          done ? 'bg-success-muted text-success' : 'bg-surface-muted text-muted-foreground'
         }`}
       >
         {done ? <CheckCircle2 className="h-4 w-4" /> : icon}

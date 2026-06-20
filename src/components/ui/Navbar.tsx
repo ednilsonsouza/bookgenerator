@@ -28,7 +28,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 sm:px-6">
         {/* Logo */}
         <Link
@@ -45,10 +45,10 @@ export function Navbar() {
               key={href}
               href={href}
               className={cn(
-                'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors',
+                'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-all',
                 pathname === href || pathname.startsWith(href + '/')
-                  ? 'bg-surface-muted text-foreground'
-                  : 'text-muted-foreground hover:bg-surface-muted hover:text-foreground'
+                  ? 'bg-primary/10 text-primary border border-primary/20'
+                  : 'text-muted-foreground hover:bg-white/5 hover:text-foreground'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -61,10 +61,10 @@ export function Navbar() {
                 key={href}
                 href={href}
                 className={cn(
-                  'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors',
+                  'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-all',
                   pathname.startsWith(href)
-                    ? 'bg-surface-muted text-foreground'
-                    : 'text-muted-foreground hover:bg-surface-muted hover:text-foreground'
+                    ? 'bg-primary/10 text-primary border border-primary/20'
+                    : 'text-muted-foreground hover:bg-white/5 hover:text-foreground'
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -94,3 +94,4 @@ export function Navbar() {
     </header>
   )
 }
+

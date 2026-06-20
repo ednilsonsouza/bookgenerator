@@ -138,9 +138,9 @@ export default function PlanPage() {
 
       {/* Erro */}
       {error && (
-        <div className="flex items-start gap-3 rounded-lg border border-red-800 bg-red-900/20 px-4 py-3">
-          <AlertCircle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
-          <p className="text-sm text-red-400">{error}</p>
+        <div className="flex items-start gap-3 rounded-lg border border-danger/30 bg-danger-muted px-4 py-3">
+          <AlertCircle className="h-4 w-4 text-danger shrink-0 mt-0.5" />
+          <p className="text-sm text-danger">{error}</p>
         </div>
       )}
 

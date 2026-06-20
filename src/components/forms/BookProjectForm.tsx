@@ -133,7 +133,7 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
           {...register('targetPages', { valueAsNumber: true })}
         />
         {errors.targetPages && (
-          <p className="text-xs text-red-400">{errors.targetPages.message}</p>
+          <p className="text-xs text-danger">{errors.targetPages.message}</p>
         )}
       </div>
 
@@ -143,3 +143,4 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
     </form>
   )
 }
+

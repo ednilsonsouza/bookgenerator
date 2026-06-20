@@ -62,7 +62,7 @@ export default function LoginPage() {
         />
 
         {error && (
-          <p className="rounded-md border border-red-800 bg-red-900/30 px-3 py-2 text-sm text-red-400">
+          <p className="rounded-md border border-danger/30 bg-danger-muted px-3 py-2 text-sm text-danger">
             {error}
           </p>
         )}
@@ -81,3 +81,4 @@ export default function LoginPage() {
     </div>
   )
 }
+
