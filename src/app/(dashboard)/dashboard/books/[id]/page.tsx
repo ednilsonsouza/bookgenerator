@@ -15,12 +15,12 @@ import { formatDate } from '@/lib/utils'
 import {
   ChevronLeft,
   BookOpen,
-  Pencil,
   Trash2,
   FileText,
   Upload,
   Wand2,
   ExternalLink,
+  CheckCircle2,
 } from 'lucide-react'
 
 export default function BookDetailPage() {
@@ -227,10 +227,10 @@ function Step({
           done ? 'bg-emerald-900/40 text-emerald-400' : 'bg-zinc-800 text-zinc-400'
         }`}
       >
-        {icon}
+        {done ? <CheckCircle2 className="h-4 w-4" /> : icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-zinc-200 group-hover:text-white">{label}</p>
+        <p className={`text-sm font-medium group-hover:text-white ${done ? 'text-zinc-300' : 'text-zinc-200'}`}>{label}</p>
         <p className="text-xs text-zinc-500">{description}</p>
       </div>
       <ExternalLink className="h-4 w-4 text-zinc-600 shrink-0 mt-0.5 group-hover:text-zinc-400 transition-colors" />
