@@ -25,6 +25,21 @@ export async function POST(
       return NextResponse.json({ error: 'Sem permissão.' }, { status: 403 })
     }
 
+    // Rate limiting: máx. 10 jobs por usuário nas últimas 24h
+    const MAX_DAILY_JOBS = 10
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    const recentJobs = await databases.listDocuments(DATABASE_ID, COLLECTIONS.GENERATION_JOBS, [
+      Query.equal('userId', userId),
+      Query.greaterThan('$createdAt', yesterday),
+      Query.limit(1),
+    ])
+    if (recentJobs.total >= MAX_DAILY_JOBS) {
+      return NextResponse.json(
+        { error: `Limite de ${MAX_DAILY_JOBS} gerações por dia atingido. Tente novamente amanhã.` },
+        { status: 429 }
+      )
+    }
+
     // Verifica plano
     const plans = await databases.listDocuments(DATABASE_ID, COLLECTIONS.WRITING_PLANS, [
       Query.equal('bookProjectId', bookId),
