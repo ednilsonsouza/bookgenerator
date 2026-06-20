@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { openai, MODEL } from '@/lib/openai/client'
-import { writingPlanJsonSchema, WritingPlanOutputSchema } from '@/lib/openai/schemas'
+import { WritingPlanOutputSchema } from '@/lib/openai/schemas'
 import { buildPlanSystemPrompt, buildPlanUserPrompt } from '@/lib/openai/prompts/planPrompt'
 import { createAdminClient } from '@/lib/appwrite/server'
 import { DATABASE_ID, COLLECTIONS } from '@/lib/appwrite/config'
@@ -65,19 +65,16 @@ export async function POST(
       updatedAt: bookDoc.$updatedAt as string,
     }
 
-    // Gera o plano com Structured Output
+    // Gera o plano com json_object (mais compatível que json_schema strict)
     const completion = await openai.chat.completions.create({
       model: MODEL,
       messages: [
         { role: 'system', content: buildPlanSystemPrompt(book) },
         { role: 'user',   content: buildPlanUserPrompt(book) },
       ],
-      response_format: {
-        type: 'json_schema',
-        json_schema: writingPlanJsonSchema,
-      },
+      response_format: { type: 'json_object' },
       temperature: 0.7,
-      max_tokens: 4096,
+      max_tokens: 8192,
     })
 
     const raw = completion.choices[0]?.message?.content
@@ -85,12 +82,30 @@ export async function POST(
       return NextResponse.json({ error: 'Resposta vazia da IA.' }, { status: 500 })
     }
 
-    // Valida o JSON retornado
+    // Extrai JSON mesmo que venha envolto em markdown/texto
+    const jsonMatch = raw.match(/\{[\s\S]*\}/)
+    if (!jsonMatch) {
+      console.error('[plan/route] resposta sem JSON:', raw)
+      return NextResponse.json({ error: 'Resposta da IA sem JSON válido.' }, { status: 500 })
+    }
+
+    // Valida com Zod (coerce para arredondar floats em inteiros)
     let parsed: ReturnType<typeof WritingPlanOutputSchema.parse>
     try {
-      parsed = WritingPlanOutputSchema.parse(JSON.parse(raw))
-    } catch {
-      return NextResponse.json({ error: 'Resposta da IA fora do formato esperado.', raw }, { status: 500 })
+      const rawJson = JSON.parse(jsonMatch[0])
+      // Normaliza targetPages e targetWords para inteiros caso venham como float
+      if (Array.isArray(rawJson?.chapters)) {
+        rawJson.chapters = rawJson.chapters.map((ch: Record<string, unknown>) => ({
+          ...ch,
+          order: Math.round(Number(ch.order)),
+          targetPages: Math.max(1, Math.round(Number(ch.targetPages))),
+          targetWords: Math.max(1, Math.round(Number(ch.targetWords))),
+        }))
+      }
+      parsed = WritingPlanOutputSchema.parse(rawJson)
+    } catch (parseErr) {
+      console.error('[plan/route] parse error:', parseErr, 'raw:', raw)
+      return NextResponse.json({ error: 'Resposta da IA fora do formato esperado.' }, { status: 500 })
     }
 
     // Remove plano anterior se existir
