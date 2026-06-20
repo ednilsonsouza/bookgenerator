@@ -92,26 +92,26 @@ export default function PlanPage() {
       <div className="flex items-center gap-2 text-sm">
         <Link
           href="/dashboard/books"
-          className="text-zinc-400 hover:text-zinc-100 transition-colors"
+          className="text-muted-foreground hover:text-foreground transition-colors"
         >
           Minhas obras
         </Link>
-        <span className="text-zinc-600">/</span>
+        <span className="text-muted-foreground/60">/</span>
         <Link
           href={`/dashboard/books/${bookId}`}
-          className="text-zinc-400 hover:text-zinc-100 transition-colors truncate max-w-[180px]"
+          className="text-muted-foreground hover:text-foreground transition-colors truncate max-w-[180px]"
         >
           {book?.title ?? '...'}
         </Link>
-        <span className="text-zinc-600">/</span>
-        <span className="text-zinc-300">Plano de escrita</span>
+        <span className="text-muted-foreground/60">/</span>
+        <span className="text-foreground/80">Plano de escrita</span>
       </div>
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Plano de escrita</h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <h1 className="text-2xl font-bold text-foreground">Plano de escrita</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             {plan
               ? 'Edite os capítulos conforme desejar antes de gerar a obra completa.'
               : 'Gere o plano para definir a estrutura da sua obra.'}
@@ -147,9 +147,9 @@ export default function PlanPage() {
       {/* Estado: sem plano */}
       {(state === 'no_plan' || state === 'error') && (
         <Card className="flex flex-col items-center justify-center py-16 text-center">
-          <Wand2 className="mb-4 h-10 w-10 text-zinc-600" />
-          <p className="mb-1 text-base font-medium text-zinc-200">Nenhum plano gerado ainda</p>
-          <p className="mb-6 text-sm text-zinc-500 max-w-sm">
+          <Wand2 className="mb-4 h-10 w-10 text-muted-foreground/60" />
+          <p className="mb-1 text-base font-medium text-foreground">Nenhum plano gerado ainda</p>
+          <p className="mb-6 text-sm text-muted-foreground/70 max-w-sm">
             A IA vai gerar a estrutura de capítulos com base no tema, tipo e quantidade de páginas
             da sua obra.
           </p>
@@ -164,8 +164,8 @@ export default function PlanPage() {
       {state === 'generating' && (
         <Card className="flex flex-col items-center justify-center py-16 text-center">
           <Spinner size="lg" className="mb-4" />
-          <p className="text-base font-medium text-zinc-200">Gerando plano de escrita…</p>
-          <p className="mt-1 text-sm text-zinc-500">
+          <p className="text-base font-medium text-foreground">Gerando plano de escrita…</p>
+          <p className="mt-1 text-sm text-muted-foreground/70">
             O GPT-4o mini está criando a estrutura de capítulos. Aguarde alguns instantes.
           </p>
         </Card>

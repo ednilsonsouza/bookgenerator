@@ -79,20 +79,20 @@ export default function ReviewPage() {
     <div className="mx-auto max-w-4xl space-y-6">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm">
-        <Link href={`/dashboard/books/${bookId}`} className="text-zinc-400 hover:text-zinc-100 transition-colors">
+        <Link href={`/dashboard/books/${bookId}`} className="text-muted-foreground hover:text-foreground transition-colors">
           {book?.title ?? '...'}
         </Link>
-        <span className="text-zinc-600">/</span>
-        <span className="text-zinc-300">Revisão</span>
+        <span className="text-muted-foreground/60">/</span>
+        <span className="text-foreground/80">Revisão</span>
       </div>
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">{book?.title}</h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <h1 className="text-2xl font-bold text-foreground">{book?.title}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             {generatedChapters.length} capítulos gerados ·{' '}
-            <span className="text-zinc-300">{totalWords.toLocaleString('pt-BR')} palavras</span>
+            <span className="text-foreground/80">{totalWords.toLocaleString('pt-BR')} palavras</span>
             {' · '}~{Math.ceil(totalWords / 300)} páginas estimadas
           </p>
         </div>
@@ -115,8 +115,8 @@ export default function ReviewPage() {
       {/* Sem conteúdo */}
       {generatedChapters.length === 0 && (
         <Card className="flex flex-col items-center justify-center py-16 text-center">
-          <BookOpen className="mb-3 h-10 w-10 text-zinc-600" />
-          <p className="font-medium text-zinc-300 mb-1">Nenhum capítulo gerado ainda</p>
+          <BookOpen className="mb-3 h-10 w-10 text-muted-foreground/60" />
+          <p className="font-medium text-foreground/80 mb-1">Nenhum capítulo gerado ainda</p>
           <Link href={`/dashboard/books/${bookId}/generate`} className="mt-3">
             <Button className="gap-2">
               <BookOpen className="h-4 w-4" />
@@ -129,13 +129,13 @@ export default function ReviewPage() {
       {/* Controles */}
       {generatedChapters.length > 0 && (
         <div className="flex items-center justify-between">
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-muted-foreground/70">
             Clique em um capítulo para ver o conteúdo gerado
           </p>
           <div className="flex gap-2">
-            <button onClick={expandAll}   className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors">Expandir tudo</button>
-            <span className="text-zinc-700">·</span>
-            <button onClick={collapseAll} className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors">Recolher tudo</button>
+            <button onClick={expandAll}   className="text-xs text-muted-foreground hover:text-foreground transition-colors">Expandir tudo</button>
+            <span className="text-border">·</span>
+            <button onClick={collapseAll} className="text-xs text-muted-foreground hover:text-foreground transition-colors">Recolher tudo</button>
           </div>
         </div>
       )}
@@ -157,7 +157,7 @@ export default function ReviewPage() {
               key={chapter.id}
               className={cn(
                 'rounded-xl border transition-colors',
-                hasContent ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-800/50 bg-zinc-900/20 opacity-60'
+                hasContent ? 'border-border bg-surface-muted/40' : 'border-border/50 bg-surface-muted/30 opacity-60'
               )}
             >
               {/* Cabeçalho do capítulo */}
@@ -167,18 +167,18 @@ export default function ReviewPage() {
                 disabled={!hasContent}
                 className={cn(
                   'w-full flex items-center gap-3 px-5 py-4 text-left',
-                  hasContent && 'hover:bg-zinc-800/30 transition-colors rounded-xl'
+                  hasContent && 'hover:bg-surface-muted/50 transition-colors rounded-xl'
                 )}
               >
-                <span className="shrink-0 text-xs font-mono text-zinc-600 w-5 text-right">
+                <span className="shrink-0 text-xs font-mono text-muted-foreground/60 w-5 text-right">
                   {chapter.order}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className={cn('font-medium', hasContent ? 'text-zinc-200' : 'text-zinc-500')}>
+                  <p className={cn('font-medium', hasContent ? 'text-foreground' : 'text-muted-foreground/70')}>
                     {chapter.title}
                   </p>
                   {hasContent && (
-                    <p className="text-xs text-zinc-500 mt-0.5">
+                    <p className="text-xs text-muted-foreground/70 mt-0.5">
                       {wordCount.toLocaleString('pt-BR')} palavras
                       {uniqueCites.length > 0 && ` · ${uniqueCites.length} cit.`}
                     </p>
@@ -186,22 +186,22 @@ export default function ReviewPage() {
                 </div>
                 {hasContent && (
                   isExpanded
-                    ? <ChevronUp className="h-4 w-4 text-zinc-500 shrink-0" />
-                    : <ChevronDown className="h-4 w-4 text-zinc-500 shrink-0" />
+                    ? <ChevronUp className="h-4 w-4 text-muted-foreground/70 shrink-0" />
+                    : <ChevronDown className="h-4 w-4 text-muted-foreground/70 shrink-0" />
                 )}
                 {!hasContent && (
-                  <span className="text-xs text-zinc-600 shrink-0">Não gerado</span>
+                  <span className="text-xs text-muted-foreground/60 shrink-0">Não gerado</span>
                 )}
               </button>
 
               {/* Conteúdo expandido */}
               {isExpanded && hasContent && (
-                <div className="border-t border-zinc-800 px-5 pb-5 pt-4">
+                <div className="border-t border-border px-5 pb-5 pt-4">
                   <div className="prose prose-invert prose-sm max-w-none">
                     {chapter.sections.map((section, si) => (
                       <div key={section.id} className={cn(si > 0 && 'mt-4')}>
                         {section.content.split('\n\n').map((para, pi) => (
-                          <p key={pi} className="text-zinc-300 text-sm leading-relaxed mb-3 last:mb-0">
+                          <p key={pi} className="text-foreground/80 text-sm leading-relaxed mb-3 last:mb-0">
                             {para}
                           </p>
                         ))}
@@ -211,13 +211,13 @@ export default function ReviewPage() {
 
                   {/* Citações do capítulo */}
                   {uniqueCites.length > 0 && (
-                    <div className="mt-4 pt-4 border-t border-zinc-800">
-                      <p className="text-xs text-zinc-500 mb-1.5">Fontes citadas neste capítulo:</p>
+                    <div className="mt-4 pt-4 border-t border-border">
+                      <p className="text-xs text-muted-foreground/70 mb-1.5">Fontes citadas neste capítulo:</p>
                       <div className="flex flex-wrap gap-1.5">
                         {uniqueCites.map((cite) => (
                           <span
                             key={cite}
-                            className="inline-block rounded-full bg-zinc-800 px-2.5 py-0.5 text-xs text-zinc-300"
+                            className="inline-block rounded-full bg-surface-muted px-2.5 py-0.5 text-xs text-foreground/80"
                           >
                             {cite}
                           </span>

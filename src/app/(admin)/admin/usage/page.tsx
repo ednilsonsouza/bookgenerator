@@ -35,7 +35,7 @@ interface UsageData {
 const PAGE_SIZE = 30
 const STATUS_COLORS: Record<string, string> = {
   completed: 'text-emerald-400', running: 'text-yellow-400',
-  failed: 'text-red-400',       pending: 'text-zinc-400',
+  failed: 'text-red-400',       pending: 'text-muted-foreground',
 }
 
 export default function AdminUsagePage() {
@@ -63,8 +63,8 @@ export default function AdminUsagePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-100">Uso de IA</h1>
-        <p className="mt-1 text-sm text-zinc-400">Estimativas baseadas nos tokens médios por operação.</p>
+        <h1 className="text-2xl font-bold text-foreground">Uso de IA</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Estimativas baseadas nos tokens médios por operação.</p>
       </div>
 
       {/* Total de custo */}
@@ -72,11 +72,11 @@ export default function AdminUsagePage() {
         <Card>
           <CardContent className="pt-5">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-zinc-400">Custo total estimado</p>
-              <DollarSign className="h-5 w-5 text-zinc-500" />
+              <p className="text-sm text-muted-foreground">Custo total estimado</p>
+              <DollarSign className="h-5 w-5 text-muted-foreground/70" />
             </div>
-            <p className="text-3xl font-bold text-zinc-100">{data?.totalCostUSD ?? '$0'}</p>
-            <p className="text-xs text-zinc-600 mt-1">
+            <p className="text-3xl font-bold text-foreground">{data?.totalCostUSD ?? '$0'}</p>
+            <p className="text-xs text-muted-foreground/60 mt-1">
               {data?.pricing.model} · in ${data?.pricing.inputPer1M}/M · out ${data?.pricing.outputPer1M}/M
             </p>
           </CardContent>
@@ -85,21 +85,21 @@ export default function AdminUsagePage() {
         <Card>
           <CardContent className="pt-5">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-zinc-400">Jobs de geração</p>
-              <Cpu className="h-5 w-5 text-zinc-500" />
+              <p className="text-sm text-muted-foreground">Jobs de geração</p>
+              <Cpu className="h-5 w-5 text-muted-foreground/70" />
             </div>
-            <p className="text-3xl font-bold text-zinc-100">{data?.total ?? 0}</p>
+            <p className="text-3xl font-bold text-foreground">{data?.total ?? 0}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="pt-5">
-            <p className="text-sm text-zinc-400 mb-3">Por usuário (top)</p>
+            <p className="text-sm text-muted-foreground mb-3">Por usuário (top)</p>
             <div className="space-y-2">
               {(data?.byUser ?? []).slice(0, 4).map((u) => (
                 <div key={u.email} className="flex items-center justify-between">
-                  <span className="text-xs text-zinc-400 truncate max-w-[140px]">{u.email}</span>
-                  <span className="text-xs text-zinc-200 font-medium shrink-0">
+                  <span className="text-xs text-muted-foreground truncate max-w-[140px]">{u.email}</span>
+                  <span className="text-xs text-foreground font-medium shrink-0">
                     ${u.cost.toFixed(4)} · {u.jobs} job{u.jobs !== 1 ? 's' : ''}
                   </span>
                 </div>
@@ -110,9 +110,9 @@ export default function AdminUsagePage() {
       </div>
 
       {/* Info sobre estimativas */}
-      <div className="flex items-start gap-3 rounded-lg border border-zinc-800 bg-zinc-900/30 px-4 py-3">
-        <Info className="h-4 w-4 text-zinc-500 shrink-0 mt-0.5" />
-        <p className="text-xs text-zinc-500">
+      <div className="flex items-start gap-3 rounded-lg border border-border bg-surface-muted/30 px-4 py-3">
+        <Info className="h-4 w-4 text-muted-foreground/70 shrink-0 mt-0.5" />
+        <p className="text-xs text-muted-foreground/70">
           Estimativas calculadas com médias: {data?.pricing.inputPer1M ? `$${data.pricing.inputPer1M}` : ''}/M tokens input,
           {data?.pricing.outputPer1M ? ` $${data.pricing.outputPer1M}` : ''}/M output,
           {data?.pricing.embeddingPer1M ? ` $${data.pricing.embeddingPer1M}` : ''}/M embed.
@@ -130,30 +130,30 @@ export default function AdminUsagePage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-zinc-800">
+                  <tr className="border-b border-border">
                     {['Usuário', 'Status', 'Capítulos', 'Seções', 'Chunks', 'Custo est.', 'Data'].map((h) => (
-                      <th key={h} className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase tracking-wider">{h}</th>
+                      <th key={h} className="px-4 py-3 text-left text-xs font-medium text-muted-foreground/70 uppercase tracking-wider">{h}</th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-800/60">
+                <tbody className="divide-y divide-border/60">
                   {(data?.jobs ?? []).map((job) => (
-                    <tr key={job.jobId} className="hover:bg-zinc-900/40 transition-colors">
-                      <td className="px-4 py-3 text-zinc-400 text-xs max-w-[160px] truncate">{job.userEmail}</td>
+                    <tr key={job.jobId} className="hover:bg-surface-muted/40 transition-colors">
+                      <td className="px-4 py-3 text-muted-foreground text-xs max-w-[160px] truncate">{job.userEmail}</td>
                       <td className="px-4 py-3">
-                        <span className={`text-xs font-medium ${STATUS_COLORS[job.status] ?? 'text-zinc-400'}`}>
+                        <span className={`text-xs font-medium ${STATUS_COLORS[job.status] ?? 'text-muted-foreground'}`}>
                           {job.status}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-zinc-300 text-center">{job.chaptersCompleted}</td>
-                      <td className="px-4 py-3 text-zinc-300 text-center">{job.sectionsGenerated}</td>
-                      <td className="px-4 py-3 text-zinc-300 text-center">{job.chunksEmbedded}</td>
-                      <td className="px-4 py-3 text-zinc-200 font-mono text-xs">{job.estimatedCost}</td>
-                      <td className="px-4 py-3 text-zinc-500">{formatDate(job.createdAt)}</td>
+                      <td className="px-4 py-3 text-foreground/80 text-center">{job.chaptersCompleted}</td>
+                      <td className="px-4 py-3 text-foreground/80 text-center">{job.sectionsGenerated}</td>
+                      <td className="px-4 py-3 text-foreground/80 text-center">{job.chunksEmbedded}</td>
+                      <td className="px-4 py-3 text-foreground font-mono text-xs">{job.estimatedCost}</td>
+                      <td className="px-4 py-3 text-muted-foreground/70">{formatDate(job.createdAt)}</td>
                     </tr>
                   ))}
                   {(data?.jobs ?? []).length === 0 && (
-                    <tr><td colSpan={7} className="px-4 py-12 text-center text-zinc-500">Nenhum job encontrado</td></tr>
+                    <tr><td colSpan={7} className="px-4 py-12 text-center text-muted-foreground/70">Nenhum job encontrado</td></tr>
                   )}
                 </tbody>
               </table>
@@ -161,8 +161,8 @@ export default function AdminUsagePage() {
           )}
 
           {(data?.total ?? 0) > PAGE_SIZE && (
-            <div className="flex items-center justify-between border-t border-zinc-800 px-4 py-3">
-              <p className="text-xs text-zinc-500">{offset + 1}–{Math.min(offset + PAGE_SIZE, data?.total ?? 0)} de {data?.total}</p>
+            <div className="flex items-center justify-between border-t border-border px-4 py-3">
+              <p className="text-xs text-muted-foreground/70">{offset + 1}–{Math.min(offset + PAGE_SIZE, data?.total ?? 0)} de {data?.total}</p>
               <div className="flex gap-2">
                 <Button variant="secondary" size="sm" onClick={() => load(offset - PAGE_SIZE)} disabled={offset === 0 || loading}>
                   <ChevronLeft className="h-4 w-4" />

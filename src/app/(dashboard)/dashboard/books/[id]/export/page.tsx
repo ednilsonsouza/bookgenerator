@@ -108,17 +108,17 @@ export default function ExportPage() {
     <div className="mx-auto max-w-2xl space-y-6">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm">
-        <Link href={`/dashboard/books/${bookId}`} className="flex items-center gap-1 text-zinc-400 hover:text-zinc-100 transition-colors">
+        <Link href={`/dashboard/books/${bookId}`} className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
           <ChevronLeft className="h-4 w-4" />
           {book.title}
         </Link>
-        <span className="text-zinc-600">/</span>
-        <span className="text-zinc-300">Exportar</span>
+        <span className="text-muted-foreground/60">/</span>
+        <span className="text-foreground/80">Exportar</span>
       </div>
 
       <div>
-        <h1 className="text-2xl font-bold text-zinc-100">Exportar PDF</h1>
-        <p className="mt-1 text-sm text-zinc-400">
+        <h1 className="text-2xl font-bold text-foreground">Exportar PDF</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Adicione uma capa, informe o nome do autor e gere o PDF final.
         </p>
       </div>
@@ -142,13 +142,13 @@ export default function ExportPage() {
         <CardContent className="space-y-5">
           {/* Nome do autor */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-zinc-300">Nome do autor</label>
+            <label className="text-sm font-medium text-foreground/80">Nome do autor</label>
             <input
               type="text"
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
               placeholder="Seu nome completo"
-              className="h-10 rounded-md border border-zinc-700 bg-zinc-900 px-3 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </div>
 
@@ -165,7 +165,7 @@ export default function ExportPage() {
       <Card>
         <CardHeader><CardTitle>Gerar PDF</CardTitle></CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-muted-foreground">
             {book.type === 'academic'
               ? 'Template acadêmico: capa ABNT, folha de rosto, sumário, capítulos e referências bibliográficas.'
               : 'Template literário: capa, sumário e capítulos formatados.'}
@@ -194,10 +194,10 @@ export default function ExportPage() {
       </Card>
 
       {/* Publicar na biblioteca */}
-      <Card className="border-zinc-700">
+      <Card className="border-border">
         <CardHeader><CardTitle>Publicar na biblioteca pública</CardTitle></CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-muted-foreground">
             Publique sua obra para que qualquer pessoa possa ler e baixar gratuitamente.
             Um resumo será gerado automaticamente pela IA.
           </p>
@@ -222,7 +222,7 @@ export default function ExportPage() {
             </Button>
           )}
           {!book.finalPdfFileId && (
-            <p className="text-xs text-zinc-500">Gere o PDF antes de publicar.</p>
+            <p className="text-xs text-muted-foreground/70">Gere o PDF antes de publicar.</p>
           )}
         </CardContent>
       </Card>
@@ -230,7 +230,7 @@ export default function ExportPage() {
       {/* Link para revisão */}
       <div className="flex justify-start">
         <Link href={`/dashboard/books/${bookId}/review`}>
-          <Button variant="ghost" className="gap-2 text-zinc-400">
+          <Button variant="ghost" className="gap-2 text-muted-foreground">
             <BookOpen className="h-4 w-4" />
             Revisar conteúdo
           </Button>

@@ -8,11 +8,11 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  default: 'bg-zinc-700 text-zinc-300',
-  success: 'bg-emerald-900/60 text-emerald-400 border border-emerald-800',
-  warning: 'bg-yellow-900/60 text-yellow-400 border border-yellow-800',
-  danger: 'bg-red-900/60 text-red-400 border border-red-800',
-  info: 'bg-blue-900/60 text-blue-400 border border-blue-800',
+  default: 'bg-surface-muted text-foreground/80',
+  success: 'bg-success-muted text-success border border-success/20',
+  warning: 'bg-warning-muted text-warning border border-warning/20',
+  danger: 'bg-danger-muted text-danger border border-danger/20',
+  info: 'bg-info-muted text-info border border-info/20',
 }
 
 export function Badge({ variant = 'default', className, children, ...props }: BadgeProps) {

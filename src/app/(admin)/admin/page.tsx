@@ -42,8 +42,8 @@ export default function AdminPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-100">Painel Administrativo</h1>
-        <p className="mt-1 text-sm text-zinc-400">Visão geral da plataforma</p>
+        <h1 className="text-2xl font-bold text-foreground">Painel Administrativo</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Visão geral da plataforma</p>
       </div>
 
       {/* Métricas principais */}
@@ -68,9 +68,9 @@ export default function AdminPage() {
           <CardContent>
             <div className="flex flex-wrap gap-3">
               {Object.entries(stats.statusCounts).map(([s, count]) => (
-                <div key={s} className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-900/40 px-3 py-2">
-                  <span className="text-sm text-zinc-300">{STATUS_LABELS[s] ?? s}</span>
-                  <span className="text-sm font-bold text-zinc-100">{count}</span>
+                <div key={s} className="flex items-center gap-2 rounded-lg border border-border bg-surface-muted/40 px-3 py-2">
+                  <span className="text-sm text-foreground/80">{STATUS_LABELS[s] ?? s}</span>
+                  <span className="text-sm font-bold text-foreground">{count}</span>
                 </div>
               ))}
             </div>
@@ -87,13 +87,13 @@ export default function AdminPage() {
           { href: '/admin/usage',   icon: BarChart3, label: 'Uso IA',    desc: 'Métricas e custos' },
         ].map(({ href, icon: Icon, label, desc }) => (
           <Link key={href} href={href}>
-            <Card className="h-full cursor-pointer transition-colors hover:border-zinc-700 hover:bg-zinc-900">
+            <Card className="h-full cursor-pointer transition-colors hover:border-border-strong hover:bg-surface-muted">
               <CardContent className="pt-5">
-                <div className="mb-2 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-800">
-                  <Icon className="h-4 w-4 text-zinc-300" />
+                <div className="mb-2 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-surface-muted">
+                  <Icon className="h-4 w-4 text-foreground/80" />
                 </div>
-                <p className="font-semibold text-zinc-100">{label}</p>
-                <p className="text-xs text-zinc-500 mt-0.5">{desc}</p>
+                <p className="font-semibold text-foreground">{label}</p>
+                <p className="text-xs text-muted-foreground/70 mt-0.5">{desc}</p>
               </CardContent>
             </Card>
           </Link>
@@ -108,15 +108,15 @@ function MetricCard({ icon: Icon, label, value, href, isString = false }: {
 }) {
   return (
     <Link href={href}>
-      <Card className="cursor-pointer transition-colors hover:border-zinc-700 hover:bg-zinc-900">
+      <Card className="cursor-pointer transition-colors hover:border-border-strong hover:bg-surface-muted">
         <CardContent className="pt-5">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm text-zinc-400">{label}</p>
-            <div className="h-8 w-8 inline-flex items-center justify-center rounded-lg bg-zinc-800">
-              <Icon className="h-4 w-4 text-zinc-300" />
+            <p className="text-sm text-muted-foreground">{label}</p>
+            <div className="h-8 w-8 inline-flex items-center justify-center rounded-lg bg-surface-muted">
+              <Icon className="h-4 w-4 text-foreground/80" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-zinc-100">
+          <p className="text-2xl font-bold text-foreground">
             {isString ? value : (value as number).toLocaleString('pt-BR')}
           </p>
         </CardContent>
@@ -127,13 +127,13 @@ function MetricCard({ icon: Icon, label, value, href, isString = false }: {
 
 function StatBox({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: number }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900/30 px-4 py-3">
-      <div className="h-8 w-8 shrink-0 inline-flex items-center justify-center rounded-lg bg-zinc-800">
-        <Icon className="h-4 w-4 text-zinc-400" />
+    <div className="flex items-center gap-3 rounded-xl border border-border bg-surface-muted/30 px-4 py-3">
+      <div className="h-8 w-8 shrink-0 inline-flex items-center justify-center rounded-lg bg-surface-muted">
+        <Icon className="h-4 w-4 text-muted-foreground" />
       </div>
       <div>
-        <p className="text-lg font-bold text-zinc-100">{value.toLocaleString('pt-BR')}</p>
-        <p className="text-xs text-zinc-500">{label}</p>
+        <p className="text-lg font-bold text-foreground">{value.toLocaleString('pt-BR')}</p>
+        <p className="text-xs text-muted-foreground/70">{label}</p>
       </div>
     </div>
   )

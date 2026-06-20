@@ -1,13 +1,77 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
-  --foreground: #f4f4f5;
+  /* Fundo laranja pastel */
+  --background: #fff3e6;
+  --background-muted: #ffe8cf;
+  --background-elevated: #fff8f0;
+
+  /* Texto */
+  --foreground: #162032;
+  --foreground-muted: #5c6b82;
+
+  /* Superfícies (cards, inputs, etc) */
+  --surface: #ffffff;
+  --surface-muted: #ffe8cf;
+  --surface-elevated: #fff8f0;
+
+  /* Bordas */
+  --border: #e6cfba;
+  --border-strong: #d4b89e;
+
+  /* Primária — azul marinho */
+  --primary: #0f3a63;
+  --primary-hover: #0a2744;
+  --primary-foreground: #ffffff;
+
+  /* Acento — laranja/coral */
+  --accent: #e87b3a;
+  --accent-hover: #c9652b;
+  --accent-foreground: #ffffff;
+
+  /* Estados */
+  --danger: #c9372d;
+  --danger-muted: #fde8e6;
+  --success: #1f7a50;
+  --success-muted: #e6f4ed;
+  --warning: #b36b00;
+  --warning-muted: #fff3d6;
+  --info: #1d5a8a;
+  --info-muted: #e6f1f8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-background-muted: var(--background-muted);
+  --color-background-elevated: var(--background-elevated);
+
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-elevated: var(--surface-elevated);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-muted-foreground: var(--foreground-muted);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-danger: var(--danger);
+  --color-danger-muted: var(--danger-muted);
+  --color-success: var(--success);
+  --color-success-muted: var(--success-muted);
+  --color-warning: var(--warning);
+  --color-warning-muted: var(--warning-muted);
+  --color-info: var(--info);
+  --color-info-muted: var(--info-muted);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -17,24 +81,24 @@ body {
   color: var(--foreground);
 }
 
-/* Scrollbar dark */
+/* Scrollbar em tons quentes */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: var(--background-muted);
 }
 ::-webkit-scrollbar-thumb {
-  background: #3f3f46;
+  background: var(--border-strong);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #52525b;
+  background: var(--foreground-muted);
 }
 
-/* Select options dark background */
+/* Select options */
 select option {
-  background: #18181b;
-  color: #f4f4f5;
+  background: var(--surface);
+  color: var(--foreground);
 }

@@ -120,16 +120,16 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
 
       {/* Páginas */}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="targetPages" className="text-sm font-medium text-zinc-300">
+        <label htmlFor="targetPages" className="text-sm font-medium text-foreground/80">
           Quantidade de páginas
-          <span className="ml-2 text-zinc-500 font-normal">(4 – 120)</span>
+          <span className="ml-2 text-muted-foreground/70 font-normal">(4 – 120)</span>
         </label>
         <input
           id="targetPages"
           type="number"
           min={4}
           max={120}
-          className="h-10 w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-white/20 hover:border-zinc-600"
+          className="h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 hover:border-border-strong"
           {...register('targetPages', { valueAsNumber: true })}
         />
         {errors.targetPages && (

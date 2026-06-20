@@ -118,18 +118,18 @@ export default function ReferencesPage() {
     <div className="mx-auto max-w-3xl space-y-6">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm">
-        <Link href={`/dashboard/books/${bookId}`} className="text-zinc-400 hover:text-zinc-100 transition-colors">
+        <Link href={`/dashboard/books/${bookId}`} className="text-muted-foreground hover:text-foreground transition-colors">
           {book?.title ?? '...'}
         </Link>
-        <span className="text-zinc-600">/</span>
-        <span className="text-zinc-300">Referências</span>
+        <span className="text-muted-foreground/60">/</span>
+        <span className="text-foreground/80">Referências</span>
       </div>
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Referências bibliográficas</h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <h1 className="text-2xl font-bold text-foreground">Referências bibliográficas</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Mínimo {MIN_REFS} · Máximo {MAX_REFS} · Aceitos: PDF e TXT
           </p>
         </div>
@@ -152,7 +152,7 @@ export default function ReferencesPage() {
       )}>
         <CardContent>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-zinc-300">
+            <span className="text-sm text-foreground/80">
               {refs.length} de {MIN_REFS} mínimas adicionadas
             </span>
             <span className={cn('text-sm font-medium', meetsMinimum ? 'text-emerald-400' : 'text-yellow-400')}>
@@ -161,14 +161,14 @@ export default function ReferencesPage() {
                 : `Faltam ${MIN_REFS - refs.length}`}
             </span>
           </div>
-          <div className="h-1.5 w-full rounded-full bg-zinc-800">
+          <div className="h-1.5 w-full rounded-full bg-surface-muted">
             <div
               className={cn('h-1.5 rounded-full transition-all', meetsMinimum ? 'bg-emerald-500' : 'bg-yellow-500')}
               style={{ width: `${Math.min((refs.length / MIN_REFS) * 100, 100)}%` }}
             />
           </div>
           {readyCount > 0 && (
-            <p className="mt-2 text-xs text-zinc-500">
+            <p className="mt-2 text-xs text-muted-foreground/70">
               {readyCount} referência{readyCount > 1 ? 's' : ''} processada{readyCount > 1 ? 's' : ''} · pronta{readyCount > 1 ? 's' : ''} para geração
             </p>
           )}
@@ -210,9 +210,9 @@ export default function ReferencesPage() {
       {/* Lista de referências */}
       {refs.length === 0 ? (
         <Card className="flex flex-col items-center justify-center py-16 text-center">
-          <FileText className="mb-3 h-10 w-10 text-zinc-600" />
-          <p className="font-medium text-zinc-300 mb-1">Nenhuma referência adicionada</p>
-          <p className="text-sm text-zinc-500 max-w-xs">
+          <FileText className="mb-3 h-10 w-10 text-muted-foreground/60" />
+          <p className="font-medium text-foreground/80 mb-1">Nenhuma referência adicionada</p>
+          <p className="text-sm text-muted-foreground/70 max-w-xs">
             Adicione de {MIN_REFS} a {MAX_REFS} referências. Você pode incluir apenas os metadados
             ou também o arquivo PDF/TXT para extração e RAG.
           </p>
@@ -220,40 +220,40 @@ export default function ReferencesPage() {
       ) : (
         <div className="space-y-3">
           {refs.map((ref, idx) => (
-            <Card key={ref.id} className="hover:border-zinc-700 transition-colors">
+            <Card key={ref.id} className="hover:border-border-strong transition-colors">
               <CardContent>
                 <div className="flex items-start gap-3">
                   {/* Número */}
-                  <span className="shrink-0 mt-0.5 text-xs font-mono text-zinc-600 w-5 text-right">
+                  <span className="shrink-0 mt-0.5 text-xs font-mono text-muted-foreground/60 w-5 text-right">
                     {idx + 1}
                   </span>
 
                   {/* Conteúdo */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <p className="font-medium text-zinc-200 text-sm leading-snug">{ref.title}</p>
+                      <p className="font-medium text-foreground text-sm leading-snug">{ref.title}</p>
                       <div className="flex items-center gap-1.5 shrink-0">
                         <ReferenceStatusBadge status={ref.extractedTextStatus} />
                       </div>
                     </div>
 
                     {ref.authors && (
-                      <p className="text-xs text-zinc-400 mb-0.5">{ref.authors}</p>
+                      <p className="text-xs text-muted-foreground mb-0.5">{ref.authors}</p>
                     )}
                     {(ref.year || ref.publisher) && (
-                      <p className="text-xs text-zinc-500">
+                      <p className="text-xs text-muted-foreground/70">
                         {[ref.year, ref.publisher].filter(Boolean).join(' · ')}
                       </p>
                     )}
 
                     {ref.abntFormattedReference && (
-                      <p className="mt-1.5 text-xs text-zinc-600 italic line-clamp-2">
+                      <p className="mt-1.5 text-xs text-muted-foreground/60 italic line-clamp-2">
                         {ref.abntFormattedReference}
                       </p>
                     )}
 
                     {ref.chunkCount != null && ref.chunkCount > 0 && (
-                      <p className="mt-1 text-xs text-zinc-600">
+                      <p className="mt-1 text-xs text-muted-foreground/60">
                         {ref.chunkCount} trecho{ref.chunkCount > 1 ? 's' : ''} indexado{ref.chunkCount > 1 ? 's' : ''}
                       </p>
                     )}
@@ -265,7 +265,7 @@ export default function ReferencesPage() {
                       <button
                         title="Reprocessar"
                         onClick={() => handleReprocess(ref.id)}
-                        className="p-1.5 rounded text-zinc-600 hover:text-zinc-300 transition-colors"
+                        className="p-1.5 rounded text-muted-foreground/60 hover:text-foreground/80 transition-colors"
                       >
                         <RefreshCw className="h-3.5 w-3.5" />
                       </button>
@@ -274,7 +274,7 @@ export default function ReferencesPage() {
                       title="Remover"
                       onClick={() => handleDelete(ref.id)}
                       disabled={deletingId === ref.id}
-                      className="p-1.5 rounded text-zinc-600 hover:text-red-400 transition-colors disabled:opacity-40"
+                      className="p-1.5 rounded text-muted-foreground/60 hover:text-red-400 transition-colors disabled:opacity-40"
                     >
                       {deletingId === ref.id
                         ? <Spinner size="sm" className="h-3.5 w-3.5" />

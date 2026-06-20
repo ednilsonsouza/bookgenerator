@@ -60,8 +60,8 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Usuários</h1>
-          <p className="mt-1 text-sm text-zinc-400">{total} conta{total !== 1 ? 's' : ''} registrada{total !== 1 ? 's' : ''}</p>
+          <h1 className="text-2xl font-bold text-foreground">Usuários</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{total} conta{total !== 1 ? 's' : ''} registrada{total !== 1 ? 's' : ''}</p>
         </div>
       </div>
 
@@ -70,21 +70,21 @@ export default function AdminUsersPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-zinc-800">
+                <tr className="border-b border-border">
                   {['Nome', 'E-mail', 'Obras', 'Cadastro', 'Status', ''].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                    <th key={h} className="px-4 py-3 text-left text-xs font-medium text-muted-foreground/70 uppercase tracking-wider">
                       {h}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800/60">
+              <tbody className="divide-y divide-border/60">
                 {users.map((u) => (
-                  <tr key={u.id} className="hover:bg-zinc-900/40 transition-colors">
-                    <td className="px-4 py-3 text-zinc-200 font-medium">{u.name || '—'}</td>
-                    <td className="px-4 py-3 text-zinc-400">{u.email}</td>
-                    <td className="px-4 py-3 text-zinc-300 text-center">{u.bookCount}</td>
-                    <td className="px-4 py-3 text-zinc-500">{formatDate(u.createdAt)}</td>
+                  <tr key={u.id} className="hover:bg-surface-muted/40 transition-colors">
+                    <td className="px-4 py-3 text-foreground font-medium">{u.name || '—'}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{u.email}</td>
+                    <td className="px-4 py-3 text-foreground/80 text-center">{u.bookCount}</td>
+                    <td className="px-4 py-3 text-muted-foreground/70">{formatDate(u.createdAt)}</td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
                         u.status
@@ -99,7 +99,7 @@ export default function AdminUsersPage() {
                         <button
                           onClick={() => toggleBlock(u.id, u.status)}
                           disabled={actionId === u.id}
-                          className="text-zinc-500 hover:text-zinc-300 transition-colors disabled:opacity-40"
+                          className="text-muted-foreground/70 hover:text-foreground/80 transition-colors disabled:opacity-40"
                           title={u.status ? 'Bloquear' : 'Desbloquear'}
                         >
                           {actionId === u.id ? (
@@ -116,7 +116,7 @@ export default function AdminUsersPage() {
                 ))}
                 {users.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="px-4 py-12 text-center text-zinc-500">
+                    <td colSpan={6} className="px-4 py-12 text-center text-muted-foreground/70">
                       <Users className="h-8 w-8 mx-auto mb-2 opacity-40" />
                       Nenhum usuário encontrado
                     </td>
@@ -128,8 +128,8 @@ export default function AdminUsersPage() {
 
           {/* Paginação */}
           {total > PAGE_SIZE && (
-            <div className="flex items-center justify-between border-t border-zinc-800 px-4 py-3">
-              <p className="text-xs text-zinc-500">
+            <div className="flex items-center justify-between border-t border-border px-4 py-3">
+              <p className="text-xs text-muted-foreground/70">
                 {offset + 1}–{Math.min(offset + PAGE_SIZE, total)} de {total}
               </p>
               <div className="flex gap-2">

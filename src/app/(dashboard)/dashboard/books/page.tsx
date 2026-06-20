@@ -40,8 +40,8 @@ export default function BooksPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Minhas obras</h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <h1 className="text-2xl font-bold text-foreground">Minhas obras</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             {books.length} {books.length === 1 ? 'obra' : 'obras'} criadas
           </p>
         </div>
@@ -63,9 +63,9 @@ export default function BooksPage() {
       {/* Lista vazia */}
       {!error && books.length === 0 && (
         <Card className="flex flex-col items-center justify-center py-16 text-center">
-          <BookOpen className="mb-4 h-12 w-12 text-zinc-600" />
-          <p className="mb-1 font-medium text-zinc-300">Nenhuma obra ainda</p>
-          <p className="mb-6 text-sm text-zinc-500">
+          <BookOpen className="mb-4 h-12 w-12 text-muted-foreground/60" />
+          <p className="mb-1 font-medium text-foreground/80">Nenhuma obra ainda</p>
+          <p className="mb-6 text-sm text-muted-foreground/70">
             Comece criando o seu primeiro projeto de obra
           </p>
           <Link href="/dashboard/books/new">
@@ -82,27 +82,27 @@ export default function BooksPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {books.map((book) => (
             <Link key={book.id} href={`/dashboard/books/${book.id}`}>
-              <Card className="h-full cursor-pointer transition-colors hover:border-zinc-700 hover:bg-zinc-900">
+              <Card className="h-full cursor-pointer transition-colors hover:border-border-strong hover:bg-surface-muted">
                 <CardContent>
                   {/* Ícone do tipo */}
                   <div className="mb-3 flex items-center justify-between">
-                    <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-800">
+                    <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-surface-muted">
                       {book.type === 'academic' ? (
-                        <GraduationCap className="h-4 w-4 text-zinc-400" />
+                        <GraduationCap className="h-4 w-4 text-muted-foreground" />
                       ) : (
-                        <BookMarked className="h-4 w-4 text-zinc-400" />
+                        <BookMarked className="h-4 w-4 text-muted-foreground" />
                       )}
                     </div>
                     <BookStatusBadge status={book.status} />
                   </div>
 
                   {/* Título */}
-                  <h3 className="font-semibold text-zinc-100 line-clamp-2 mb-1">
+                  <h3 className="font-semibold text-foreground line-clamp-2 mb-1">
                     {book.title}
                   </h3>
 
                   {/* Subtipo/gênero */}
-                  <p className="text-xs text-zinc-500 mb-2">
+                  <p className="text-xs text-muted-foreground/70 mb-2">
                     {book.type === 'academic' && book.academicSubtype
                       ? ACADEMIC_SUBTYPE_LABELS[book.academicSubtype]
                       : book.type === 'literary' && book.literaryGenre
@@ -113,10 +113,10 @@ export default function BooksPage() {
                   </p>
 
                   {/* Descrição */}
-                  <p className="text-sm text-zinc-400 line-clamp-2 mb-3">{book.description}</p>
+                  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{book.description}</p>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between text-xs text-zinc-600">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground/60">
                     <span>{book.targetPages} págs.</span>
                     <span>{formatDate(book.createdAt)}</span>
                   </div>

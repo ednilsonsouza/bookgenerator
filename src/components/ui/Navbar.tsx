@@ -28,12 +28,12 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-zinc-800 bg-black/80 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 sm:px-6">
         {/* Logo */}
         <Link
           href="/dashboard"
-          className="mr-2 text-base font-bold tracking-tight text-white shrink-0"
+          className="mr-2 text-base font-bold tracking-tight text-primary shrink-0"
         >
           BookGenerator
         </Link>
@@ -47,8 +47,8 @@ export function Navbar() {
               className={cn(
                 'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors',
                 pathname === href || pathname.startsWith(href + '/')
-                  ? 'bg-zinc-800 text-zinc-100'
-                  : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100'
+                  ? 'bg-surface-muted text-foreground'
+                  : 'text-muted-foreground hover:bg-surface-muted hover:text-foreground'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -63,8 +63,8 @@ export function Navbar() {
                 className={cn(
                   'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors',
                   pathname.startsWith(href)
-                    ? 'bg-zinc-800 text-zinc-100'
-                    : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100'
+                    ? 'bg-surface-muted text-foreground'
+                    : 'text-muted-foreground hover:bg-surface-muted hover:text-foreground'
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -76,7 +76,7 @@ export function Navbar() {
         {/* Right side */}
         <div className="ml-auto flex items-center gap-2">
           {user && (
-            <span className="hidden sm:block text-xs text-zinc-500 max-w-[160px] truncate">
+            <span className="hidden sm:block text-xs text-muted-foreground max-w-[160px] truncate">
               {user.name || user.email}
             </span>
           )}

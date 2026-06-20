@@ -90,13 +90,13 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
       {/* Cabeçalho do editor */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-muted-foreground">
             {chapters.length} capítulos •{' '}
-            <span className={cn(totalPages === plan.chapters.reduce((s,c)=>s+c.targetPages,0) ? 'text-zinc-400' : 'text-yellow-400')}>
+            <span className={cn(totalPages === plan.chapters.reduce((s,c)=>s+c.targetPages,0) ? 'text-muted-foreground' : 'text-yellow-400')}>
               {totalPages} págs. no total
             </span>
           </p>
-          <p className="text-xs text-zinc-600 mt-0.5">
+          <p className="text-xs text-muted-foreground/60 mt-0.5">
             Edite títulos, descrições e reordene capítulos antes de gerar a obra.
           </p>
         </div>
@@ -132,34 +132,34 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
           <div
             key={chapter.id}
             className={cn(
-              'rounded-xl border bg-zinc-900/60 transition-colors',
-              chapter.dirty ? 'border-yellow-800/60' : 'border-zinc-800',
-              expandedId === chapter.id && 'border-zinc-700'
+              'rounded-xl border bg-surface-muted/60 transition-colors',
+              chapter.dirty ? 'border-yellow-800/60' : 'border-border',
+              expandedId === chapter.id && 'border-border'
             )}
           >
             {/* Linha do capítulo */}
             <div className="flex items-center gap-3 px-4 py-3">
               {/* Número */}
-              <span className="shrink-0 w-6 text-center text-xs font-mono text-zinc-600 select-none">
+              <span className="shrink-0 w-6 text-center text-xs font-mono text-muted-foreground/60 select-none">
                 {chapter.order}
               </span>
 
               {/* Grip visual */}
-              <GripVertical className="h-4 w-4 shrink-0 text-zinc-700" />
+              <GripVertical className="h-4 w-4 shrink-0 text-border" />
 
               {/* Título clicável para expandir */}
               <button
                 type="button"
-                className="flex-1 text-left text-sm font-medium text-zinc-200 hover:text-white transition-colors truncate"
+                className="flex-1 text-left text-sm font-medium text-foreground hover:text-foreground transition-colors truncate"
                 onClick={() =>
                   setExpandedId(expandedId === chapter.id ? null : chapter.id)
                 }
               >
-                {chapter.title || <span className="text-zinc-500 italic">Sem título</span>}
+                {chapter.title || <span className="text-muted-foreground/70 italic">Sem título</span>}
               </button>
 
               {/* Páginas */}
-              <span className="shrink-0 text-xs text-zinc-500 hidden sm:block">
+              <span className="shrink-0 text-xs text-muted-foreground/70 hidden sm:block">
                 {chapter.targetPages} págs.
               </span>
 
@@ -169,7 +169,7 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
                   type="button"
                   onClick={() => moveChapter(chapter.id, 'up')}
                   disabled={idx === 0}
-                  className="p-1 rounded text-zinc-600 hover:text-zinc-300 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                  className="p-1 rounded text-muted-foreground/60 hover:text-foreground/80 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
                 >
                   <ChevronUp className="h-4 w-4" />
                 </button>
@@ -177,7 +177,7 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
                   type="button"
                   onClick={() => moveChapter(chapter.id, 'down')}
                   disabled={idx === chapters.length - 1}
-                  className="p-1 rounded text-zinc-600 hover:text-zinc-300 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                  className="p-1 rounded text-muted-foreground/60 hover:text-foreground/80 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
                 >
                   <ChevronDown className="h-4 w-4" />
                 </button>
@@ -186,7 +186,7 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
 
             {/* Painel de edição expandido */}
             {expandedId === chapter.id && (
-              <div className="border-t border-zinc-800 px-4 pb-4 pt-3 space-y-3">
+              <div className="border-t border-border px-4 pb-4 pt-3 space-y-3">
                 <Input
                   label="Título do capítulo"
                   value={chapter.title}
@@ -213,7 +213,7 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
                       }
                     />
                   </div>
-                  <div className="pt-5 text-xs text-zinc-500">
+                  <div className="pt-5 text-xs text-muted-foreground/70">
                     ≈ {chapter.targetPages * 300} palavras
                   </div>
                 </div>
@@ -224,12 +224,12 @@ export function WritingPlanEditor({ plan, onSaved, onGenerateBook }: WritingPlan
       </div>
 
       {/* Resumo */}
-      <div className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-900/30 px-4 py-3 text-sm">
-        <FileText className="h-4 w-4 text-zinc-500 shrink-0" />
-        <span className="text-zinc-400">
-          Total: <span className="text-zinc-200 font-medium">{totalPages} páginas</span>
+      <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-muted/30 px-4 py-3 text-sm">
+        <FileText className="h-4 w-4 text-muted-foreground/70 shrink-0" />
+        <span className="text-muted-foreground">
+          Total: <span className="text-foreground font-medium">{totalPages} páginas</span>
           {' · '}
-          <span className="text-zinc-200 font-medium">
+          <span className="text-foreground font-medium">
             {chapters.reduce((s, c) => s + c.targetPages * 300, 0).toLocaleString('pt-BR')}
           </span>{' '}
           palavras estimadas

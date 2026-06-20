@@ -47,8 +47,8 @@ export default function RegisterPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-xl font-semibold text-zinc-100">Criar conta</h1>
-      <p className="mb-6 text-sm text-zinc-400">Comece gratuitamente hoje</p>
+      <h1 className="mb-1 text-xl font-semibold text-foreground">Criar conta</h1>
+      <p className="mb-6 text-sm text-muted-foreground">Comece gratuitamente hoje</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
@@ -95,9 +95,9 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <p className="mt-5 text-center text-sm text-zinc-500">
+      <p className="mt-5 text-center text-sm text-muted-foreground/70">
         Já tem conta?{' '}
-        <Link href="/login" className="text-zinc-300 hover:text-white transition-colors">
+        <Link href="/login" className="text-foreground/80 hover:text-foreground transition-colors">
           Entrar
         </Link>
       </p>

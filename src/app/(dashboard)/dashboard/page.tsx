@@ -15,8 +15,8 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Olá, {firstName}</h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <h1 className="text-2xl font-bold text-foreground">Olá, {firstName}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Crie, edite e publique suas obras com inteligência artificial.
           </p>
         </div>
@@ -31,10 +31,10 @@ export default function DashboardPage() {
       {/* Cards de ação rápida */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Link href="/dashboard/books/new" className="group block">
-          <Card className="h-full transition-colors hover:border-zinc-700 hover:bg-zinc-900">
+          <Card className="h-full transition-colors hover:border-border-strong hover:bg-surface-muted">
             <CardHeader>
-              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/5">
-                <Plus className="h-5 w-5 text-zinc-300" />
+              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-foreground/5">
+                <Plus className="h-5 w-5 text-foreground/80" />
               </div>
               <CardTitle>Nova obra</CardTitle>
               <CardDescription>
@@ -45,10 +45,10 @@ export default function DashboardPage() {
         </Link>
 
         <Link href="/dashboard/books" className="group block">
-          <Card className="h-full transition-colors hover:border-zinc-700 hover:bg-zinc-900">
+          <Card className="h-full transition-colors hover:border-border-strong hover:bg-surface-muted">
             <CardHeader>
-              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/5">
-                <BookOpen className="h-5 w-5 text-zinc-300" />
+              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-foreground/5">
+                <BookOpen className="h-5 w-5 text-foreground/80" />
               </div>
               <CardTitle>Minhas obras</CardTitle>
               <CardDescription>
@@ -59,10 +59,10 @@ export default function DashboardPage() {
         </Link>
 
         <Link href="/library" className="group block">
-          <Card className="h-full transition-colors hover:border-zinc-700 hover:bg-zinc-900">
+          <Card className="h-full transition-colors hover:border-border-strong hover:bg-surface-muted">
             <CardHeader>
-              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/5">
-                <Library className="h-5 w-5 text-zinc-300" />
+              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-foreground/5">
+                <Library className="h-5 w-5 text-foreground/80" />
               </div>
               <CardTitle>Biblioteca pública</CardTitle>
               <CardDescription>
@@ -74,15 +74,15 @@ export default function DashboardPage() {
       </div>
 
       {/* Banner informativo */}
-      <Card className="border-zinc-700 bg-gradient-to-r from-zinc-900 to-zinc-800/50">
+      <Card className="border-border bg-gradient-to-r from-surface to-surface-muted/50">
         <CardContent>
           <div className="flex items-start gap-4">
             <div className="shrink-0 mt-0.5">
-              <Sparkles className="h-5 w-5 text-zinc-400" />
+              <Sparkles className="h-5 w-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="font-medium text-zinc-200 mb-1">Como funciona</p>
-              <ol className="space-y-1 text-sm text-zinc-400 list-decimal list-inside">
+              <p className="font-medium text-foreground mb-1">Como funciona</p>
+              <ol className="space-y-1 text-sm text-muted-foreground list-decimal list-inside">
                 <li>Crie um projeto informando tema, tipo e quantidade de páginas</li>
                 <li>Para obras acadêmicas, faça upload de suas referências bibliográficas</li>
                 <li>Gere o plano de escrita e edite os capítulos como preferir</li>

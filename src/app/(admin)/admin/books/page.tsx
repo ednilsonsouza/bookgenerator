@@ -60,8 +60,8 @@ export default function AdminBooksPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-100">Obras</h1>
-        <p className="mt-1 text-sm text-zinc-400">{total} obra{total !== 1 ? 's' : ''} no total</p>
+        <h1 className="text-2xl font-bold text-foreground">Obras</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{total} obra{total !== 1 ? 's' : ''} no total</p>
       </div>
 
       {/* Filtros de status */}
@@ -72,8 +72,8 @@ export default function AdminBooksPage() {
             onClick={() => handleStatusChange(s)}
             className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
               statusFilter === s
-                ? 'bg-white text-black'
-                : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-surface-muted text-muted-foreground hover:bg-border'
             }`}
           >
             {STATUS_LABELS[s]}
@@ -89,25 +89,25 @@ export default function AdminBooksPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-zinc-800">
+                  <tr className="border-b border-border">
                     {['Título', 'Tipo', 'Autor', 'Págs.', 'Status', 'Criada'].map((h) => (
-                      <th key={h} className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase tracking-wider">{h}</th>
+                      <th key={h} className="px-4 py-3 text-left text-xs font-medium text-muted-foreground/70 uppercase tracking-wider">{h}</th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-800/60">
+                <tbody className="divide-y divide-border/60">
                   {books.map((b) => (
-                    <tr key={b.id} className="hover:bg-zinc-900/40 transition-colors">
-                      <td className="px-4 py-3 text-zinc-200 max-w-[200px] truncate font-medium">{b.title}</td>
-                      <td className="px-4 py-3 text-zinc-400 capitalize">{b.type === 'academic' ? 'Acadêmica' : 'Literária'}</td>
-                      <td className="px-4 py-3 text-zinc-400 text-xs max-w-[160px] truncate">{b.authorEmail}</td>
-                      <td className="px-4 py-3 text-zinc-400 text-center">{b.targetPages}</td>
+                    <tr key={b.id} className="hover:bg-surface-muted/40 transition-colors">
+                      <td className="px-4 py-3 text-foreground max-w-[200px] truncate font-medium">{b.title}</td>
+                      <td className="px-4 py-3 text-muted-foreground capitalize">{b.type === 'academic' ? 'Acadêmica' : 'Literária'}</td>
+                      <td className="px-4 py-3 text-muted-foreground text-xs max-w-[160px] truncate">{b.authorEmail}</td>
+                      <td className="px-4 py-3 text-muted-foreground text-center">{b.targetPages}</td>
                       <td className="px-4 py-3"><BookStatusBadge status={b.status} /></td>
-                      <td className="px-4 py-3 text-zinc-500">{formatDate(b.createdAt)}</td>
+                      <td className="px-4 py-3 text-muted-foreground/70">{formatDate(b.createdAt)}</td>
                     </tr>
                   ))}
                   {books.length === 0 && (
-                    <tr><td colSpan={6} className="px-4 py-12 text-center text-zinc-500">
+                    <tr><td colSpan={6} className="px-4 py-12 text-center text-muted-foreground/70">
                       <BookOpen className="h-8 w-8 mx-auto mb-2 opacity-40" />
                       Nenhuma obra encontrada
                     </td></tr>
@@ -118,8 +118,8 @@ export default function AdminBooksPage() {
           )}
 
           {total > PAGE_SIZE && (
-            <div className="flex items-center justify-between border-t border-zinc-800 px-4 py-3">
-              <p className="text-xs text-zinc-500">{offset + 1}–{Math.min(offset + PAGE_SIZE, total)} de {total}</p>
+            <div className="flex items-center justify-between border-t border-border px-4 py-3">
+              <p className="text-xs text-muted-foreground/70">{offset + 1}–{Math.min(offset + PAGE_SIZE, total)} de {total}</p>
               <div className="flex gap-2">
                 <Button variant="secondary" size="sm" onClick={() => load(offset - PAGE_SIZE)} disabled={offset === 0 || loading}>
                   <ChevronLeft className="h-4 w-4" />

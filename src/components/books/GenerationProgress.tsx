@@ -22,7 +22,7 @@ interface GenerationProgressProps {
 }
 
 const statusConfig: Record<ChapterGenStatus, { icon: React.ElementType; label: string; classes: string }> = {
-  pending:    { icon: Clock,        label: 'Aguardando', classes: 'text-zinc-500 bg-zinc-800/40 border-zinc-700' },
+  pending:    { icon: Clock,        label: 'Aguardando', classes: 'text-muted-foreground/70 bg-surface-muted/40 border-border' },
   generating: { icon: Loader2,      label: 'Gerando…',  classes: 'text-yellow-400 bg-yellow-900/20 border-yellow-800 animate-pulse' },
   completed:  { icon: CheckCircle2, label: 'Concluído', classes: 'text-emerald-400 bg-emerald-900/20 border-emerald-800' },
   failed:     { icon: AlertCircle,  label: 'Falhou',    classes: 'text-red-400 bg-red-900/20 border-red-800' },
@@ -32,23 +32,23 @@ export function GenerationProgress({ chapters, progress, currentStep, isRunning 
   return (
     <div className="space-y-4">
       {/* Barra de progresso global */}
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 space-y-3">
+      <div className="rounded-xl border border-border bg-surface/50 p-4 space-y-3">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-zinc-300 font-medium">
+          <span className="text-foreground/80 font-medium">
             {progress === 100 ? 'Geração concluída!' : isRunning ? currentStep || 'Gerando...' : 'Aguardando início'}
           </span>
-          <span className="text-zinc-500 font-mono">{progress}%</span>
+          <span className="text-muted-foreground/70 font-mono">{progress}%</span>
         </div>
-        <div className="h-2 w-full rounded-full bg-zinc-800 overflow-hidden">
+        <div className="h-2 w-full rounded-full bg-surface-muted overflow-hidden">
           <div
             className={cn(
               'h-2 rounded-full transition-all duration-500',
-              progress === 100 ? 'bg-emerald-500' : isRunning ? 'bg-white' : 'bg-zinc-600'
+              progress === 100 ? 'bg-emerald-500' : isRunning ? 'bg-white' : 'bg-muted-foreground/30'
             )}
             style={{ width: `${progress}%` }}
           />
         </div>
-        <p className="text-xs text-zinc-600">
+        <p className="text-xs text-muted-foreground/60">
           {chapters.filter((c) => c.status === 'completed').length} de {chapters.length} capítulos concluídos
         </p>
       </div>

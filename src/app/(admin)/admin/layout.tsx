@@ -18,7 +18,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-black">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <Spinner size="lg" />
       </div>
     )
@@ -27,7 +27,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (!isAdmin) return null
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">{children}</main>
     </div>

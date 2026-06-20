@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+﻿import { forwardRef } from 'react'
 import { cn } from '@/lib/utils'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
@@ -12,13 +12,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    'bg-white text-black hover:bg-zinc-200 active:bg-zinc-300 disabled:bg-zinc-600 disabled:text-zinc-400',
+    'bg-primary text-primary-foreground hover:bg-primary-hover active:bg-[#081b2f] disabled:bg-primary/50 disabled:text-primary-foreground/70',
   secondary:
-    'bg-zinc-800 text-zinc-100 border border-zinc-700 hover:bg-zinc-700 active:bg-zinc-600 disabled:opacity-50',
+    'bg-surface text-foreground border border-border hover:bg-background-muted active:bg-border disabled:opacity-50',
   ghost:
-    'bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100 disabled:opacity-40',
+    'bg-transparent text-foreground/80 hover:bg-surface-muted hover:text-foreground disabled:opacity-40',
   danger:
-    'bg-red-700 text-white hover:bg-red-600 active:bg-red-800 disabled:opacity-50',
+    'bg-danger text-foreground hover:bg-[#a82b23] active:bg-[#8f241d] disabled:opacity-50',
 }
 
 const sizeClasses: Record<Size, string> = {
@@ -37,7 +37,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 cursor-pointer',
+          'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 cursor-pointer',
           variantClasses[variant],
           sizeClasses[size],
           className

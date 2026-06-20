@@ -44,18 +44,18 @@ export default function NewBookPage() {
       <div className="flex items-center gap-2">
         <Link
           href="/dashboard/books"
-          className="flex items-center gap-1 text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ChevronLeft className="h-4 w-4" />
           Minhas obras
         </Link>
-        <span className="text-zinc-600">/</span>
-        <span className="text-sm text-zinc-300">Nova obra</span>
+        <span className="text-muted-foreground/60">/</span>
+        <span className="text-sm text-foreground/80">Nova obra</span>
       </div>
 
       <div>
-        <h1 className="text-2xl font-bold text-zinc-100">Nova obra</h1>
-        <p className="mt-1 text-sm text-zinc-400">
+        <h1 className="text-2xl font-bold text-foreground">Nova obra</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Preencha os dados básicos para criar seu projeto
         </p>
       </div>
@@ -66,7 +66,7 @@ export default function NewBookPage() {
         </p>
       )}
 
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
+      <div className="rounded-xl border border-border bg-surface/50 p-6">
         <BookProjectForm onSubmit={handleSubmit} loading={loading} />
       </div>
     </div>

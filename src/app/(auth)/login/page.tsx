@@ -40,8 +40,8 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-xl font-semibold text-zinc-100">Entrar</h1>
-      <p className="mb-6 text-sm text-zinc-400">Acesse sua conta para continuar</p>
+      <h1 className="mb-1 text-xl font-semibold text-foreground">Entrar</h1>
+      <p className="mb-6 text-sm text-muted-foreground">Acesse sua conta para continuar</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
@@ -72,9 +72,9 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <p className="mt-5 text-center text-sm text-zinc-500">
+      <p className="mt-5 text-center text-sm text-muted-foreground/70">
         Não tem conta?{' '}
-        <Link href="/register" className="text-zinc-300 hover:text-white transition-colors">
+        <Link href="/register" className="text-foreground/80 hover:text-foreground transition-colors">
           Criar conta
         </Link>
       </p>

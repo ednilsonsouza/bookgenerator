@@ -80,23 +80,23 @@ export default function BookDetailPage() {
       <div className="flex items-center gap-2">
         <Link
           href="/dashboard/books"
-          className="flex items-center gap-1 text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ChevronLeft className="h-4 w-4" />
           Minhas obras
         </Link>
-        <span className="text-zinc-600">/</span>
-        <span className="text-sm text-zinc-300 line-clamp-1 max-w-xs">{book.title}</span>
+        <span className="text-muted-foreground/60">/</span>
+        <span className="text-sm text-foreground/80 line-clamp-1 max-w-xs">{book.title}</span>
       </div>
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:justify-between">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-2xl font-bold text-zinc-100">{book.title}</h1>
+            <h1 className="text-2xl font-bold text-foreground">{book.title}</h1>
             <BookStatusBadge status={book.status} />
           </div>
-          {subtype && <p className="text-sm text-zinc-400">{subtype}</p>}
+          {subtype && <p className="text-sm text-muted-foreground">{subtype}</p>}
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <Button
@@ -121,7 +121,7 @@ export default function BookDetailPage() {
       <div className="grid gap-4 sm:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-zinc-400">Sobre a obra</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Sobre a obra</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <Row label="Tema" value={book.theme} />
@@ -134,7 +134,7 @@ export default function BookDetailPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-zinc-400">Datas</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Datas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <Row label="Criada em" value={formatDate(book.createdAt)} />
@@ -146,17 +146,17 @@ export default function BookDetailPage() {
       {/* Descrição */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-zinc-400">Descrição</CardTitle>
+          <CardTitle className="text-sm font-medium text-muted-foreground">Descrição</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-zinc-300 leading-relaxed">{book.description}</p>
+          <p className="text-sm text-foreground/80 leading-relaxed">{book.description}</p>
         </CardContent>
       </Card>
 
       {/* Próximas etapas */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base font-semibold text-zinc-100">Próximas etapas</CardTitle>
+          <CardTitle className="text-base font-semibold text-foreground">Próximas etapas</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {book.type === 'academic' && (
@@ -198,8 +198,8 @@ export default function BookDetailPage() {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4">
-      <span className="text-zinc-500 shrink-0">{label}</span>
-      <span className="text-zinc-200 text-right">{value}</span>
+      <span className="text-muted-foreground/70 shrink-0">{label}</span>
+      <span className="text-foreground text-right">{value}</span>
     </div>
   )
 }
@@ -220,20 +220,20 @@ function Step({
   return (
     <Link
       href={href}
-      className="flex items-start gap-3 rounded-lg border border-zinc-800 p-4 transition-colors hover:border-zinc-700 hover:bg-zinc-900/50 group"
+      className="flex items-start gap-3 rounded-lg border border-border p-4 transition-colors hover:border-border-strong hover:bg-surface/50 group"
     >
       <div
         className={`mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${
-          done ? 'bg-emerald-900/40 text-emerald-400' : 'bg-zinc-800 text-zinc-400'
+          done ? 'bg-emerald-900/40 text-emerald-400' : 'bg-surface-muted text-muted-foreground'
         }`}
       >
         {done ? <CheckCircle2 className="h-4 w-4" /> : icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-medium group-hover:text-white ${done ? 'text-zinc-300' : 'text-zinc-200'}`}>{label}</p>
-        <p className="text-xs text-zinc-500">{description}</p>
+        <p className={`text-sm font-medium group-hover:text-foreground ${done ? 'text-foreground/80' : 'text-foreground'}`}>{label}</p>
+        <p className="text-xs text-muted-foreground/70">{description}</p>
       </div>
-      <ExternalLink className="h-4 w-4 text-zinc-600 shrink-0 mt-0.5 group-hover:text-zinc-400 transition-colors" />
+      <ExternalLink className="h-4 w-4 text-muted-foreground/60 shrink-0 mt-0.5 group-hover:text-muted-foreground transition-colors" />
     </Link>
   )
 }

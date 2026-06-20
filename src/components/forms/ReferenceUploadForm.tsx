@@ -122,21 +122,21 @@ export function ReferenceUploadForm({ bookId, userId, onSuccess }: ReferenceUplo
 
       {/* Upload de arquivo */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-zinc-300">
+        <label className="text-sm font-medium text-foreground/80">
           Arquivo (PDF ou TXT)
-          <span className="ml-1 text-zinc-500 font-normal">— opcional</span>
+          <span className="ml-1 text-muted-foreground/70 font-normal">— opcional</span>
         </label>
         {file ? (
-          <div className="flex items-center gap-3 rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2">
-            <FileText className="h-4 w-4 text-zinc-400 shrink-0" />
-            <span className="flex-1 text-sm text-zinc-200 truncate">{file.name}</span>
-            <span className="text-xs text-zinc-500 shrink-0">
+          <div className="flex items-center gap-3 rounded-md border border-border bg-surface px-3 py-2">
+            <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
+            <span className="flex-1 text-sm text-foreground truncate">{file.name}</span>
+            <span className="text-xs text-muted-foreground/70 shrink-0">
               {(file.size / 1024 / 1024).toFixed(1)} MB
             </span>
             <button
               type="button"
               onClick={() => { setFile(null); if (fileRef.current) fileRef.current.value = '' }}
-              className="text-zinc-500 hover:text-zinc-300 transition-colors"
+              className="text-muted-foreground/70 hover:text-foreground/80 transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
@@ -144,8 +144,8 @@ export function ReferenceUploadForm({ bookId, userId, onSuccess }: ReferenceUplo
         ) : (
           <label
             className={cn(
-              'flex cursor-pointer items-center gap-3 rounded-md border-2 border-dashed border-zinc-700 bg-zinc-900/50 px-4 py-4 text-sm text-zinc-400 transition-colors',
-              'hover:border-zinc-600 hover:text-zinc-300'
+              'flex cursor-pointer items-center gap-3 rounded-md border-2 border-dashed border-border bg-surface/50 px-4 py-4 text-sm text-muted-foreground transition-colors',
+              'hover:border-border-strong hover:text-foreground/80'
             )}
           >
             <Upload className="h-4 w-4 shrink-0" />

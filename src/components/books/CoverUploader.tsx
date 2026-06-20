@@ -55,13 +55,13 @@ export function CoverUploader({ currentFileId, onUploaded, onRemoved }: CoverUpl
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-zinc-300">
+      <label className="text-sm font-medium text-foreground/80">
         Capa do livro
-        <span className="ml-1 text-zinc-500 font-normal">— JPG, PNG ou WEBP, máx. 5 MB</span>
+        <span className="ml-1 text-muted-foreground/70 font-normal">— JPG, PNG ou WEBP, máx. 5 MB</span>
       </label>
 
       {previewUrl ? (
-        <div className="relative w-36 h-52 rounded-lg overflow-hidden border border-zinc-700">
+        <div className="relative w-36 h-52 rounded-lg overflow-hidden border border-border">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={previewUrl}
@@ -72,7 +72,7 @@ export function CoverUploader({ currentFileId, onUploaded, onRemoved }: CoverUpl
             <button
               type="button"
               onClick={onRemoved}
-              className="absolute top-1.5 right-1.5 rounded-full bg-black/70 p-1 text-zinc-300 hover:text-white transition-colors"
+              className="absolute top-1.5 right-1.5 rounded-full bg-foreground/70 p-1 text-foreground/80 hover:text-foreground transition-colors"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -81,7 +81,7 @@ export function CoverUploader({ currentFileId, onUploaded, onRemoved }: CoverUpl
       ) : (
         <label
           className={cn(
-            'flex w-36 h-52 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-700 bg-zinc-900/50 text-zinc-500 transition-colors hover:border-zinc-600 hover:text-zinc-400',
+            'flex w-36 h-52 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-surface/50 text-muted-foreground/70 transition-colors hover:border-border-strong hover:text-muted-foreground',
             uploading && 'pointer-events-none opacity-60'
           )}
         >

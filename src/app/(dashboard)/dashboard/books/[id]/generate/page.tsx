@@ -192,18 +192,18 @@ export default function GeneratePage() {
     <div className="mx-auto max-w-3xl space-y-6">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm">
-        <Link href={`/dashboard/books/${bookId}`} className="text-zinc-400 hover:text-zinc-100 transition-colors">
+        <Link href={`/dashboard/books/${bookId}`} className="text-muted-foreground hover:text-foreground transition-colors">
           {book?.title ?? '...'}
         </Link>
-        <span className="text-zinc-600">/</span>
-        <span className="text-zinc-300">Gerar obra</span>
+        <span className="text-muted-foreground/60">/</span>
+        <span className="text-foreground/80">Gerar obra</span>
       </div>
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Geração da obra</h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <h1 className="text-2xl font-bold text-foreground">Geração da obra</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Cada capítulo é gerado individualmente. Você pode pausar e retomar a qualquer momento.
           </p>
         </div>
@@ -223,9 +223,9 @@ export default function GeneratePage() {
       {/* Estado: idle sem capítulos */}
       {pageState === 'idle' && chapters.length === 0 && (
         <Card className="flex flex-col items-center justify-center py-16 text-center">
-          <Wand2 className="mb-4 h-10 w-10 text-zinc-600" />
-          <p className="mb-1 text-base font-medium text-zinc-200">Pronto para gerar</p>
-          <p className="mb-6 text-sm text-zinc-500 max-w-sm">
+          <Wand2 className="mb-4 h-10 w-10 text-muted-foreground/60" />
+          <p className="mb-1 text-base font-medium text-foreground">Pronto para gerar</p>
+          <p className="mb-6 text-sm text-muted-foreground/70 max-w-sm">
             A IA vai escrever cada capítulo do plano. Para obras acadêmicas, usa as referências que você carregou.
           </p>
           <Button onClick={startGeneration} size="lg" className="gap-2">
@@ -239,7 +239,7 @@ export default function GeneratePage() {
       {pageState === 'idle' && chapters.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-muted-foreground">
               {chapters.filter((c) => c.status === 'completed').length} de {chapters.length} capítulos gerados
             </p>
             <div className="flex items-center gap-2">
