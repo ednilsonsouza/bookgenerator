@@ -113,6 +113,7 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
 
         return (
           <Page key={chapter.id} size="A4" style={s.page}>
+            <PageHeader title={book.title} authorName={authorName} />
             {/* Título do capítulo */}
             <Text style={[s.h2, { marginBottom: 16 }]}>
               {chapter.order}  {chapter.title.toUpperCase()}
@@ -122,6 +123,7 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
             {paragraphs.map((para, pi) => (
               <Text key={pi} style={s.body}>{para}</Text>
             ))}
+            <PageFooter pageNum={cidx + 4} />
           </Page>
         )
       })}

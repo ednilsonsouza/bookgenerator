@@ -81,6 +81,7 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
 
         return (
           <Page key={chapter.id} size="A4" style={s.page}>
+            <PageHeader title={book.title} authorName={authorName} fontFamily="Times-Roman" color="#666" />
             {/* Cabeçalho do capítulo */}
             <View style={{ marginBottom: 32, alignItems: 'center' }}>
               <Text style={s.chapterNumber}>Capítulo {chapter.order}</Text>
@@ -91,6 +92,7 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
             {paragraphs.map((para, pi) => (
               <Text key={pi} style={s.body}>{para}</Text>
             ))}
+            <PageFooter pageNum={cidx + 3} fontFamily="Times-Roman" color="#666" />
           </Page>
         )
       })}
