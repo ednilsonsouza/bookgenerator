@@ -1,0 +1,113 @@
+import { StyleSheet } from '@react-pdf/renderer'
+
+// ── Estilos compartilhados ────────────────────────────────────────────────────
+
+/** Margens ABNT: superior 3cm, esquerda 3cm, inferior 2cm, direita 2cm */
+export const ABNT_MARGIN = { top: 85, left: 85, bottom: 57, right: 57 }   // 1pt ≈ 1.333px; 3cm ≈ 85pt
+export const LIT_MARGIN  = { top: 72, left: 72, bottom: 72, right: 72 }   // 2.54cm
+
+export const academicStyles = StyleSheet.create({
+  page: {
+    fontFamily:  'Helvetica',
+    fontSize:    12,
+    lineHeight:  1.5,
+    paddingTop:    ABNT_MARGIN.top,
+    paddingLeft:   ABNT_MARGIN.left,
+    paddingBottom: ABNT_MARGIN.bottom,
+    paddingRight:  ABNT_MARGIN.right,
+    color: '#111',
+  },
+  coverPage: {
+    fontFamily:  'Helvetica',
+    fontSize:    12,
+    lineHeight:  1.5,
+    paddingTop:  ABNT_MARGIN.top,
+    paddingLeft: ABNT_MARGIN.left,
+    paddingBottom: ABNT_MARGIN.bottom,
+    paddingRight: ABNT_MARGIN.right,
+    display:     'flex',
+    flexDirection: 'column',
+    alignItems:  'center',
+  },
+  h1: { fontSize: 14, fontFamily: 'Helvetica-Bold', textAlign: 'center', textTransform: 'uppercase', marginBottom: 6 },
+  h2: { fontSize: 13, fontFamily: 'Helvetica-Bold', textAlign: 'left', textTransform: 'uppercase', marginBottom: 4, marginTop: 18 },
+  h3: { fontSize: 12, fontFamily: 'Helvetica-Bold', textAlign: 'left', marginBottom: 4, marginTop: 12 },
+  body: { fontSize: 12, textAlign: 'justify', marginBottom: 8 },
+  indent: { fontSize: 12, textAlign: 'justify', marginBottom: 8, paddingLeft: 36 },
+  pageNum: { position: 'absolute', top: 28, right: 57, fontSize: 10, color: '#555' },
+  toc: { fontSize: 12, marginBottom: 6, flexDirection: 'row', justifyContent: 'space-between' },
+  refItem: { fontSize: 11, marginBottom: 8, textAlign: 'justify' },
+  spacer: { marginBottom: 24 },
+  hr: { borderBottomWidth: 1, borderBottomColor: '#ccc', marginVertical: 12 },
+  coverTitle: { fontSize: 14, fontFamily: 'Helvetica-Bold', textAlign: 'center', textTransform: 'uppercase', marginTop: 'auto', marginBottom: 12 },
+  coverAuthor: { fontSize: 12, textAlign: 'center', marginBottom: 8 },
+  coverFooter: { fontSize: 12, textAlign: 'center', marginTop: 'auto' },
+})
+
+export const literaryStyles = StyleSheet.create({
+  page: {
+    fontFamily:  'Times-Roman',
+    fontSize:    12,
+    lineHeight:  1.6,
+    paddingTop:    LIT_MARGIN.top,
+    paddingLeft:   LIT_MARGIN.left,
+    paddingBottom: LIT_MARGIN.bottom,
+    paddingRight:  LIT_MARGIN.right,
+    color: '#111',
+  },
+  coverPage: {
+    fontFamily:  'Times-Roman',
+    fontSize:    12,
+    lineHeight:  1.6,
+    paddingTop:  LIT_MARGIN.top,
+    paddingLeft: LIT_MARGIN.left,
+    paddingBottom: LIT_MARGIN.bottom,
+    paddingRight: LIT_MARGIN.right,
+    display:     'flex',
+    flexDirection: 'column',
+    alignItems:  'center',
+    backgroundColor: '#111',
+  },
+  coverTitle: {
+    fontFamily: 'Times-Bold',
+    fontSize:   28,
+    color:      '#fff',
+    textAlign:  'center',
+    marginTop:  'auto',
+    marginBottom: 12,
+    lineHeight:  1.2,
+  },
+  coverGenre: {
+    fontFamily: 'Times-Italic',
+    fontSize:   14,
+    color:      '#aaa',
+    textAlign:  'center',
+    marginBottom: 8,
+  },
+  coverAuthor: {
+    fontFamily: 'Times-Roman',
+    fontSize:   14,
+    color:      '#ccc',
+    textAlign:  'center',
+    marginBottom: 'auto',
+  },
+  chapterNumber: {
+    fontFamily: 'Times-Roman',
+    fontSize:   11,
+    color:      '#666',
+    textAlign:  'center',
+    textTransform: 'uppercase',
+    letterSpacing: 2,
+    marginBottom: 8,
+  },
+  chapterTitle: {
+    fontFamily: 'Times-Bold',
+    fontSize:   20,
+    textAlign:  'center',
+    marginBottom: 28,
+  },
+  body: { fontSize: 12, textAlign: 'justify', marginBottom: 10, lineHeight: 1.7 },
+  toc: { fontSize: 12, marginBottom: 8, flexDirection: 'row', justifyContent: 'space-between' },
+  tocTitle: { fontFamily: 'Times-Bold', fontSize: 16, textAlign: 'center', marginBottom: 20 },
+  pageNum: { position: 'absolute', bottom: 40, left: 0, right: 0, textAlign: 'center', fontSize: 10, color: '#666' },
+})
