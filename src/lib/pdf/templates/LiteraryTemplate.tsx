@@ -41,14 +41,16 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
           />
         ) : null}
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', gap: 12 }}>
-          <Text style={s.coverGenre}>{genre.toUpperCase()}</Text>
-          <Text style={s.coverTitle}>{book.title}</Text>
-          <Text style={s.coverAuthor}>{authorName}</Text>
+        <View style={s.coverContent}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', gap: 12 }}>
+            <Text style={s.coverGenre}>{genre.toUpperCase()}</Text>
+            <Text style={s.coverTitle}>{book.title}</Text>
+            <Text style={s.coverAuthor}>{authorName}</Text>
+          </View>
+          <Text style={{ fontFamily: 'Times-Roman', fontSize: 10, color: '#888', textAlign: 'center', marginBottom: 8 }}>
+            {year} · BookGenerator
+          </Text>
         </View>
-        <Text style={{ fontFamily: 'Times-Roman', fontSize: 10, color: '#888', textAlign: 'center', marginBottom: 8 }}>
-          {year} · BookGenerator
-        </Text>
       </Page>
 
       {/* ── SUMÁRIO ──────────────────────────────────────────────────────── */}
