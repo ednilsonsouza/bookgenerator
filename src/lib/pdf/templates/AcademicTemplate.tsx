@@ -1,6 +1,7 @@
 import React from 'react'
 import { Document, Page, Text, View } from '@react-pdf/renderer'
 import { academicStyles as s } from '../styles'
+import { PageHeader, PageFooter } from '../components'
 import type { BookProject, Chapter } from '@/types/book'
 import { ACADEMIC_SUBTYPE_LABELS } from '@/types/book'
 import type { GeneratedSection } from '@/lib/appwrite/generation'
@@ -26,6 +27,12 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
   const subtype  = book.academicSubtype ? ACADEMIC_SUBTYPE_LABELS[book.academicSubtype] : 'Trabalho Acadêmico'
   const year     = new Date().getFullYear()
   const generatedChapters = chapters.filter((c) => (sectionsMap[c.id] ?? []).length > 0)
+
+  // Páginas:
+  // 1: capa, 2: folha de rosto, 3: sumário
+  // capítulos começam na página 4
+  // referências após os capítulos
+  const refsPage = generatedChapters.length + 4
 
   return (
     <Document
@@ -77,6 +84,7 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
 
       {/* ── SUMÁRIO ──────────────────────────────────────────────────────── */}
       <Page size="A4" style={s.page}>
+        <PageHeader title={book.title} authorName={authorName} />
         <Text style={[s.h1, { marginBottom: 20 }]}>SUMÁRIO</Text>
         {generatedChapters.map((ch, idx) => (
           <View key={ch.id} style={s.toc}>
@@ -91,10 +99,10 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
             <Text style={{ flex: 1, textTransform: 'uppercase', fontSize: 12 }}>
               REFERÊNCIAS
             </Text>
-            <Text style={{ color: '#555', fontSize: 12 }}>{generatedChapters.length + 4}</Text>
+            <Text style={{ color: '#555', fontSize: 12 }}>{refsPage}</Text>
           </View>
         )}
-        <Text style={s.pageNum}>{3}</Text>
+        <PageFooter pageNum={3} />
       </Page>
 
       {/* ── CAPÍTULOS ────────────────────────────────────────────────────── */}
@@ -105,9 +113,6 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
 
         return (
           <Page key={chapter.id} size="A4" style={s.page}>
-            {/* Número de página */}
-            <Text style={s.pageNum}>{cidx + 4}</Text>
-
             {/* Título do capítulo */}
             <Text style={[s.h2, { marginBottom: 16 }]}>
               {chapter.order}  {chapter.title.toUpperCase()}
@@ -124,14 +129,14 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
       {/* ── REFERÊNCIAS ──────────────────────────────────────────────────── */}
       {references.length > 0 && (
         <Page size="A4" style={s.page}>
-          <Text style={s.pageNum}>{generatedChapters.length + 4}</Text>
+          <PageHeader title={book.title} authorName={authorName} />
           <Text style={[s.h2, { marginBottom: 16 }]}>REFERÊNCIAS</Text>
           {references.map((ref, i) => (
             <Text key={i} style={s.refItem}>{ref.abntFormattedReference}</Text>
           ))}
+          <PageFooter pageNum={refsPage} />
         </Page>
       )}
     </Document>
   )
 }
-

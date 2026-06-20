@@ -34,7 +34,7 @@ export const academicStyles = StyleSheet.create({
   h3: { fontSize: 12, fontFamily: 'Helvetica-Bold', textAlign: 'left', marginBottom: 4, marginTop: 12 },
   body: { fontSize: 12, textAlign: 'justify', marginBottom: 8 },
   indent: { fontSize: 12, textAlign: 'justify', marginBottom: 8, paddingLeft: 36 },
-  pageNum: { position: 'absolute', top: 28, right: 57, fontSize: 10, color: '#555' },
+  pageNum: { position: 'absolute', bottom: 28, left: 0, right: 0, textAlign: 'center', fontSize: 10, color: '#555' },
   toc: { fontSize: 12, marginBottom: 6, flexDirection: 'row', justifyContent: 'space-between' },
   refItem: { fontSize: 11, marginBottom: 8, textAlign: 'justify' },
   spacer: { marginBottom: 24 },

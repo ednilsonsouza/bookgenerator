@@ -1,6 +1,7 @@
 import React from 'react'
 import { Document, Page, Text, View, Image } from '@react-pdf/renderer'
 import { literaryStyles as s } from '../styles'
+import { PageHeader, PageFooter } from '../components'
 import type { BookProject, Chapter } from '@/types/book'
 import { LITERARY_GENRE_LABELS } from '@/types/book'
 import type { GeneratedSection } from '@/lib/appwrite/generation'
@@ -24,6 +25,12 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
   const genre = book.literaryGenre ? LITERARY_GENRE_LABELS[book.literaryGenre] : 'Literatura'
   const year  = new Date().getFullYear()
   const generatedChapters = chapters.filter((c) => (sectionsMap[c.id] ?? []).length > 0)
+
+  // Páginas:
+  // 1: capa, 2: sumário
+  // capítulos começam na página 3
+  // página final após os capítulos
+  const finalPage = generatedChapters.length + 3
 
   return (
     <Document
@@ -55,6 +62,7 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
 
       {/* ── SUMÁRIO ──────────────────────────────────────────────────────── */}
       <Page size="A4" style={s.page}>
+        <PageHeader title={book.title} authorName={authorName} fontFamily="Times-Roman" color="#666" />
         <Text style={s.tocTitle}>Sumário</Text>
         {generatedChapters.map((ch, idx) => (
           <View key={ch.id} style={s.toc}>
@@ -62,7 +70,7 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
             <Text style={{ color: '#666' }}>{idx + 3}</Text>
           </View>
         ))}
-        <Text style={s.pageNum}>2</Text>
+        <PageFooter pageNum={2} fontFamily="Times-Roman" color="#666" />
       </Page>
 
       {/* ── CAPÍTULOS ────────────────────────────────────────────────────── */}
@@ -83,15 +91,13 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
             {paragraphs.map((para, pi) => (
               <Text key={pi} style={s.body}>{para}</Text>
             ))}
-
-            {/* Número de página */}
-            <Text style={s.pageNum}>{cidx + 3}</Text>
           </Page>
         )
       })}
 
       {/* ── PÁGINA FINAL ─────────────────────────────────────────────────── */}
       <Page size="A4" style={s.page}>
+        <PageHeader title={book.title} authorName={authorName} fontFamily="Times-Roman" color="#666" />
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ fontFamily: 'Times-Italic', fontSize: 14, color: '#555', textAlign: 'center', marginBottom: 8 }}>
             {book.title}
@@ -100,8 +106,8 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
             Gerado com BookGenerator · {year}
           </Text>
         </View>
+        <PageFooter pageNum={finalPage} fontFamily="Times-Roman" color="#666" />
       </Page>
     </Document>
   )
 }
-
