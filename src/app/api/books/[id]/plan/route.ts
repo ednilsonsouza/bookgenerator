@@ -35,6 +35,20 @@ export async function POST(
       return NextResponse.json({ error: 'Sem permissão.' }, { status: 403 })
     }
 
+    // Obras acadêmicas requerem mínimo de 5 referências
+    if (bookDoc.type === 'academic') {
+      const refs = await databases.listDocuments(DATABASE_ID, COLLECTIONS.REFERENCES, [
+        Query.equal('bookProjectId', bookId),
+        Query.limit(1),
+      ])
+      if (refs.total < 5) {
+        return NextResponse.json(
+          { error: `Obras acadêmicas requerem pelo menos 5 referências bibliográficas. Você tem ${refs.total}.` },
+          { status: 422 }
+        )
+      }
+    }
+
     const book = {
       id: bookDoc.$id as string,
       userId: bookDoc.userId as string,
