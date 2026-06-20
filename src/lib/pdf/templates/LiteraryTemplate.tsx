@@ -9,16 +9,13 @@ import type { GeneratedSection } from '@/lib/appwrite/generation'
 interface Props {
   book: BookProject
   chapters: Chapter[]
-  sectionsMap: Record<string, GeneratedSection[]>  // chapterId → sections
-  coverImageBase64?: string                         // data:image/jpeg;base64,...
+  sectionsMap: Record<string, GeneratedSection[]>
+  coverImageBase64?: string
   authorName: string
 }
 
 function splitParagraphs(text: string): string[] {
-  return text
-    .split(/\n\n+/)
-    .map((p) => p.trim())
-    .filter(Boolean)
+  return text.split(/\n\n+/).map((p) => p.trim()).filter(Boolean)
 }
 
 export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, authorName }: Props) {
@@ -26,10 +23,8 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
   const year  = new Date().getFullYear()
   const generatedChapters = chapters.filter((c) => (sectionsMap[c.id] ?? []).length > 0)
 
-  // Páginas:
-  // 1: capa, 2: sumário
-  // capítulos começam na página 3
-  // página final após os capítulos
+  // Sumário: página 2 do sumário referencia capítulos começando em 3
+  // (capa=1, sumário=2, cap1=3, cap2=4 ...)
   const finalPage = generatedChapters.length + 3
 
   return (
@@ -40,7 +35,7 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
       creator="BookGenerator"
       producer="BookGenerator"
     >
-      {/* ── CAPA ─────────────────────────────────────────────────────────── */}
+      {/* ── CAPA ─────────────────────────────────────────────── sem header/footer */}
       <Page size="A4" style={s.coverPage}>
         {coverImageBase64 ? (
           <Image
@@ -60,7 +55,7 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
         </View>
       </Page>
 
-      {/* ── SUMÁRIO ──────────────────────────────────────────────────────── */}
+      {/* ── SUMÁRIO ─────────────────────────────────── header + footer automático */}
       <Page size="A4" style={s.page}>
         <PageHeader title={book.title} authorName={authorName} fontFamily="Times-Roman" color="#666" />
         <Text style={s.tocTitle}>Sumário</Text>
@@ -70,34 +65,31 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
             <Text style={{ color: '#666' }}>{idx + 3}</Text>
           </View>
         ))}
-        <PageFooter pageNum={2} fontFamily="Times-Roman" color="#666" />
+        <PageFooter fontFamily="Times-Roman" color="#666" />
       </Page>
 
-      {/* ── CAPÍTULOS ────────────────────────────────────────────────────── */}
-      {generatedChapters.map((chapter, cidx) => {
-        const sections = sectionsMap[chapter.id] ?? []
-        const fullText = sections.map((s) => s.content).join('\n\n')
+      {/* ── CAPÍTULOS ────────────────────────────────── header + footer automático */}
+      {generatedChapters.map((chapter) => {
+        const sections  = sectionsMap[chapter.id] ?? []
+        const fullText  = sections.map((sec) => sec.content).join('\n\n')
         const paragraphs = splitParagraphs(fullText)
 
         return (
           <Page key={chapter.id} size="A4" style={s.page}>
             <PageHeader title={book.title} authorName={authorName} fontFamily="Times-Roman" color="#666" />
-            {/* Cabeçalho do capítulo */}
             <View style={{ marginBottom: 32, alignItems: 'center' }}>
               <Text style={s.chapterNumber}>Capítulo {chapter.order}</Text>
               <Text style={s.chapterTitle}>{chapter.title}</Text>
             </View>
-
-            {/* Parágrafos */}
             {paragraphs.map((para, pi) => (
               <Text key={pi} style={s.body}>{para}</Text>
             ))}
-            <PageFooter pageNum={cidx + 3} fontFamily="Times-Roman" color="#666" />
+            <PageFooter fontFamily="Times-Roman" color="#666" />
           </Page>
         )
       })}
 
-      {/* ── PÁGINA FINAL ─────────────────────────────────────────────────── */}
+      {/* ── PÁGINA FINAL ─────────────────────────────── header + footer automático */}
       <Page size="A4" style={s.page}>
         <PageHeader title={book.title} authorName={authorName} fontFamily="Times-Roman" color="#666" />
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -108,7 +100,7 @@ export function LiteraryPdf({ book, chapters, sectionsMap, coverImageBase64, aut
             Gerado com BookGenerator · {year}
           </Text>
         </View>
-        <PageFooter pageNum={finalPage} fontFamily="Times-Roman" color="#666" />
+        <PageFooter fontFamily="Times-Roman" color="#666" />
       </Page>
     </Document>
   )

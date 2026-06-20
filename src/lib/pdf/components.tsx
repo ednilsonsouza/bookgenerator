@@ -13,9 +13,15 @@ interface PageHeaderProps {
   color?: string
 }
 
+/**
+ * Cabeçalho fixo: aparece em TODAS as páginas do Page que o contém,
+ * inclusive nas páginas de overflow geradas automaticamente pelo @react-pdf.
+ * O prop `fixed` é obrigatório para isso funcionar.
+ */
 export function PageHeader({ title, authorName, fontFamily = 'Helvetica', color = '#555' }: PageHeaderProps) {
   return (
     <View
+      fixed
       style={{
         position: 'absolute',
         top: 28,
@@ -40,26 +46,44 @@ export function PageHeader({ title, authorName, fontFamily = 'Helvetica', color 
 }
 
 interface PageFooterProps {
-  pageNum: number | string
+  /** Número fixo quando quiser sobrescrever (ex: capa = 1). Se omitido, usa pageNumber automático. */
+  pageNum?: number | string
   fontFamily?: string
   color?: string
 }
 
+/**
+ * Rodapé fixo com número de página centralizado.
+ * Usa render={({ pageNumber })} do @react-pdf para numerar automaticamente
+ * as páginas de overflow.
+ */
 export function PageFooter({ pageNum, fontFamily = 'Helvetica', color = '#555' }: PageFooterProps) {
+  const baseStyle = {
+    position: 'absolute' as const,
+    bottom: 28,
+    left: 0,
+    right: 0,
+    textAlign: 'center' as const,
+    fontFamily,
+    fontSize: 10,
+    color,
+  }
+
+  if (pageNum !== undefined) {
+    // Número fixo explícito (para quando sabemos o número exato)
+    return (
+      <Text fixed style={baseStyle}>
+        {pageNum}
+      </Text>
+    )
+  }
+
+  // Número automático via render prop — funciona em páginas de overflow também
   return (
     <Text
-      style={{
-        position: 'absolute',
-        bottom: 28,
-        left: 0,
-        right: 0,
-        textAlign: 'center',
-        fontFamily,
-        fontSize: 10,
-        color,
-      }}
-    >
-      {pageNum}
-    </Text>
+      fixed
+      style={baseStyle}
+      render={({ pageNumber }) => String(pageNumber)}
+    />
   )
 }

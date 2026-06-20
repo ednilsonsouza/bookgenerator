@@ -24,14 +24,11 @@ function splitParagraphs(text: string): string[] {
 }
 
 export function AcademicPdf({ book, chapters, sectionsMap, references, authorName }: Props) {
-  const subtype  = book.academicSubtype ? ACADEMIC_SUBTYPE_LABELS[book.academicSubtype] : 'Trabalho Acadêmico'
-  const year     = new Date().getFullYear()
+  const subtype = book.academicSubtype ? ACADEMIC_SUBTYPE_LABELS[book.academicSubtype] : 'Trabalho Acadêmico'
+  const year    = new Date().getFullYear()
   const generatedChapters = chapters.filter((c) => (sectionsMap[c.id] ?? []).length > 0)
 
-  // Páginas:
-  // 1: capa, 2: folha de rosto, 3: sumário
-  // capítulos começam na página 4
-  // referências após os capítulos
+  // capa=1, folha de rosto=2, sumário=3, cap1=4 ...
   const refsPage = generatedChapters.length + 4
 
   return (
@@ -42,35 +39,27 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
       creator="BookGenerator"
       producer="BookGenerator"
     >
-      {/* ── CAPA (ABNT NBR 14724) ────────────────────────────────────────── */}
+      {/* ── CAPA ─────────────────────────────────────────────── sem header/footer */}
       <Page size="A4" style={s.coverPage}>
-        {/* Instituição (topo) */}
         <Text style={{ fontFamily: 'Helvetica-Bold', fontSize: 12, textTransform: 'uppercase', textAlign: 'center', marginBottom: 4 }}>
           {authorName}
         </Text>
-
-        {/* Título centralizado */}
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={s.coverTitle}>{book.title}</Text>
           <Text style={{ fontSize: 11, textAlign: 'center', marginTop: 8, color: '#333' }}>
             {subtype}
           </Text>
         </View>
-
-        {/* Rodapé: cidade e ano */}
         <Text style={s.coverFooter}>{year}</Text>
       </Page>
 
-      {/* ── FOLHA DE ROSTO ───────────────────────────────────────────────── */}
+      {/* ── FOLHA DE ROSTO ─────────────────────────────── sem header/footer */}
       <Page size="A4" style={s.coverPage}>
         <Text style={{ fontFamily: 'Helvetica-Bold', fontSize: 12, textTransform: 'uppercase', textAlign: 'center', marginBottom: 4 }}>
           {authorName}
         </Text>
-
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
           <Text style={s.coverTitle}>{book.title}</Text>
-
-          {/* Caixa de descrição (ABNT: alinhada à direita, 7cm) */}
           <View style={{ width: '55%', alignSelf: 'flex-end', marginTop: 24 }}>
             <Text style={{ fontSize: 11, textAlign: 'left', fontFamily: 'Helvetica', lineHeight: 1.4 }}>
               {subtype} apresentado como requisito acadêmico.{'\n\n'}
@@ -78,11 +67,10 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
             </Text>
           </View>
         </View>
-
         <Text style={s.coverFooter}>{year}</Text>
       </Page>
 
-      {/* ── SUMÁRIO ──────────────────────────────────────────────────────── */}
+      {/* ── SUMÁRIO ─────────────────────────────── header + footer automático */}
       <Page size="A4" style={s.page}>
         <PageHeader title={book.title} authorName={authorName} />
         <Text style={[s.h1, { marginBottom: 20 }]}>SUMÁRIO</Text>
@@ -96,17 +84,15 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
         ))}
         {references.length > 0 && (
           <View style={s.toc}>
-            <Text style={{ flex: 1, textTransform: 'uppercase', fontSize: 12 }}>
-              REFERÊNCIAS
-            </Text>
+            <Text style={{ flex: 1, textTransform: 'uppercase', fontSize: 12 }}>REFERÊNCIAS</Text>
             <Text style={{ color: '#555', fontSize: 12 }}>{refsPage}</Text>
           </View>
         )}
-        <PageFooter pageNum={3} />
+        <PageFooter />
       </Page>
 
-      {/* ── CAPÍTULOS ────────────────────────────────────────────────────── */}
-      {generatedChapters.map((chapter, cidx) => {
+      {/* ── CAPÍTULOS ────────────────────────────── header + footer automático */}
+      {generatedChapters.map((chapter) => {
         const sections   = sectionsMap[chapter.id] ?? []
         const fullText   = sections.map((sec) => sec.content).join('\n\n')
         const paragraphs = splitParagraphs(fullText)
@@ -114,21 +100,18 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
         return (
           <Page key={chapter.id} size="A4" style={s.page}>
             <PageHeader title={book.title} authorName={authorName} />
-            {/* Título do capítulo */}
             <Text style={[s.h2, { marginBottom: 16 }]}>
               {chapter.order}  {chapter.title.toUpperCase()}
             </Text>
-
-            {/* Corpo */}
             {paragraphs.map((para, pi) => (
               <Text key={pi} style={s.body}>{para}</Text>
             ))}
-            <PageFooter pageNum={cidx + 4} />
+            <PageFooter />
           </Page>
         )
       })}
 
-      {/* ── REFERÊNCIAS ──────────────────────────────────────────────────── */}
+      {/* ── REFERÊNCIAS ──────────────────────────── header + footer automático */}
       {references.length > 0 && (
         <Page size="A4" style={s.page}>
           <PageHeader title={book.title} authorName={authorName} />
@@ -136,7 +119,7 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
           {references.map((ref, i) => (
             <Text key={i} style={s.refItem}>{ref.abntFormattedReference}</Text>
           ))}
-          <PageFooter pageNum={refsPage} />
+          <PageFooter />
         </Page>
       )}
     </Document>
