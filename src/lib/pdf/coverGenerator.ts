@@ -1,4 +1,7 @@
 import sharp from 'sharp'
+import { parse as parseFont, type Font } from 'opentype.js'
+import fs from 'fs'
+import path from 'path'
 
 interface CoverData {
   title: string
@@ -8,25 +11,56 @@ interface CoverData {
   type: 'academic' | 'literary'
 }
 
-function escapeXml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
+const FONT_REGULAR_PATH = path.join(process.cwd(), 'src', 'lib', 'pdf', 'fonts', 'Roboto-Regular.ttf')
+const FONT_BOLD_PATH = path.join(process.cwd(), 'src', 'lib', 'pdf', 'fonts', 'Roboto-Bold.ttf')
+
+let regularFont: Font | null = null
+let boldFont: Font | null = null
+
+function getFont(weight: 'normal' | 'bold' = 'normal'): Font {
+  if (weight === 'bold') {
+    if (!boldFont) boldFont = parseFont(fs.readFileSync(FONT_BOLD_PATH))
+    return boldFont
+  }
+  if (!regularFont) regularFont = parseFont(fs.readFileSync(FONT_REGULAR_PATH))
+  return regularFont
 }
 
-function wrapText(text: string, maxChars: number): string[] {
+function textToPath(
+  text: string,
+  x: number,
+  y: number,
+  fontSize: number,
+  weight: 'normal' | 'bold' = 'normal',
+  align: 'left' | 'center' = 'left'
+): string {
+  const font = getFont(weight)
+  const scale = fontSize / font.unitsPerEm
+  const width = font.getAdvanceWidth(text, fontSize)
+
+  let startX = x
+  if (align === 'center') {
+    startX = x - width / 2
+  }
+
+  // opentype.js path coordinates: y=0 is baseline, positive y goes up.
+  // SVG: y grows downward. We flip vertically and translate to baseline.
+  const p = font.getPath(text, startX, y, fontSize)
+  return p.toSVG(2)
+}
+
+function wrapText(text: string, font: Font, fontSize: number, maxWidth: number): string[] {
   const words = text.split(/\s+/)
   const lines: string[] = []
   let current = ''
   for (const word of words) {
-    if ((current + ' ' + word).trim().length > maxChars) {
-      if (current) lines.push(current.trim())
+    const test = current ? `${current} ${word}` : word
+    const width = font.getAdvanceWidth(test, fontSize)
+    if (width > maxWidth && current) {
+      lines.push(current.trim())
       current = word
     } else {
-      current = (current + ' ' + word).trim()
+      current = test
     }
   }
   if (current) lines.push(current.trim())
@@ -42,29 +76,44 @@ export async function generateCoverImage(data: CoverData): Promise<Buffer> {
   const label = type === 'academic' ? 'OBRA ACADÊMICA' : (genre ? genre.toUpperCase() : 'LITERATURA')
   const subtitle = theme && theme !== title ? theme : ''
 
-  const titleLines = wrapText(escapeXml(title), 28)
-  const subtitleLines = subtitle ? wrapText(escapeXml(subtitle), 42) : []
+  const regularFont = getFont('normal')
+  const boldFont = getFont('bold')
 
-  // Monta texto do título com tamanho dinâmico
   const titleFontSize = title.length > 50 ? 44 : title.length > 30 ? 52 : 60
+  const maxTitleWidth = width * 0.82 // 82% da largura
+  const titleLines = wrapText(title, boldFont, titleFontSize, maxTitleWidth)
+
+  const subtitleFontSize = 18
+  const maxSubtitleWidth = width * 0.78
+  const subtitleLines = subtitle ? wrapText(subtitle, regularFont, subtitleFontSize, maxSubtitleWidth) : []
+
+  const titleLineHeight = titleFontSize * 1.15
+  const totalTitleHeight = titleLines.length * titleLineHeight
   const titleY = 420
-  const lineHeight = titleFontSize * 1.15
-  const totalTitleHeight = titleLines.length * lineHeight
   const titleStartY = titleY - totalTitleHeight / 2
 
-  let titleSvg = ''
+  let titlePaths = ''
   titleLines.forEach((line, i) => {
-    titleSvg += `<text x="${width / 2}" y="${titleStartY + i * lineHeight}" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="${titleFontSize}" font-weight="bold" fill="#f0f0f0">${line}</text>`
+    titlePaths += textToPath(line, width / 2, titleStartY + i * titleLineHeight, titleFontSize, 'bold', 'center')
   })
 
-  let subtitleSvg = ''
+  let subtitlePaths = ''
   if (subtitleLines.length > 0) {
-    const subLineHeight = 22
+    const subLineHeight = subtitleFontSize * 1.25
     const subStartY = titleStartY + totalTitleHeight + 32
     subtitleLines.forEach((line, i) => {
-      subtitleSvg += `<text x="${width / 2}" y="${subStartY + i * subLineHeight}" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="#9ca3af">${line}</text>`
+      subtitlePaths += textToPath(line, width / 2, subStartY + i * subLineHeight, subtitleFontSize, 'normal', 'center')
     })
   }
+
+  const labelFontSize = 13
+  const labelPaths = textToPath(label, width / 2, 220, labelFontSize, 'bold', 'center')
+
+  const authorFontSize = 18
+  const authorPaths = textToPath(escapeXml(authorName), width / 2, height - 220, authorFontSize, 'normal', 'center')
+
+  const footerFontSize = 12
+  const footerPaths = textToPath(`${year} · BookGenerator`, width / 2, height - 90, footerFontSize, 'normal', 'center')
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
@@ -112,22 +161,22 @@ export async function generateCoverImage(data: CoverData): Promise<Buffer> {
   <rect x="${width / 2 - 120}" y="160" width="240" height="2" fill="url(#line)"/>
 
   <!-- Label -->
-  <text x="${width / 2}" y="220" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="bold" letter-spacing="4" fill="#06b6d4">${escapeXml(label)}</text>
+  <g fill="#06b6d4" letter-spacing="4">${labelPaths}</g>
 
   <!-- Title -->
-  ${titleSvg}
+  <g fill="#f0f0f0">${titlePaths}</g>
 
   <!-- Subtitle / Theme -->
-  ${subtitleSvg}
+  <g fill="#9ca3af">${subtitlePaths}</g>
 
   <!-- Author -->
-  <text x="${width / 2}" y="${height - 220}" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="#e5e7eb">${escapeXml(authorName)}</text>
+  <g fill="#e5e7eb">${authorPaths}</g>
 
   <!-- Bottom line -->
   <rect x="${width / 2 - 80}" y="${height - 170}" width="160" height="1" fill="#06b6d4" opacity="0.5"/>
 
   <!-- Footer -->
-  <text x="${width / 2}" y="${height - 90}" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#6b7280">${year} · BookGenerator</text>
+  <g fill="#6b7280">${footerPaths}</g>
 </svg>
   `.trim()
 
@@ -137,4 +186,13 @@ export async function generateCoverImage(data: CoverData): Promise<Buffer> {
     .toBuffer()
 
   return png
+}
+
+function escapeXml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
 }
