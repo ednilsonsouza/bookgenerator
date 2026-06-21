@@ -9,13 +9,14 @@ import type { BookProject } from '@/types/book'
 import type { Reference, ReferenceStatus } from '@/lib/appwrite/references'
 import { ReferenceUploadForm } from '@/components/forms/ReferenceUploadForm'
 import { ReferenceStatusBadge } from '@/components/books/ReferenceStatusBadge'
+import { ImportReferencesModal } from '@/components/books/ImportReferencesModal'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Spinner } from '@/components/ui/Spinner'
 import { cn } from '@/lib/utils'
 import {
   ChevronLeft, BookOpen, Plus, Trash2, RefreshCw,
-  AlertTriangle, CheckCircle2, FileText,
+  AlertTriangle, CheckCircle2, FileText, Library,
 } from 'lucide-react'
 
 const MIN_REFS = 5
@@ -31,6 +32,7 @@ export default function ReferencesPage() {
   const [loading, setLoading]   = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [showImport, setShowImport] = useState(false)
   const [error, setError]       = useState('')
 
   const loadRefs = useCallback(async () => {
@@ -134,14 +136,24 @@ export default function ReferencesPage() {
           </p>
         </div>
         {!atLimit && (
-          <Button
-            onClick={() => setShowForm((v) => !v)}
-            className="gap-2 shrink-0"
-            variant={showForm ? 'secondary' : 'primary'}
-          >
-            <Plus className="h-4 w-4" />
-            {showForm ? 'Cancelar' : 'Adicionar'}
-          </Button>
+          <div className="flex items-center gap-2 shrink-0">
+            <Button
+              onClick={() => setShowImport(true)}
+              variant="secondary"
+              className="gap-2"
+            >
+              <Library className="h-4 w-4" />
+              Reutilizar
+            </Button>
+            <Button
+              onClick={() => setShowForm((v) => !v)}
+              className="gap-2"
+              variant={showForm ? 'secondary' : 'primary'}
+            >
+              <Plus className="h-4 w-4" />
+              {showForm ? 'Cancelar' : 'Adicionar'}
+            </Button>
+          </div>
         )}
       </div>
 
@@ -299,6 +311,18 @@ export default function ReferencesPage() {
             </Button>
           </Link>
         </div>
+      )}
+
+      {/* Modal: reutilizar referências */}
+      {showImport && user && (
+        <ImportReferencesModal
+          bookId={bookId}
+          userId={user.$id}
+          currentCount={refs.length}
+          maxRefs={MAX_REFS}
+          onImported={async () => { await loadRefs() }}
+          onClose={() => setShowImport(false)}
+        />
       )}
     </div>
   )
