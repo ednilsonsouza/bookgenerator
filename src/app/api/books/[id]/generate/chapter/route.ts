@@ -15,6 +15,7 @@ import { truncate } from '@/lib/utils'
 import { ID } from 'node-appwrite'
 import type { BookProject, Chapter } from '@/types/book'
 import type { AcademicSubtype, LiteraryGenre } from '@/types/book'
+import { METHODOLOGY_REFS } from '@/lib/openai/methodologyRefs'
 
 export const dynamic    = 'force-dynamic'
 export const maxDuration = 60
@@ -186,7 +187,21 @@ export async function POST(
         }))
       }
 
-      sourceChunkIds = sources.map((s) => s.chunkId)
+      // Injeta referências metodológicas fixas (Bardin + Gil) caso não estejam nos resultados RAG
+      const methodologyKeys = new Set(sources.map((s) => s.citationKey))
+      for (const mref of METHODOLOGY_REFS) {
+        if (!methodologyKeys.has(mref.citationKey)) {
+          sources.push({
+            chunkId:     `method-${mref.citationKey}`,
+            citationKey: mref.citationKey,
+            abnt:        mref.abntFormattedReference,
+            excerpt:     `${mref.title}. ${mref.authors} (${mref.year}). ${mref.publisher}. Referência metodológica obrigatória desta obra.`,
+            score:       0,
+          })
+        }
+      }
+
+      sourceChunkIds = sources.filter((s) => !s.chunkId.startsWith('method-')).map((s) => s.chunkId)
       citations      = [...new Set(sources.map((s) => s.citationKey))]
 
       // Calcula max_tokens dinamicamente baseado no targetWords do capítulo

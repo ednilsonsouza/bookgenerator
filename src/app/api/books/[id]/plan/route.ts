@@ -6,6 +6,7 @@ import { createAdminClient } from '@/lib/appwrite/server'
 import { DATABASE_ID, COLLECTIONS } from '@/lib/appwrite/config'
 import { ID, Query } from 'node-appwrite'
 import { truncate } from '@/lib/utils'
+import { ensureMethodologyRefs } from '@/lib/openai/methodologyRefs'
 import type { BookProject, AcademicSubtype, LiteraryGenre } from '@/types/book'
 
 export async function POST(
@@ -205,6 +206,13 @@ export async function POST(
     await databases.updateDocument(DATABASE_ID, COLLECTIONS.BOOK_PROJECTS, bookId, {
       status: 'plan_ready',
     })
+
+    // Garante referências metodológicas para obras acadêmicas
+    if (book.type === 'academic') {
+      await ensureMethodologyRefs(bookId).catch((err) =>
+        console.error('[plan/route] ensureMethodologyRefs:', err)
+      )
+    }
 
     return NextResponse.json({
       planId: planDoc.$id,

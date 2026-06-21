@@ -108,47 +108,53 @@ INSTRUÇÕES ESPECÍFICAS — METODOLOGIA:
 Escreva a metodologia descrevendo OBRIGATORIAMENTE os seguintes elementos:
 
 1. TIPO DE PESQUISA: Caracterize como pesquisa qualitativa do tipo levantamento bibliográfico.
+   Cite OBRIGATORIAMENTE (GIL, 2002) ao definir e justificar a pesquisa bibliográfica como método.
    Justifique a escolha: permite mapear e analisar sistematicamente a produção científica sobre o tema.
 
 2. CORPUS DOCUMENTAL: Descreva os critérios de seleção das fontes:
-   - Bases de dados e repositórios consultados (ex: SciELO, Google Scholar, CAPES, etc.)
+   - Bases de dados e repositórios consultados (ex: SciELO, Google Scholar, CAPES, OpenAlex, etc.)
    - Descritores/palavras-chave utilizados
    - Período de publicação adotado
    - Critérios de inclusão (artigos completos, idioma, relevância temática)
    - Critérios de exclusão (duplicatas, textos não relacionados ao tema)
 
-3. ANÁLISE DE CONTEÚDO DE LAURENCE BARDIN (cite BARDIN como fonte):
+3. ANÁLISE DE CONTEÚDO DE LAURENCE BARDIN:
+   Cite OBRIGATORIAMENTE (BARDIN, 2011) em todos os parágrafos que descrevem o método.
    Descreva detalhadamente as três fases:
 
-   a) PRÉ-ANÁLISE:
+   a) PRÉ-ANÁLISE (BARDIN, 2011):
       - Leitura flutuante do corpus para contato inicial com os textos.
       - Constituição do corpus: seleção dos documentos que compõem o material analisado.
       - Formulação de hipóteses e objetivos de análise.
       - Preparação do material para análise.
 
-   b) EXPLORAÇÃO DO MATERIAL (codificação):
-      - Definição das unidades de registro: fragmentos de texto com significado próprio (palavras, frases, parágrafos).
+   b) EXPLORAÇÃO DO MATERIAL — codificação (BARDIN, 2011):
+      - Definição das unidades de registro: fragmentos de texto com significado próprio.
       - Definição das unidades de contexto: segmentos maiores que dão sentido às unidades de registro.
       - Processo de codificação e enumeração dos dados.
       - Formação das categorias de análise: processo de categorização temática.
       - Apresente as categorias emergentes identificadas neste estudo.
 
-   c) TRATAMENTO DOS RESULTADOS, INFERÊNCIA E INTERPRETAÇÃO:
+   c) TRATAMENTO DOS RESULTADOS, INFERÊNCIA E INTERPRETAÇÃO (BARDIN, 2011):
       - Agrupamento das unidades de registro em categorias temáticas.
       - Análise das frequências e relevâncias.
       - Inferências e interpretações a partir do referencial teórico.
 
 4. APRESENTAÇÃO DAS CATEGORIAS: Liste e defina as categorias de análise identificadas,
-   que serão exploradas no capítulo de resultados.`
+   que serão exploradas no capítulo de resultados.
+
+ATENÇÃO: As citações (BARDIN, 2011) e (GIL, 2002) SÃO OBRIGATÓRIAS neste capítulo.`
 
     case 'analysis':
       return `
 INSTRUÇÕES ESPECÍFICAS — ANÁLISE E DISCUSSÃO DOS RESULTADOS:
-Escreva os resultados OBRIGATORIAMENTE a partir das categorias da Análise de Conteúdo de Bardin:
+Escreva os resultados OBRIGATORIAMENTE a partir das categorias da Análise de Conteúdo de Bardin (BARDIN, 2011):
 
+- Mencione explicitamente que os resultados foram organizados segundo a Análise de Conteúdo
+  proposta por Bardin (BARDIN, 2011) e que a pesquisa segue metodologia bibliográfica (GIL, 2002).
 - Organize o capítulo em seções, cada uma correspondente a uma categoria de análise identificada.
 - Para CADA categoria:
-  a) Enuncie e defina a categoria.
+  a) Enuncie e defina a categoria, referenciando as unidades de contexto que a constituem.
   b) Apresente as unidades de contexto relevantes encontradas no corpus — cite trechos representativos
      das fontes bibliográficas analisadas (entre aspas com citação ABNT).
   c) Analise as unidades de contexto: quais padrões, convergências, divergências ou contradições emergem.
@@ -157,7 +163,8 @@ Escreva os resultados OBRIGATORIAMENTE a partir das categorias da Análise de Co
 
 - Use linguagem analítica e crítica, não apenas descritiva.
 - Cada seção de categoria deve conectar teoria e dados empíricos do corpus.
-- Ao final, faça uma síntese integradora articulando todas as categorias.`
+- Ao final, faça uma síntese integradora articulando todas as categorias.
+- Cite (BARDIN, 2011) ao referenciar categorias, unidades de registro ou unidades de contexto.`
 
     case 'conclusion':
       return `
@@ -180,6 +187,11 @@ export function buildAcademicChapterSystem(book: BookProject): string {
   return `Você é um redator acadêmico experiente especializado em ${subtype}.
 A obra é um LEVANTAMENTO BIBLIOGRÁFICO que usa a ANÁLISE DE CONTEÚDO DE LAURENCE BARDIN como metodologia.
 Escreva em português brasileiro formal, seguindo rigorosamente as normas ABNT.
+
+REFERÊNCIAS METODOLÓGICAS FIXAS — sempre disponíveis para citação:
+- BARDIN, Laurence. Análise de Conteúdo. São Paulo: Edições 70, 2011. [chave: BARDIN (2011)]
+- GIL, Antônio Carlos. Como elaborar projetos de pesquisa. 4. ed. São Paulo: Atlas, 2002. [chave: GIL (2002)]
+
 REGRAS OBRIGATÓRIAS:
 1. SEMPRE escreva o capítulo completo — NUNCA recuse, independentemente das fontes disponíveis.
 2. Se houver fontes disponíveis: cite ao longo do texto usando (SOBRENOME, ano).
@@ -187,7 +199,7 @@ REGRAS OBRIGATÓRIAS:
 4. Se não houver fontes: escreva o capítulo com base no tema e conhecimento acadêmico geral.
 5. Citação indireta: (SOBRENOME, ano) — ex: (SILVA, 2023)
 6. Citação direta curta: "texto" (SOBRENOME, ano) — sem número de página.
-7. NUNCA invente autores ou anos que não estejam nas fontes fornecidas.
+7. NUNCA invente autores ou anos que não estejam nas fontes fornecidas ou nas referências fixas acima.
 8. NUNCA escreva "p. X", "p. XX" ou qualquer indicador de página fictício.
 9. Escreva em linguagem técnica e objetiva.
 10. Não use markdown, asteriscos nem emojis.
