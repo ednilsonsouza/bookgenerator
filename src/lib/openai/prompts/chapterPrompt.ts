@@ -181,13 +181,16 @@ export function buildAcademicChapterSystem(book: BookProject): string {
 A obra é um LEVANTAMENTO BIBLIOGRÁFICO que usa a ANÁLISE DE CONTEÚDO DE LAURENCE BARDIN como metodologia.
 Escreva em português brasileiro formal, seguindo rigorosamente as normas ABNT.
 REGRAS OBRIGATÓRIAS:
-1. Todo parágrafo deve conter pelo menos uma citação das FONTES DISPONÍVEIS.
-2. Citação indireta: (SOBRENOME, ano) — ex: (SILVA, 2023)
-3. Citação direta curta (até 3 linhas): "texto" (SOBRENOME, ano) — sem número de página pois são fontes digitais.
-4. Use APENAS as fontes fornecidas. NUNCA invente autores, anos ou páginas.
-5. NUNCA escreva "p. X", "p. XX" ou qualquer indicador de página fictício.
-6. Escreva em linguagem técnica e objetiva.
-7. Não use markdown, asteriscos nem emojis.
+1. SEMPRE escreva o capítulo completo — NUNCA recuse, independentemente das fontes disponíveis.
+2. Se houver fontes disponíveis: cite ao longo do texto usando (SOBRENOME, ano).
+3. Se as fontes forem apenas metadados (sem trechos): cite pelos dados bibliográficos fornecidos.
+4. Se não houver fontes: escreva o capítulo com base no tema e conhecimento acadêmico geral.
+5. Citação indireta: (SOBRENOME, ano) — ex: (SILVA, 2023)
+6. Citação direta curta: "texto" (SOBRENOME, ano) — sem número de página.
+7. NUNCA invente autores ou anos que não estejam nas fontes fornecidas.
+8. NUNCA escreva "p. X", "p. XX" ou qualquer indicador de página fictício.
+9. Escreva em linguagem técnica e objetiva.
+10. Não use markdown, asteriscos nem emojis.
 8. Escreva somente o corpo do texto, sem título de capítulo.
 
 QUADROS — USE SEMPRE QUE NECESSÁRIO:
@@ -218,12 +221,15 @@ export function buildAcademicChapterUser(ctx: ChapterContext, sources: AcademicS
 
   const sourcesBlock = sources.length > 0
     ? sources
-        .map(
-          (s, i) =>
-            `[FONTE ${i + 1}] ${s.citationKey}\nReferência: ${s.abnt}\nTrecho: "${s.excerpt.slice(0, 600)}"`
-        )
+        .map((s, i) => {
+          const hasRichExcerpt = s.excerpt.length > 100 && !s.excerpt.startsWith(s.citationKey.split(' ')[0])
+          const excerptLine = hasRichExcerpt
+            ? `\nTrecho: "${s.excerpt.slice(0, 600)}"`
+            : `\nDescrição: ${s.excerpt.slice(0, 200)}`
+          return `[FONTE ${i + 1}] ${s.citationKey}\nReferência ABNT: ${s.abnt}${excerptLine}`
+        })
         .join('\n\n')
-    : 'Nenhuma fonte disponível para este capítulo.'
+    : 'Sem fontes anexadas. Escreva o capítulo com base no tema da obra e conhecimento acadêmico geral, sem inventar autores.'
 
   const role = detectChapterRole(chapter)
   const specificInstruction = buildBardinChapterInstruction(role)
@@ -246,5 +252,9 @@ ${specificInstruction}
 FONTES DISPONÍVEIS PARA CITAÇÃO:
 ${sourcesBlock}
 
-INSTRUÇÃO FINAL: Escreva o corpo do Capítulo ${chapter.order} usando obrigatoriamente as fontes acima. Cada parágrafo deve citar pelo menos uma fonte. Alvo: ${chapter.targetWords} palavras.`
+INSTRUÇÃO FINAL: Escreva AGORA o corpo completo do Capítulo ${chapter.order}.
+${sources.length > 0
+  ? 'Use as fontes fornecidas para embasar cada parágrafo com citações (SOBRENOME, ano).'
+  : 'Sem fontes disponíveis — escreva com rigor acadêmico sem inventar referências.'}
+Alvo: ${chapter.targetWords} palavras. NUNCA recuse ou explique por que não pode escrever — escreva sempre.`
 }

@@ -123,7 +123,6 @@ export async function POST(
     // ── ACADÊMICO: RAG ────────────────────────────────────────────────────────
     if (bookObj.type === 'academic') {
       const query = `${chapter.title} ${chapter.description ?? ''} ${bookObj.theme}`
-      const queryEmbedding = await embedQuery(query)
 
       // Busca todos os chunks do projeto
       const chunksRes = await databases.listDocuments(DATABASE_ID, COLLECTIONS.REFERENCE_CHUNKS, [
@@ -131,42 +130,61 @@ export async function POST(
         Query.limit(200),
       ])
 
-      // Rank por similaridade
-      const ranked = chunksRes.documents
-        .filter((c) => c.embeddingJson)
-        .map((c) => ({
-          chunkId:     c.$id as string,
-          referenceId: c.referenceId as string,
-          text:        c.chunkText as string,
-          score:       cosineSimilarity(queryEmbedding, JSON.parse(c.embeddingJson as string)),
-        }))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 6)
+      let sources: AcademicSource[] = []
 
-      // Busca citationKey de cada referência
-      const refIds = [...new Set(ranked.map((r) => r.referenceId))]
-      const refDocs = await Promise.all(
-        refIds.map((refId) =>
-          databases.getDocument(DATABASE_ID, COLLECTIONS.REFERENCES, refId)
-            .then((d) => d as Record<string, unknown>)
-            .catch(() => null)
+      if (chunksRes.documents.length > 0) {
+        // ── Caminho normal: chunks com embeddings existem, ranqueia por similaridade
+        const queryEmbedding = await embedQuery(query)
+        const ranked = chunksRes.documents
+          .filter((c) => c.embeddingJson)
+          .map((c) => ({
+            chunkId:     c.$id as string,
+            referenceId: c.referenceId as string,
+            text:        c.chunkText as string,
+            score:       cosineSimilarity(queryEmbedding, JSON.parse(c.embeddingJson as string)),
+          }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 8)
+
+        const refIds = [...new Set(ranked.map((r) => r.referenceId))]
+        const refDocs = await Promise.all(
+          refIds.map((refId) =>
+            databases.getDocument(DATABASE_ID, COLLECTIONS.REFERENCES, refId)
+              .then((d) => d as Record<string, unknown>)
+              .catch(() => null)
+          )
         )
-      )
-      const refMap: Record<string, { citationKey: string; abnt: string }> = {}
-      refDocs.forEach((d) => {
-        if (d) refMap[d.$id as string] = {
+        const refMap: Record<string, { citationKey: string; abnt: string }> = {}
+        refDocs.forEach((d) => {
+          if (d) refMap[d.$id as string] = {
+            citationKey: (d.citationKey as string) ?? 'AUTOR (S.D.)',
+            abnt:        (d.abntFormattedReference as string) ?? '',
+          }
+        })
+
+        sources = ranked.map((r) => ({
+          chunkId:     r.chunkId,
+          citationKey: refMap[r.referenceId]?.citationKey ?? 'AUTOR (S.D.)',
+          abnt:        refMap[r.referenceId]?.abnt ?? '',
+          excerpt:     r.text,
+          score:       r.score,
+        }))
+      } else {
+        // ── Fallback: sem chunks (refs só com metadados, ex: via OpenAlex)
+        // Busca todas as referências do projeto e passa os metadados como fontes
+        const refsRes = await databases.listDocuments(DATABASE_ID, COLLECTIONS.REFERENCES, [
+          Query.equal('bookProjectId', bookId),
+          Query.orderAsc('$createdAt'),
+          Query.limit(30),
+        ])
+        sources = refsRes.documents.map((d) => ({
+          chunkId:     d.$id as string,
           citationKey: (d.citationKey as string) ?? 'AUTOR (S.D.)',
           abnt:        (d.abntFormattedReference as string) ?? '',
-        }
-      })
-
-      const sources: AcademicSource[] = ranked.map((r) => ({
-        chunkId:     r.chunkId,
-        citationKey: refMap[r.referenceId]?.citationKey ?? 'AUTOR (S.D.)',
-        abnt:        refMap[r.referenceId]?.abnt ?? '',
-        excerpt:     r.text,
-        score:       r.score,
-      }))
+          excerpt:     `${d.title as string}. ${d.authors as string} (${d.year as string}). ${d.publisher as string}`,
+          score:       1,
+        }))
+      }
 
       sourceChunkIds = sources.map((s) => s.chunkId)
       citations      = [...new Set(sources.map((s) => s.citationKey))]
@@ -175,7 +193,7 @@ export async function POST(
       const completion = await openai.chat.completions.create({
         model:       MODEL,
         temperature: 0.5,
-        max_tokens:  4096,
+        max_tokens:  8192,
         messages: [
           { role: 'system', content: buildAcademicChapterSystem(bookObj) },
           { role: 'user',   content: buildAcademicChapterUser(ctx, sources) },
