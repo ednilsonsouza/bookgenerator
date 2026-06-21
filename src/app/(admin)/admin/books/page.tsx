@@ -16,7 +16,7 @@ interface AdminBook {
   type: string
   status: BookStatus
   visibility: string
-  targetPages: number
+  chapterCount: number
   authorEmail: string
   createdAt: string
 }
@@ -90,7 +90,7 @@ export default function AdminBooksPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border">
-                    {['Título', 'Tipo', 'Autor', 'Págs.', 'Status', 'Criada'].map((h) => (
+                    {['Título', 'Tipo', 'Autor', 'Cap.', 'Status', 'Criada'].map((h) => (
                       <th key={h} className="px-4 py-3 text-left text-xs font-medium text-muted-foreground/70 uppercase tracking-wider">{h}</th>
                     ))}
                   </tr>
@@ -101,7 +101,7 @@ export default function AdminBooksPage() {
                       <td className="px-4 py-3 text-foreground max-w-[200px] truncate font-medium">{b.title}</td>
                       <td className="px-4 py-3 text-muted-foreground capitalize">{b.type === 'academic' ? 'Acadêmica' : 'Literária'}</td>
                       <td className="px-4 py-3 text-muted-foreground text-xs max-w-[160px] truncate">{b.authorEmail}</td>
-                      <td className="px-4 py-3 text-muted-foreground text-center">{b.targetPages}</td>
+                      <td className="px-4 py-3 text-muted-foreground text-center">{b.chapterCount} cap.</td>
                       <td className="px-4 py-3"><BookStatusBadge status={b.status} /></td>
                       <td className="px-4 py-3 text-muted-foreground/70">{formatDate(b.createdAt)}</td>
                     </tr>

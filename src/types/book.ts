@@ -46,6 +46,11 @@ export type BookStatus =
 
 export type BookVisibility = 'private' | 'public'
 
+export interface SectionPlan {
+  order: number
+  title: string
+}
+
 export interface BookProject {
   id: string
   userId: string
@@ -55,7 +60,8 @@ export interface BookProject {
   academicSubtype?: AcademicSubtype
   literaryGenre?: LiteraryGenre
   description: string
-  targetPages: number
+  chapterCount: number
+  sectionsPerChapter: number
   status: BookStatus
   visibility: BookVisibility
   coverFileId?: string
@@ -72,6 +78,7 @@ export interface Chapter {
   targetPages: number
   targetWords: number
   description?: string
+  sections?: SectionPlan[]
   status: 'pending' | 'generating' | 'completed' | 'failed'
 }
 

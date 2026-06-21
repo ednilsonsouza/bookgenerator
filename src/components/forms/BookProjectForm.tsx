@@ -46,14 +46,18 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
   } = useForm<BookProjectFormValues>({
     resolver: zodResolver(bookProjectSchema),
     defaultValues: {
-      targetPages: 30,
+      chapterCount: 5,
+      sectionsPerChapter: 4,
       ...defaultValues,
     },
   })
 
   const bookType = watch('type')
+  const chapterCount = watch('chapterCount')
+  const sectionsPerChapter = watch('sectionsPerChapter')
+  const totalSections = (chapterCount || 0) * (sectionsPerChapter || 0)
+  const totalPages = Math.round(totalSections * 600 / 450)
 
-  // Limpa subtipo ao mudar o tipo
   useEffect(() => {
     setValue('academicSubtype', undefined)
     setValue('literaryGenre', undefined)
@@ -61,7 +65,6 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-      {/* Título */}
       <Input
         label="Título da obra"
         placeholder="Ex: A Influência da Tecnologia na Educação"
@@ -69,7 +72,6 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
         {...register('title')}
       />
 
-      {/* Tema */}
       <Input
         label="Tema principal"
         placeholder="Ex: Inteligência artificial na pedagogia"
@@ -77,7 +79,6 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
         {...register('theme')}
       />
 
-      {/* Tipo */}
       <Select
         label="Tipo da obra"
         options={typeOptions}
@@ -86,7 +87,6 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
         {...register('type')}
       />
 
-      {/* Subtipo acadêmico */}
       {bookType === 'academic' && (
         <Select
           label="Tipo acadêmico"
@@ -97,7 +97,6 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
         />
       )}
 
-      {/* Gênero literário */}
       {bookType === 'literary' && (
         <Select
           label="Gênero literário"
@@ -108,7 +107,6 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
         />
       )}
 
-      {/* Descrição */}
       <Textarea
         label="Descrição breve da obra"
         placeholder="Descreva o conteúdo, objetivo e público-alvo da obra..."
@@ -118,24 +116,54 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
         {...register('description')}
       />
 
-      {/* Páginas */}
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="targetPages" className="text-sm font-medium text-foreground/80">
-          Quantidade de páginas
-          <span className="ml-2 text-muted-foreground/70 font-normal">(4 – 60)</span>
-        </label>
-        <input
-          id="targetPages"
-          type="number"
-          min={4}
-          max={60}
-          className="h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 hover:border-border-strong"
-          {...register('targetPages', { valueAsNumber: true })}
-        />
-        {errors.targetPages && (
-          <p className="text-xs text-danger">{errors.targetPages.message}</p>
-        )}
+      {/* Capítulos e Seções */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="chapterCount" className="text-sm font-medium text-foreground/80">
+            Capítulos
+            <span className="ml-2 text-muted-foreground/70 font-normal">(3 – 12)</span>
+          </label>
+          <input
+            id="chapterCount"
+            type="number"
+            min={3}
+            max={12}
+            className="h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 hover:border-border-strong"
+            {...register('chapterCount', { valueAsNumber: true })}
+          />
+          {errors.chapterCount && (
+            <p className="text-xs text-danger">{errors.chapterCount.message}</p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="sectionsPerChapter" className="text-sm font-medium text-foreground/80">
+            Seções por capítulo
+            <span className="ml-2 text-muted-foreground/70 font-normal">(3 – 8)</span>
+          </label>
+          <input
+            id="sectionsPerChapter"
+            type="number"
+            min={3}
+            max={8}
+            className="h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 hover:border-border-strong"
+            {...register('sectionsPerChapter', { valueAsNumber: true })}
+          />
+          {errors.sectionsPerChapter && (
+            <p className="text-xs text-danger">{errors.sectionsPerChapter.message}</p>
+          )}
+        </div>
       </div>
+
+      {totalSections > 0 && (
+        <p className="text-xs text-muted-foreground/80 bg-surface-muted/40 rounded-md px-3 py-2">
+          {chapterCount} cap. × {sectionsPerChapter} seções = <span className="text-foreground font-medium">{totalSections} seções</span>
+          {' · '}
+          ~600 palavras/seção
+          {' · '}
+          <span className="text-foreground font-medium">{totalPages} págs.</span> estimadas
+        </p>
+      )}
 
       <Button type="submit" loading={loading} className="w-full" size="lg">
         Salvar obra
@@ -143,4 +171,3 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
     </form>
   )
 }
-

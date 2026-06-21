@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
         type:        b.type,
         status:      b.status,
         visibility:  b.visibility,
-        targetPages: b.targetPages,
+        chapterCount: b.chapterCount ?? 5,
         userId:      b.userId,
         authorEmail,
         createdAt:   b.$createdAt,

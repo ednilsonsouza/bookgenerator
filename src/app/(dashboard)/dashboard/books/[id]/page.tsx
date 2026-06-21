@@ -127,7 +127,7 @@ export default function BookDetailPage() {
             <Row label="Tema" value={book.theme} />
             <Row label="Tipo" value={book.type === 'academic' ? 'Acadêmica' : 'Literária'} />
             {subtype && <Row label={book.type === 'academic' ? 'Subtipo' : 'Gênero'} value={subtype} />}
-            <Row label="Páginas" value={`${book.targetPages} páginas`} />
+            <Row label="Capítulos" value={`${book.chapterCount} cap. × ${book.sectionsPerChapter} seções`} />
             <Row label="Visibilidade" value={book.visibility === 'public' ? 'Pública' : 'Privada'} />
           </CardContent>
         </Card>

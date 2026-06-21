@@ -56,10 +56,16 @@ export const bookProjectSchema = z
       .string()
       .min(20, 'A descrição deve ter pelo menos 20 caracteres')
       .max(2000, 'A descrição deve ter no máximo 2000 caracteres'),
-    targetPages: z
-      .number({ error: 'Informe a quantidade de páginas' })
-      .min(4, 'Mínimo de 4 páginas')
-      .max(60, 'Máximo de 60 páginas'),
+    chapterCount: z
+      .number({ error: 'Informe a quantidade de capítulos' })
+      .int()
+      .min(3, 'Mínimo de 3 capítulos')
+      .max(12, 'Máximo de 12 capítulos'),
+    sectionsPerChapter: z
+      .number({ error: 'Informe a quantidade de seções por capítulo' })
+      .int()
+      .min(3, 'Mínimo de 3 seções por capítulo')
+      .max(8, 'Máximo de 8 seções por capítulo'),
   })
   .superRefine((data, ctx) => {
     if (data.type === 'academic' && !data.academicSubtype) {

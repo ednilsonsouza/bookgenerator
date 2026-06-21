@@ -117,7 +117,7 @@ export default function BooksPage() {
 
                   {/* Footer */}
                   <div className="flex items-center justify-between text-xs text-muted-foreground/60">
-                    <span>{book.targetPages} págs.</span>
+                    <span>{book.chapterCount} cap.</span>
                     <span>{formatDate(book.createdAt)}</span>
                   </div>
                 </CardContent>

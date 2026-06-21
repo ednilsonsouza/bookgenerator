@@ -27,7 +27,8 @@ export default function NewBookPage() {
         academicSubtype: values.academicSubtype,
         literaryGenre: values.literaryGenre,
         description: values.description,
-        targetPages: values.targetPages,
+        chapterCount: values.chapterCount,
+        sectionsPerChapter: values.sectionsPerChapter,
         status: 'draft',
         visibility: 'private',
       })

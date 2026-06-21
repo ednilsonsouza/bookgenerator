@@ -18,7 +18,8 @@ function docToBookProject(doc: Record<string, unknown>): BookProject {
     academicSubtype: (doc.academicSubtype as BookProject['academicSubtype']) ?? undefined,
     literaryGenre: (doc.literaryGenre as BookProject['literaryGenre']) ?? undefined,
     description: (doc.description as string) ?? '',
-    targetPages: (doc.targetPages as number) ?? 0,
+    chapterCount: (doc.chapterCount as number) ?? 5,
+    sectionsPerChapter: (doc.sectionsPerChapter as number) ?? 4,
     status: (doc.status as BookStatus) ?? 'draft',
     visibility: (doc.visibility as BookProject['visibility']) ?? 'private',
     coverFileId: (doc.coverFileId as string) ?? undefined,
@@ -65,7 +66,8 @@ export async function createBookProject(
         academicSubtype: data.academicSubtype ?? null,
         literaryGenre: data.literaryGenre ?? null,
         description: truncate(data.description, 2000),
-        targetPages: data.targetPages,
+        chapterCount: data.chapterCount ?? 5,
+        sectionsPerChapter: data.sectionsPerChapter ?? 4,
         status: data.status ?? 'draft',
         visibility: data.visibility ?? 'private',
         coverFileId: null,
@@ -116,7 +118,8 @@ export async function updateBookProject(
     if (data.academicSubtype !== undefined) payload.academicSubtype = data.academicSubtype
     if (data.literaryGenre !== undefined) payload.literaryGenre = data.literaryGenre
     if (data.description !== undefined) payload.description = truncate(data.description, 2000)
-    if (data.targetPages !== undefined) payload.targetPages = data.targetPages
+    if (data.chapterCount !== undefined) payload.chapterCount = data.chapterCount
+    if (data.sectionsPerChapter !== undefined) payload.sectionsPerChapter = data.sectionsPerChapter
     if (data.status !== undefined) payload.status = data.status
     if (data.visibility !== undefined) payload.visibility = data.visibility
     if (data.coverFileId !== undefined) payload.coverFileId = data.coverFileId ?? null

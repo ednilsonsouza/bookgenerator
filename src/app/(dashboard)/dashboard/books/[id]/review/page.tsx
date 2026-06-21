@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { ChevronDown, ChevronUp, BookOpen, FileText, RotateCcw } from 'lucide-react'
 
-interface ChapterWithContent extends Chapter {
+interface ChapterWithContent extends Omit<Chapter, 'sections'> {
   sections: GeneratedSection[]
 }
 

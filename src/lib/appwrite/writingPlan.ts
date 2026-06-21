@@ -4,11 +4,17 @@ import { AppwriteException } from 'appwrite'
 import { databases, ID, Query } from './client'
 import { DATABASE_ID, COLLECTIONS } from './config'
 import { truncate } from '@/lib/utils'
-import type { Chapter, WritingPlan } from '@/types/book'
+import type { Chapter, WritingPlan, SectionPlan } from '@/types/book'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
 function docToChapter(doc: Record<string, unknown>): Chapter {
+  let sections: SectionPlan[] | undefined
+  try {
+    const raw = (doc.sectionsJson as string)
+    if (raw) sections = JSON.parse(raw)
+  } catch { /* ignora json inválido */ }
+
   return {
     id: doc.$id as string,
     bookProjectId: (doc.bookProjectId as string) ?? '',
@@ -17,6 +23,7 @@ function docToChapter(doc: Record<string, unknown>): Chapter {
     targetPages: (doc.targetPages as number) ?? 0,
     targetWords: (doc.targetWords as number) ?? 0,
     description: (doc.description as string) ?? undefined,
+    sections,
     status: (doc.status as Chapter['status']) ?? 'pending',
   }
 }
@@ -91,7 +98,7 @@ export async function savePlanEdits(
         description: truncate(ch.description, 1000),
         order: ch.order,
         targetPages: ch.targetPages,
-        targetWords: ch.targetPages * 300,
+        targetWords: ch.targetPages * 450,
       })
     )
   )
