@@ -9,7 +9,7 @@ import type { AcademicSubtype, LiteraryGenre } from '@/types/book'
 import type { GeneratedSection } from '@/lib/appwrite/generation'
 
 export const dynamic    = 'force-dynamic'
-export const maxDuration = 60
+export const maxDuration = 120  // geração de capa + PDF pode levar até 2 min em livros grandes
 
 export async function POST(
   req: NextRequest,

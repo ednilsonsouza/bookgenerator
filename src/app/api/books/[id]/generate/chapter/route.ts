@@ -16,9 +16,10 @@ import { ID } from 'node-appwrite'
 import type { BookProject, Chapter } from '@/types/book'
 import type { AcademicSubtype, LiteraryGenre } from '@/types/book'
 import { METHODOLOGY_REFS } from '@/lib/openai/methodologyRefs'
+import { MODEL_MAX_OUTPUT_TOKENS } from '@/lib/openai/client'
 
 export const dynamic    = 'force-dynamic'
-export const maxDuration = 60
+export const maxDuration = 300   // gpt-4.1-mini gera capítulos longos em até ~3 min
 
 // ── Cosine similarity (inline para não importar módulo cliente) ───────────────
 function cosineSimilarity(a: number[], b: number[]): number {
@@ -206,7 +207,7 @@ export async function POST(
 
       // Calcula max_tokens dinamicamente baseado no targetWords do capítulo
       // ~1.4 tokens/palavra em português → multiplica por 1.5 para folga
-      const academicTokens = Math.min(16000, Math.max(8192, Math.ceil(chapter.targetWords * 1.5)))
+      const academicTokens = Math.min(MODEL_MAX_OUTPUT_TOKENS, Math.max(8192, Math.ceil(chapter.targetWords * 1.5)))
 
       // Gera o capítulo acadêmico
       const completion = await openai.chat.completions.create({
@@ -222,7 +223,7 @@ export async function POST(
 
     // ── LITERÁRIO ─────────────────────────────────────────────────────────────
     } else {
-      const literaryTokens = Math.min(16000, Math.max(8192, Math.ceil(chapter.targetWords * 1.5)))
+      const literaryTokens = Math.min(MODEL_MAX_OUTPUT_TOKENS, Math.max(8192, Math.ceil(chapter.targetWords * 1.5)))
       const completion = await openai.chat.completions.create({
         model:       MODEL,
         temperature: 0.8,
