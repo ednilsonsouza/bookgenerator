@@ -2,10 +2,19 @@ import type { BookProject } from '@/types/book'
 import { ACADEMIC_SUBTYPE_LABELS, LITERARY_GENRE_LABELS } from '@/types/book'
 
 /**
- * Estima o número de palavras por página para o tipo da obra.
+ * Palavras por página calibradas para o PDF real.
+ *
+ * Medições do template @react-pdf:
+ * - Acadêmico: Helvetica 12pt, lineHeight 1.5, margens ABNT (3cm/2cm)
+ *   → ~35 linhas × ~13 palavras = ~455 palavras/pág. Usamos 450.
+ * - Literário: Times-Roman 12pt, lineHeight 1.7, margens 2.54cm
+ *   → ~31 linhas × ~12 palavras = ~372 palavras/pág. Usamos 380.
+ *
+ * Obs: páginas estruturais (capa, sumário, referências) não contam.
+ * O fator de ajuste já embute essa reserva.
  */
 function wordsPerPage(type: BookProject['type']): number {
-  return type === 'academic' ? 350 : 280
+  return type === 'academic' ? 450 : 380
 }
 
 /**

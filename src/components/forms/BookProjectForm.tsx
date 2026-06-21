@@ -46,7 +46,7 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
   } = useForm<BookProjectFormValues>({
     resolver: zodResolver(bookProjectSchema),
     defaultValues: {
-      targetPages: 60,
+      targetPages: 30,
       ...defaultValues,
     },
   })
@@ -122,13 +122,13 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
       <div className="flex flex-col gap-1.5">
         <label htmlFor="targetPages" className="text-sm font-medium text-foreground/80">
           Quantidade de páginas
-          <span className="ml-2 text-muted-foreground/70 font-normal">(4 – 120)</span>
+          <span className="ml-2 text-muted-foreground/70 font-normal">(4 – 60)</span>
         </label>
         <input
           id="targetPages"
           type="number"
           min={4}
-          max={120}
+          max={60}
           className="h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 hover:border-border-strong"
           {...register('targetPages', { valueAsNumber: true })}
         />

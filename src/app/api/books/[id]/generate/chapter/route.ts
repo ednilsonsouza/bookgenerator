@@ -189,11 +189,15 @@ export async function POST(
       sourceChunkIds = sources.map((s) => s.chunkId)
       citations      = [...new Set(sources.map((s) => s.citationKey))]
 
+      // Calcula max_tokens dinamicamente baseado no targetWords do capítulo
+      // ~1.4 tokens/palavra em português → multiplica por 1.5 para folga
+      const academicTokens = Math.min(16000, Math.max(8192, Math.ceil(chapter.targetWords * 1.5)))
+
       // Gera o capítulo acadêmico
       const completion = await openai.chat.completions.create({
         model:       MODEL,
         temperature: 0.5,
-        max_tokens:  8192,
+        max_tokens:  academicTokens,
         messages: [
           { role: 'system', content: buildAcademicChapterSystem(bookObj) },
           { role: 'user',   content: buildAcademicChapterUser(ctx, sources) },
@@ -203,10 +207,11 @@ export async function POST(
 
     // ── LITERÁRIO ─────────────────────────────────────────────────────────────
     } else {
+      const literaryTokens = Math.min(16000, Math.max(8192, Math.ceil(chapter.targetWords * 1.5)))
       const completion = await openai.chat.completions.create({
         model:       MODEL,
         temperature: 0.8,
-        max_tokens:  4096,
+        max_tokens:  literaryTokens,
         messages: [
           { role: 'system', content: buildLiteraryChapterSystem(bookObj) },
           { role: 'user',   content: buildLiteraryChapterUser(ctx) },

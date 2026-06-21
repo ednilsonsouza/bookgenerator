@@ -112,13 +112,35 @@ export async function POST(
         anyObj.chapters_list ??  // variante inglês
         []
 
-      const chapters = chaptersRaw.map((ch: Record<string, unknown>, idx: number) => ({
+      const wpg = book.type === 'academic' ? 450 : 380
+
+      const rawChapters = chaptersRaw.map((ch: Record<string, unknown>, idx: number) => ({
         order:       Math.round(Number(ch.order ?? ch.numero ?? ch.ordem ?? (idx + 1))),
         title:       String(ch.title ?? ch.titulo ?? `Capítulo ${idx + 1}`),
         description: String(ch.description ?? ch.descricao ?? ch.descricão ?? ch.summary ?? ''),
         targetPages: Math.max(1, Math.round(Number(ch.targetPages ?? ch.paginas ?? ch.target_pages ?? ch.pages ?? 1))),
         targetWords: Math.max(1, Math.round(Number(ch.targetWords ?? ch.palavras ?? ch.target_words ?? ch.words ?? 100))),
       }))
+
+      // Garante que a soma de targetPages bata exatamente com book.targetPages
+      const totalPagesRequested = book.targetPages as number
+      const rawSum = rawChapters.reduce((s, c) => s + c.targetPages, 0)
+
+      const chapters = rawSum === totalPagesRequested
+        ? rawChapters
+        : rawChapters.map((ch, i) => {
+            // Redistribui proporcionalmente; último capítulo absorve o resto
+            const proportionalPages = i < rawChapters.length - 1
+              ? Math.max(1, Math.round((ch.targetPages / rawSum) * totalPagesRequested))
+              : Math.max(1, totalPagesRequested - rawChapters.slice(0, -1).reduce((s, c2, j) => {
+                  return s + Math.max(1, Math.round((c2.targetPages / rawSum) * totalPagesRequested))
+                }, 0))
+            return {
+              ...ch,
+              targetPages: proportionalPages,
+              targetWords: proportionalPages * wpg,
+            }
+          })
 
       parsed = WritingPlanOutputSchema.parse({ chapters })
     } catch (parseErr) {

@@ -59,7 +59,7 @@ export const bookProjectSchema = z
     targetPages: z
       .number({ error: 'Informe a quantidade de páginas' })
       .min(4, 'Mínimo de 4 páginas')
-      .max(120, 'Máximo de 120 páginas'),
+      .max(60, 'Máximo de 60 páginas'),
   })
   .superRefine((data, ctx) => {
     if (data.type === 'academic' && !data.academicSubtype) {
