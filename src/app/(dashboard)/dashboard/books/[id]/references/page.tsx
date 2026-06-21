@@ -10,13 +10,14 @@ import type { Reference, ReferenceStatus } from '@/lib/appwrite/references'
 import { ReferenceUploadForm } from '@/components/forms/ReferenceUploadForm'
 import { ReferenceStatusBadge } from '@/components/books/ReferenceStatusBadge'
 import { ImportReferencesModal } from '@/components/books/ImportReferencesModal'
+import { OpenAlexSearchModal } from '@/components/books/OpenAlexSearchModal'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Spinner } from '@/components/ui/Spinner'
 import { cn } from '@/lib/utils'
 import {
   ChevronLeft, BookOpen, Plus, Trash2, RefreshCw,
-  AlertTriangle, CheckCircle2, FileText, Library,
+  AlertTriangle, CheckCircle2, FileText, Library, Globe, ExternalLink,
 } from 'lucide-react'
 
 const MIN_REFS = 5
@@ -33,6 +34,7 @@ export default function ReferencesPage() {
   const [showForm, setShowForm] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [showImport, setShowImport] = useState(false)
+  const [showOpenAlex, setShowOpenAlex] = useState(false)
   const [error, setError]       = useState('')
 
   const loadRefs = useCallback(async () => {
@@ -52,6 +54,7 @@ export default function ReferencesPage() {
         extractedTextStatus:    r.extractedTextStatus as ReferenceStatus,
         citationKey:            r.citationKey as string,
         abntFormattedReference: r.abntFormattedReference as string,
+        accessUrl:              r.accessUrl as string | undefined,
         chunkCount:             r.chunkCount as number,
       }))
     )
@@ -136,7 +139,15 @@ export default function ReferencesPage() {
           </p>
         </div>
         {!atLimit && (
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
+            <Button
+              onClick={() => setShowOpenAlex(true)}
+              variant="secondary"
+              className="gap-2"
+            >
+              <Globe className="h-4 w-4" />
+              OpenAlex
+            </Button>
             <Button
               onClick={() => setShowImport(true)}
               variant="secondary"
@@ -264,6 +275,19 @@ export default function ReferencesPage() {
                       </p>
                     )}
 
+                    {ref.accessUrl && (
+                      <a
+                        href={ref.accessUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 mt-1 text-xs text-primary hover:underline"
+                        title={ref.accessUrl}
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                        Acessar obra
+                      </a>
+                    )}
+
                     {ref.chunkCount != null && ref.chunkCount > 0 && (
                       <p className="mt-1 text-xs text-muted-foreground/60">
                         {ref.chunkCount} trecho{ref.chunkCount > 1 ? 's' : ''} indexado{ref.chunkCount > 1 ? 's' : ''}
@@ -322,6 +346,18 @@ export default function ReferencesPage() {
           maxRefs={MAX_REFS}
           onImported={async () => { await loadRefs() }}
           onClose={() => setShowImport(false)}
+        />
+      )}
+
+      {/* Modal: buscar no OpenAlex */}
+      {showOpenAlex && user && (
+        <OpenAlexSearchModal
+          bookId={bookId}
+          userId={user.$id}
+          currentCount={refs.length}
+          maxRefs={MAX_REFS}
+          onAdded={async () => { await loadRefs() }}
+          onClose={() => setShowOpenAlex(false)}
         />
       )}
     </div>

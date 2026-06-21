@@ -49,7 +49,7 @@ export async function POST(
   try {
     const { id: bookId } = await params
     const body = await req.json()
-    const { userId, title, authors, year, publisher, fileId } = body
+    const { userId, title, authors, year, publisher, fileId, accessUrl } = body
 
     if (!bookId || !userId || !title) {
       return NextResponse.json({ error: 'bookId, userId e title são obrigatórios.' }, { status: 400 })
@@ -87,7 +87,12 @@ export async function POST(
         return `${last}, ${first}`
       })
       .join('; ')
-    const abnt = `${authorsUpper}. ${title}. ${publisher ?? ''}${publisher && year ? ', ' : ''}${year ?? ''}.`.replace(/\.\s*\./g, '.')
+    let abnt = `${authorsUpper}. ${title}. ${publisher ?? ''}${publisher && year ? ', ' : ''}${year ?? ''}.`.replace(/\.\s*\./g, '.')
+    if (accessUrl) {
+      const today = new Date()
+      const acesso = today.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })
+      abnt += ` Disponível em: ${accessUrl}. Acesso em: ${acesso}.`
+    }
 
     const doc = await databases.createDocument(
       DATABASE_ID,
@@ -103,6 +108,7 @@ export async function POST(
         extractedTextStatus:    fileId ? 'pending' : 'no_file',
         citationKey:            truncate(citationKey, 128),
         abntFormattedReference: truncate(abnt, 1024),
+        accessUrl:              accessUrl ? truncate(accessUrl, 1024) : null,
       }
     )
 

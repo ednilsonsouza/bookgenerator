@@ -20,6 +20,7 @@ export interface Reference {
   extractedTextStatus: ReferenceStatus
   citationKey: string
   abntFormattedReference: string
+  accessUrl?: string   // URL de acesso (OpenAlex, DOI, etc.)
   chunkCount?: number
 }
 
@@ -37,6 +38,7 @@ function docToReference(doc: Record<string, unknown>): Reference {
     extractedTextStatus:    (doc.extractedTextStatus as ReferenceStatus) ?? 'pending',
     citationKey:            (doc.citationKey as string)             ?? '',
     abntFormattedReference: (doc.abntFormattedReference as string)  ?? '',
+    accessUrl:              (doc.accessUrl as string)               ?? undefined,
   }
 }
 
@@ -46,7 +48,13 @@ function docToReference(doc: Record<string, unknown>): Reference {
  * Gera uma referência bibliográfica no formato ABNT a partir dos metadados.
  * SOBRENOME, Nome. Título. Cidade: Editora, Ano.
  */
-export function formatAbnt(authors: string, title: string, publisher: string, year: string): string {
+export function formatAbnt(
+  authors: string,
+  title: string,
+  publisher: string,
+  year: string,
+  accessUrl?: string,
+): string {
   const authorsUpper = authors
     .split(/[,;]/)
     .map((a) => {
@@ -62,7 +70,15 @@ export function formatAbnt(authors: string, title: string, publisher: string, ye
     .filter(Boolean)
     .join('. ')
 
-  return parts + '.'
+  let ref = parts + '.'
+
+  if (accessUrl) {
+    const today = new Date()
+    const acesso = today.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })
+    ref += ` Disponível em: ${accessUrl}. Acesso em: ${acesso}.`
+  }
+
+  return ref
 }
 
 /**
@@ -83,9 +99,10 @@ export async function createReference(data: {
   year: string
   publisher: string
   fileId?: string
+  accessUrl?: string
 }): Promise<Reference> {
   const citationKey = buildCitationKey(data.authors, data.year)
-  const abnt        = formatAbnt(data.authors, data.title, data.publisher, data.year)
+  const abnt        = formatAbnt(data.authors, data.title, data.publisher, data.year, data.accessUrl)
 
   const doc = await databases.createDocument(
     DATABASE_ID,
@@ -101,6 +118,7 @@ export async function createReference(data: {
       extractedTextStatus:    data.fileId ? 'pending' : 'no_file',
       citationKey:            truncate(citationKey, 128),
       abntFormattedReference: truncate(abnt, 1024),
+      accessUrl:              data.accessUrl ? truncate(data.accessUrl, 1024) : null,
     }
   )
   return docToReference(doc as Record<string, unknown>)
