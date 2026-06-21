@@ -80,10 +80,23 @@ export async function GET(
       const openAccess  = w.open_access as Record<string, unknown> | null
       const authorships = (w.authorships as Array<{author: {display_name: string}}>) ?? []
 
+      // Prioridade de URL de acesso:
+      // 1. DOI via doi.org (mais estável, não quebra com o tempo)
+      // 2. landing_page_url da localização primária (página do artigo no journal)
+      // 3. oa_url SOMENTE se não for link direto para PDF (links /pdf/ quebram com frequência)
+      // 4. Fallback: página da obra no OpenAlex
+      const oaUrl = openAccess?.oa_url as string | null
+      const landingUrl = primaryLoc?.landing_page_url as string | null
+      const doiUrl = doi ? `https://doi.org/${doi.replace('https://doi.org/', '')}` : null
+
+      const isPdfLink = (url: string | null) =>
+        !!url && (/\/download\//i.test(url) || /\.pdf$/i.test(url) || /\/pdf\//i.test(url))
+
       const accessUrl =
-        (openAccess?.oa_url as string | null) ||
-        (primaryLoc?.landing_page_url as string | null) ||
-        (doi ? `https://doi.org/${doi.replace('https://doi.org/', '')}` : null) ||
+        doiUrl ||
+        landingUrl ||
+        (!isPdfLink(oaUrl) ? oaUrl : null) ||
+        oaUrl ||  // aceita PDF como último recurso antes do fallback
         (w.id as string)
 
       // Reconstrói abstract de inverted index
