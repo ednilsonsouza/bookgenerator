@@ -48,6 +48,7 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
     defaultValues: {
       chapterCount: 5,
       sectionsPerChapter: 4,
+      paragraphsPerSection: 5,
       ...defaultValues,
     },
   })
@@ -55,8 +56,10 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
   const bookType = watch('type')
   const chapterCount = watch('chapterCount')
   const sectionsPerChapter = watch('sectionsPerChapter')
+  const paragraphsPerSection = watch('paragraphsPerSection')
   const totalSections = (chapterCount || 0) * (sectionsPerChapter || 0)
-  const totalPages = Math.round(totalSections * 600 / 450)
+  const totalParagraphs = totalSections * (paragraphsPerSection || 0)
+  const totalPages = Math.round(totalParagraphs * 150 / 450)
 
   useEffect(() => {
     setValue('academicSubtype', undefined)
@@ -155,11 +158,30 @@ export function BookProjectForm({ onSubmit, loading = false, defaultValues }: Bo
         </div>
       </div>
 
+      {/* Parágrafos por seção */}
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="paragraphsPerSection" className="text-sm font-medium text-foreground/80">
+          Parágrafos por seção
+          <span className="ml-2 text-muted-foreground/70 font-normal">(3 – 8)</span>
+        </label>
+        <input
+          id="paragraphsPerSection"
+          type="number"
+          min={3}
+          max={8}
+          className="h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 hover:border-border-strong"
+          {...register('paragraphsPerSection', { valueAsNumber: true })}
+        />
+        {errors.paragraphsPerSection && (
+          <p className="text-xs text-danger">{errors.paragraphsPerSection.message}</p>
+        )}
+      </div>
+
       {totalSections > 0 && (
         <p className="text-xs text-muted-foreground/80 bg-surface-muted/40 rounded-md px-3 py-2">
-          {chapterCount} cap. × {sectionsPerChapter} seções = <span className="text-foreground font-medium">{totalSections} seções</span>
+          {chapterCount} cap. × {sectionsPerChapter} seções × {paragraphsPerSection} parágrafos = <span className="text-foreground font-medium">{totalParagraphs} parágrafos</span>
           {' · '}
-          ~600 palavras/seção
+          ~150 palavras/parágrafo
           {' · '}
           <span className="text-foreground font-medium">{totalPages} págs.</span> estimadas
         </p>

@@ -29,6 +29,7 @@ export default function NewBookPage() {
         description: values.description,
         chapterCount: values.chapterCount,
         sectionsPerChapter: values.sectionsPerChapter,
+        paragraphsPerSection: values.paragraphsPerSection,
         status: 'draft',
         visibility: 'private',
       })

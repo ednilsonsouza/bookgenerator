@@ -38,6 +38,7 @@ export async function POST(
       description:     bookDoc.description as string,
       chapterCount:        (bookDoc.chapterCount as number) ?? 5,
       sectionsPerChapter:  (bookDoc.sectionsPerChapter as number) ?? 4,
+      paragraphsPerSection: (bookDoc.paragraphsPerSection as number) ?? 5,
       status:              bookDoc.status as BookProject['status'],
       visibility:      bookDoc.visibility as BookProject['visibility'],
       coverFileId:     bookDoc.coverFileId as string | undefined,

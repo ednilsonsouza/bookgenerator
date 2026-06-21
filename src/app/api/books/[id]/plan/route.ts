@@ -58,6 +58,7 @@ export async function POST(
       description:         bookDoc.description as string,
       chapterCount:        (bookDoc.chapterCount as number) ?? 5,
       sectionsPerChapter:  (bookDoc.sectionsPerChapter as number) ?? 4,
+      paragraphsPerSection: (bookDoc.paragraphsPerSection as number) ?? 5,
       status:              bookDoc.status as BookProject['status'],
       visibility:          bookDoc.visibility as BookProject['visibility'],
       createdAt:           bookDoc.$createdAt as string,
@@ -96,7 +97,7 @@ export async function POST(
     }
 
     const wpg = book.type === 'academic' ? 450 : 380
-    const wps = 600
+    const wps = book.paragraphsPerSection * 150 // palavras/parágrafo
     const expectedPagesPerChapter = Math.max(1, Math.round((book.sectionsPerChapter * wps) / wpg))
     const expectedWordsPerChapter = book.sectionsPerChapter * wps
 

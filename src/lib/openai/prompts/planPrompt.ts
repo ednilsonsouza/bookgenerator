@@ -5,8 +5,12 @@ function wordsPerPage(type: BookProject['type']): number {
   return type === 'academic' ? 450 : 380
 }
 
-function wordsPerSection(): number {
-  return 600  // parágrafos longos em cada seção (~600 palavras)
+function wordsPerParagraph(): number {
+  return 150  // parágrafos longos (~150 palavras cada)
+}
+
+function wordsPerSection(book: BookProject): number {
+  return book.paragraphsPerSection * wordsPerParagraph()
 }
 
 export function buildPlanSystemPrompt(book: BookProject): string {
@@ -32,9 +36,11 @@ ${jsonFormat}`
 export function buildPlanUserPrompt(book: BookProject): string {
   const isAcademic = book.type === 'academic'
   const wpg = wordsPerPage(book.type)
-  const wps = wordsPerSection()
+  const wps = wordsPerSection(book)
+  const wpp = wordsPerParagraph()
   const totalSections = book.chapterCount * book.sectionsPerChapter
-  const totalWords = totalSections * wps
+  const totalParagraphs = totalSections * book.paragraphsPerSection
+  const totalWords = totalParagraphs * wpp
   const totalPages = Math.max(1, Math.round(totalWords / wpg))
 
   const subtypeLabel =
@@ -56,7 +62,9 @@ TIPO: ${isAcademic ? 'Acadêmica' : 'Literária'} — ${subtypeLabel}
 DESCRIÇÃO: ${book.description}
 CAPÍTULOS: ${book.chapterCount}
 SEÇÕES POR CAPÍTULO: ${book.sectionsPerChapter}
+PARÁGRAFOS POR SEÇÃO: ${book.paragraphsPerSection}
 TOTAL DE SEÇÕES: ${totalSections}
+TOTAL DE PARÁGRAFOS: ${totalParagraphs.toLocaleString('pt-BR')}
 TOTAL DE PALAVRAS ESTIMADO: ${totalWords.toLocaleString('pt-BR')} 
 PÁGINAS ESTIMADAS: ${totalPages}
 
@@ -66,8 +74,8 @@ INSTRUÇÕES:
 - Use EXATAMENTE: order, title, description, targetPages, targetWords, sections (em inglês).
 - Gere EXATAMENTE ${book.chapterCount} capítulos, cada um com EXATAMENTE ${book.sectionsPerChapter} seções.
 - Cada section deve ter order e title (títulos em português, descritivos).
-- targetPages de cada capítulo = (${book.sectionsPerChapter} × ${wps}) / ${wpg} ≈ ${Math.round((book.sectionsPerChapter * wps) / wpg)} páginas.
-- targetWords de cada capítulo = ${book.sectionsPerChapter} × ${wps} = ${book.sectionsPerChapter * wps}.
+- targetPages de cada capítulo = (${book.sectionsPerChapter} × ${book.paragraphsPerSection} × ${wpp}) / ${wpg} ≈ ${Math.round((book.sectionsPerChapter * book.paragraphsPerSection * wpp) / wpg)} páginas.
+- targetWords de cada capítulo = ${book.sectionsPerChapter} × ${book.paragraphsPerSection} × ${wpp} = ${book.sectionsPerChapter * book.paragraphsPerSection * wpp}.
 - Retorne SOMENTE o JSON, sem texto antes ou depois.`
 }
 

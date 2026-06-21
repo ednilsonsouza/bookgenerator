@@ -62,6 +62,7 @@ export interface BookProject {
   description: string
   chapterCount: number
   sectionsPerChapter: number
+  paragraphsPerSection: number
   status: BookStatus
   visibility: BookVisibility
   coverFileId?: string

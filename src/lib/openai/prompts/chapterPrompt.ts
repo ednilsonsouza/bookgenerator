@@ -48,7 +48,7 @@ DADOS DA OBRA:
 CAPÍTULO: ${chapter.order} de ${allChapters.length} — "${chapter.title}"
 - Objetivo: ${chapter.description ?? ''}${sectionInfo}${prevSection}
 
-INSTRUÇÃO: Escreva parágrafos longos e envolventes. Aproxime-se de 600 palavras. NÃO inclua o título da seção, apenas o texto.`
+INSTRUÇÃO: Escreva ${book.paragraphsPerSection} parágrafos longos e envolventes. Cada parágrafo com pelo menos 150 palavras. Total: ~${book.paragraphsPerSection * 150} palavras. NÃO inclua o título da seção, apenas o texto.`
 }
 
 // ── Acadêmico ─────────────────────────────────────────────────────────────────
@@ -109,6 +109,7 @@ export function buildAcademicChapterUser(ctx: ChapterContext, sources: AcademicS
   const { book, chapter, allChapters, section, sectionIndex, totalSections } = ctx
   const role = detectChapterRole(chapter)
   const specificInstruction = buildBardinChapterInstruction(role, section)
+  const wordsTarget = book.paragraphsPerSection * 150
 
   const planSummary = allChapters.map((c) => `Cap. ${c.order}: ${c.title}`).join(' | ')
 
@@ -126,12 +127,12 @@ DADOS DA OBRA:
 - Tipo: ${book.academicSubtype ? ACADEMIC_SUBTYPE_LABELS[book.academicSubtype] : ''} — Levantamento Bibliográfico
 - Tema: ${book.theme}
 - Estrutura: ${planSummary}${sectionInfo}
-- Meta: ~600 palavras, parágrafos LONGOS (150+ palavras cada)
+- Meta: exatamente ${book.paragraphsPerSection} parágrafos longos (${wordsTarget}+ palavras por parágrafo, ~${wordsTarget * book.paragraphsPerSection} palavras no total)
 
 ${specificInstruction}
 
 FONTES:
 ${sourcesBlock}
 
-INSTRUÇÃO FINAL: Escreva parágrafos longos e densos. ${sources.length > 0 ? 'Cite ao menos uma fonte por parágrafo.' : ''} Aproxime-se de 600 palavras. Não inclua título da seção.`
+INSTRUÇÃO FINAL: Escreva ${book.paragraphsPerSection} parágrafos longos e densos. Cada parágrafo com pelo menos ${wordsTarget} palavras. ${sources.length > 0 ? 'Cite ao menos uma fonte por parágrafo.' : ''} Total: ~${wordsTarget * book.paragraphsPerSection} palavras. Não inclua título da seção.`
 }

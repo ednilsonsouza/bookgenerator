@@ -66,6 +66,11 @@ export const bookProjectSchema = z
       .int()
       .min(3, 'Mínimo de 3 seções por capítulo')
       .max(8, 'Máximo de 8 seções por capítulo'),
+    paragraphsPerSection: z
+      .number({ error: 'Informe a quantidade de parágrafos por seção' })
+      .int()
+      .min(3, 'Mínimo de 3 parágrafos por seção')
+      .max(8, 'Máximo de 8 parágrafos por seção'),
   })
   .superRefine((data, ctx) => {
     if (data.type === 'academic' && !data.academicSubtype) {

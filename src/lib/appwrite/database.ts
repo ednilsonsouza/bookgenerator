@@ -20,6 +20,7 @@ function docToBookProject(doc: Record<string, unknown>): BookProject {
     description: (doc.description as string) ?? '',
     chapterCount: (doc.chapterCount as number) ?? 5,
     sectionsPerChapter: (doc.sectionsPerChapter as number) ?? 4,
+    paragraphsPerSection: (doc.paragraphsPerSection as number) ?? 5,
     status: (doc.status as BookStatus) ?? 'draft',
     visibility: (doc.visibility as BookProject['visibility']) ?? 'private',
     coverFileId: (doc.coverFileId as string) ?? undefined,
@@ -68,6 +69,7 @@ export async function createBookProject(
         description: truncate(data.description, 2000),
         chapterCount: data.chapterCount ?? 5,
         sectionsPerChapter: data.sectionsPerChapter ?? 4,
+        paragraphsPerSection: data.paragraphsPerSection ?? 5,
         status: data.status ?? 'draft',
         visibility: data.visibility ?? 'private',
         coverFileId: null,
@@ -120,6 +122,7 @@ export async function updateBookProject(
     if (data.description !== undefined) payload.description = truncate(data.description, 2000)
     if (data.chapterCount !== undefined) payload.chapterCount = data.chapterCount
     if (data.sectionsPerChapter !== undefined) payload.sectionsPerChapter = data.sectionsPerChapter
+    if (data.paragraphsPerSection !== undefined) payload.paragraphsPerSection = data.paragraphsPerSection
     if (data.status !== undefined) payload.status = data.status
     if (data.visibility !== undefined) payload.visibility = data.visibility
     if (data.coverFileId !== undefined) payload.coverFileId = data.coverFileId ?? null
