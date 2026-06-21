@@ -8,7 +8,10 @@
  */
 
 export interface TableData {
+  /** Título original sem número (ex: "Quadro 1 – Critérios" ou "Critérios") */
   title: string
+  /** Título com numeração global correta (definido pelo PDF renderer) */
+  numberedTitle?: string
   source: string
   headers: string[]
   rows: string[][]
@@ -17,6 +20,27 @@ export interface TableData {
 export type ContentBlock =
   | { type: 'text'; content: string }
   | { type: 'table'; data: TableData }
+
+const CURRENT_YEAR = new Date().getFullYear()
+
+/**
+ * Corrige o ano na linha de fonte do quadro.
+ * Substitui qualquer ano entre parênteses (19xx ou 20xx) pelo ano atual.
+ * Ex: "Fonte: Elaborado pelo autor (2023)" → "Fonte: Elaborado pelo autor (2026)"
+ */
+function fixSourceYear(source: string): string {
+  return source.replace(/\(\s*(19|20)\d{2}\s*\)/g, `(${CURRENT_YEAR})`)
+}
+
+/**
+ * Remove o número de quadro do título caso a IA já tenha inserido
+ * (ex: "Quadro 1 – Critérios" → "Critérios") para que o renderer
+ * possa inserir a numeração global correta.
+ */
+function stripTableNumber(title: string): string {
+  // Remove prefixo: "Quadro N –", "Quadro N -", "Quadro N.", "Quadro N:"
+  return title.replace(/^Quadro\s+\d+\s*[–\-.:]\s*/i, '').trim() || title
+}
 
 /**
  * Divide o conteúdo de um capítulo em blocos de texto e quadros.
@@ -40,8 +64,8 @@ export function parseContentBlocks(content: string): ContentBlock[] {
     }
 
     // Processa o quadro
-    const title  = match[1].trim()
-    const source = match[2].trim()
+    const rawTitle = match[1].trim()
+    const rawSource = match[2].trim()
     const body   = match[3].trim()
 
     const lines = body
@@ -55,7 +79,12 @@ export function parseContentBlocks(content: string): ContentBlock[] {
 
       blocks.push({
         type: 'table',
-        data: { title, source, headers, rows },
+        data: {
+          title:  stripTableNumber(rawTitle),  // sem número (será atribuído globalmente)
+          source: fixSourceYear(rawSource),     // ano sempre correto
+          headers,
+          rows,
+        },
       })
     }
 
@@ -74,4 +103,11 @@ export function parseContentBlocks(content: string): ContentBlock[] {
   }
 
   return blocks
+}
+
+/**
+ * Conta o total de quadros em uma lista de blocos de conteúdo.
+ */
+export function countTables(blocks: ContentBlock[]): number {
+  return blocks.filter((b) => b.type === 'table').length
 }

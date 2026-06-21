@@ -23,7 +23,7 @@ export function TableBlock({ data, fontFamily = 'Helvetica' }: TableBlockProps) 
 
   return (
     <View style={{ marginVertical: 14, width: '100%' }}>
-      {/* Título do quadro */}
+      {/* Título do quadro — usa numeração global se disponível */}
       <Text
         style={{
           fontFamily: boldFamily,
@@ -33,7 +33,7 @@ export function TableBlock({ data, fontFamily = 'Helvetica' }: TableBlockProps) 
           color: '#111',
         }}
       >
-        {data.title}
+        {data.numberedTitle ?? data.title}
       </Text>
 
       {/* Tabela */}

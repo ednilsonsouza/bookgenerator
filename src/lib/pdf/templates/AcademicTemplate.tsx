@@ -2,7 +2,7 @@ import React from 'react'
 import { Document, Page, Text, View } from '@react-pdf/renderer'
 import { academicStyles as s } from '../styles'
 import { PageHeader, PageFooter } from '../components'
-import { parseContentBlocks } from '../tableParser'
+import { parseContentBlocks, countTables, type ContentBlock } from '../tableParser'
 import { TableBlock } from '../TableBlock'
 import type { BookProject, Chapter } from '@/types/book'
 import { ACADEMIC_SUBTYPE_LABELS } from '@/types/book'
@@ -26,15 +26,21 @@ function splitParagraphs(text: string): string[] {
 }
 
 /**
- * Renderiza o conteúdo de uma seção, detectando quadros e texto corrido.
+ * Renderiza uma lista de blocos já parseados, atribuindo numeração global aos quadros.
+ * @param blocks  Blocos do capítulo
+ * @param tableOffset  Quantos quadros já foram renderizados antes deste capítulo
  */
-function renderSection(content: string) {
-  const blocks = parseContentBlocks(content)
+function renderBlocks(blocks: ContentBlock[], tableOffset: number) {
+  let tableCount = tableOffset
   return blocks.map((block, bi) => {
     if (block.type === 'table') {
-      return <TableBlock key={bi} data={block.data} fontFamily="Helvetica" />
+      tableCount++
+      const tableData = {
+        ...block.data,
+        numberedTitle: `Quadro ${tableCount} – ${block.data.title}`,
+      }
+      return <TableBlock key={bi} data={tableData} fontFamily="Helvetica" />
     }
-    // Texto: divide em parágrafos
     return splitParagraphs(block.content).map((para, pi) => (
       <Text key={`${bi}-${pi}`} style={s.body}>{para}</Text>
     ))
@@ -110,21 +116,31 @@ export function AcademicPdf({ book, chapters, sectionsMap, references, authorNam
       </Page>
 
       {/* ── CAPÍTULOS ────────────────────────────── header + footer automático */}
-      {generatedChapters.map((chapter) => {
-        const sections = sectionsMap[chapter.id] ?? []
-        const fullText = sections.map((sec) => sec.content).join('\n\n')
+      {(() => {
+        // Pré-parseia todos os capítulos para calcular offset global de quadros
+        const chapterBlocks = generatedChapters.map((chapter) => {
+          const sections = sectionsMap[chapter.id] ?? []
+          const fullText = sections.map((sec) => sec.content).join('\n\n')
+          return { chapter, blocks: parseContentBlocks(fullText) }
+        })
 
-        return (
-          <Page key={chapter.id} size="A4" style={s.page}>
-            <PageHeader title={book.title} authorName={authorName} />
-            <Text style={[s.h2, { marginBottom: 16 }]}>
-              {chapter.order}  {chapter.title.toUpperCase()}
-            </Text>
-            {renderSection(fullText)}
-            <PageFooter />
-          </Page>
-        )
-      })}
+        let globalTableOffset = 0
+        return chapterBlocks.map(({ chapter, blocks }) => {
+          const offsetForThisChapter = globalTableOffset
+          globalTableOffset += countTables(blocks)
+
+          return (
+            <Page key={chapter.id} size="A4" style={s.page}>
+              <PageHeader title={book.title} authorName={authorName} />
+              <Text style={[s.h2, { marginBottom: 16 }]}>
+                {chapter.order}  {chapter.title.toUpperCase()}
+              </Text>
+              {renderBlocks(blocks, offsetForThisChapter)}
+              <PageFooter />
+            </Page>
+          )
+        })
+      })()}
 
       {/* ── REFERÊNCIAS ──────────────────────────── header + footer automático */}
       {references.length > 0 && (

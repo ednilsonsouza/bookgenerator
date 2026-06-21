@@ -208,17 +208,18 @@ REGRAS OBRIGATÓRIAS:
 QUADROS — USE SEMPRE QUE NECESSÁRIO:
 Sempre que for útil organizar e sistematizar informações (comparações, sínteses, categorias, resultados, etapas metodológicas, critérios, etc.), insira um quadro usando EXATAMENTE este formato:
 
-[QUADRO|Título descritivo do quadro|Fonte: Elaborado pelo autor (ano)]
+[QUADRO|Título descritivo do quadro|Fonte: Elaborado pelo autor]
 Cabeçalho coluna 1 | Cabeçalho coluna 2 | Cabeçalho coluna 3
 Dado linha 1 col 1 | Dado linha 1 col 2 | Dado linha 1 col 3
 Dado linha 2 col 1 | Dado linha 2 col 2 | Dado linha 2 col 3
 [/QUADRO]
 
 Regras para quadros:
-- O título deve ser numerado sequencialmente: Quadro 1, Quadro 2, etc.
+- NÃO inclua número no título (ex: use "Critérios de inclusão" não "Quadro 1 – Critérios"). A numeração é gerada automaticamente.
+- NÃO inclua ano na Fonte (ex: use "Fonte: Elaborado pelo autor" não "Fonte: Elaborado pelo autor (2023)"). O ano é inserido automaticamente.
 - Sempre inclua linha de cabeçalho (primeira linha = nomes das colunas).
 - Use | como separador de colunas.
-- Fonte obrigatória: "Fonte: Elaborado pelo autor (ano)" ou cite a fonte original.
+- Fonte: "Fonte: Elaborado pelo autor" ou cite a fonte original sem ano.
 - Após o quadro, escreva um parágrafo de análise referenciando-o: "Conforme o Quadro X, ...".
 - Use quadros para: categorias de análise, critérios de inclusão/exclusão, síntese de autores, etapas de Bardin, comparação de estudos, resultados por categoria.`
 }
